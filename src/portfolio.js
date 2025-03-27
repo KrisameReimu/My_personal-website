@@ -33,7 +33,7 @@ const greeting = {
 
 const socialMediaLinks = {
   github: "https://github.com/KrisameReimu",
-  linkedin: "", // 可以添加你的LinkedIn链接
+  linkedin: "https://www.linkedin.com/in/echo-chen-27a367241/", // 可以添加你的LinkedIn链接
   gmail: "chen944420634@gmail.com",
   instagram: "", // 可以添加你的Instagram链接
   // 可以添加其他社交媒体链接
@@ -121,7 +121,7 @@ const educationInfo = {
       logo: require("./assets/images/polyuLogo.png"), // 需要添加理工大学的logo
       subHeader: "BSc in Internet and Multimedia Technologies",
       duration: "September 2021 - August 2025 (Expected)",
-      desc: "GPA: 3.41/4.3. Focused on multimedia development, programming, and machine intelligence.",
+      desc: " Focused on multimedia development, programming, and machine intelligence.",
       descBullets: [
         "Key courses: Digital and Computer Systems (A+), Computer Programming (A), Fundamentals of Machine Intelligence (A)",
         "Object-Oriented Design and Programming (A), Database System (A-)"
