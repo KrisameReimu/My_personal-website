@@ -4,6 +4,7 @@
 
 import emoji from "react-easy-emoji";
 import splashAnimation from "./assets/lottie/splashAnimation"; // Rename to your file name for custom animation
+import placeholderImages from "./placeholderImages"; // Placeholder images for quick start
 
 // Splash Screen
 
@@ -20,12 +21,12 @@ const illustration = {
 };
 
 const greeting = {
-  username: "Chen Chen",
-  title: "Hi all, I'm 陈琛 Echo Chen",
+  username: "Echo Chen",
+  title: "Hi all, I'm Echo (陈琛) Chen",
   subTitle: emoji(
-    "A creative IMT student 🚀 passionate about photography, writing, and game development. Exploring the intersection of technology and art through multimedia projects."
+    "A passionate AI & Full-Stack Developer 🚀 | Game Creator 🎮 | Digital Storyteller ✨ | Bridging technology and creativity to build innovative solutions that inspire and engage."
   ),
-  resumeLink: "", // 你可以上传你的简历并添加链接
+  resumeLink: "https://drive.google.com/file/d/your-cv-link", // Upload your CV to Google Drive and add link here
   displayGreeting: true // Set false to hide this section, defaults to true
 };
 
@@ -33,10 +34,10 @@ const greeting = {
 
 const socialMediaLinks = {
   github: "https://github.com/KrisameReimu",
-  linkedin: "https://www.linkedin.com/in/echo-chen-27a367241/", // 可以添加你的LinkedIn链接
+  linkedin: "https://www.linkedin.com/in/chenchenai/",
   gmail: "chen944420634@gmail.com",
-  instagram: "", // 可以添加你的Instagram链接
-  // 可以添加其他社交媒体链接
+  instagram: "", // Add your Instagram if you have one
+  youtube: "", // Add your YouTube channel for video works
   // To customize icons and social links, tweak src/components/SocialMedia
   display: true // Set true to display this section, defaults to false
 };
@@ -45,17 +46,20 @@ const socialMediaLinks = {
 
 const skillsSection = {
   title: "What I do",
-  subTitle: "CREATIVE IMT STUDENT WHO LOVES TO EXPRESS THROUGH DIFFERENT MEDIUMS",
+  subTitle: "FULL-STACK DEVELOPER & AI ENTHUSIAST WHO TURNS IDEAS INTO REALITY",
   skills: [
     emoji(
-      "⚡ Develop interactive and immersive independent games using Unity"
+      "⚡ Develop AI-powered educational tools using GPT-4 and Azure OpenAI for personalized learning experiences"
     ),
-    emoji("⚡ Capture moments and stories through photography"),
+    emoji("⚡ Create immersive 2D action-adventure games with Unity, featuring intricate level design and narrative-driven gameplay"),
     emoji(
-      "⚡ Express thoughts and emotions through creative writing"
+      "⚡ Build responsive full-stack web applications with React.js, Flask, and modern JavaScript frameworks"
     ),
     emoji(
-      "⚡ Create multimedia experiences combining technology and art"
+      "⚡ Design and produce multimedia content as a Department Multimedia Producer, bringing creative visions to life"
+    ),
+    emoji(
+      "⚡ Write compelling articles and stories that blend technical insights with creative narratives"
     )
   ],
 
@@ -64,8 +68,52 @@ https://fontawesome.com/icons?d=gallery */
 
   softwareSkills: [
     {
+      skillName: "Python",
+      fontAwesomeClassname: "fab fa-python"
+    },
+    {
+      skillName: "PyTorch",
+      fontAwesomeClassname: "fas fa-brain"
+    },
+    {
+      skillName: "TensorFlow",
+      fontAwesomeClassname: "fas fa-project-diagram"
+    },
+    {
       skillName: "Unity",
       fontAwesomeClassname: "fab fa-unity"
+    },
+    {
+      skillName: "C#",
+      fontAwesomeClassname: "fas fa-code"
+    },
+    {
+      skillName: "JavaScript",
+      fontAwesomeClassname: "fab fa-js"
+    },
+    {
+      skillName: "React",
+      fontAwesomeClassname: "fab fa-react"
+    },
+    {
+      skillName: "Node.js",
+      fontAwesomeClassname: "fab fa-node"
+    },
+    {
+      skillName: "Java",
+      fontAwesomeClassname: "fab fa-java"
+    },
+    {
+      skillName: "SQL",
+      fontAwesomeClassname: "fas fa-database"
+    },
+    {
+      skillName: "Docker",
+      fontAwesomeClassname: "fab fa-docker"
+    },
+    {
+      skillName: "Git",
+      fontAwesomeClassname: "fab fa-git-alt"
     },
     {
       skillName: "Adobe PR",
@@ -76,36 +124,12 @@ https://fontawesome.com/icons?d=gallery */
       fontAwesomeClassname: "fas fa-image"
     },
     {
-      skillName: "3ds Max",
-      fontAwesomeClassname: "fas fa-cube"
-    },
-    {
-      skillName: "MATLAB",
-      fontAwesomeClassname: "fas fa-calculator"
-    },
-    {
-      skillName: "Java",
-      fontAwesomeClassname: "fab fa-java"
-    },
-    {
-      skillName: "Python",
-      fontAwesomeClassname: "fab fa-python"
-    },
-    {
-      skillName: "html-5",
-      fontAwesomeClassname: "fab fa-html5"
-    },
-    {
-      skillName: "JavaScript",
-      fontAwesomeClassname: "fab fa-js"
-    },
-    {
       skillName: "Photography",
       fontAwesomeClassname: "fas fa-camera"
     },
     {
-      skillName: "Writing",
-      fontAwesomeClassname: "fas fa-pen-fancy"
+      skillName: "3ds Max",
+      fontAwesomeClassname: "fas fa-cube"
     }
   ],
   display: true // Set false to hide this section, defaults to true
@@ -118,7 +142,7 @@ const educationInfo = {
   schools: [
     {
       schoolName: "The Hong Kong Polytechnic University",
-      logo: require("./assets/images/polyuLogo.png"), // 需要添加理工大学的logo
+      logo: placeholderImages.polyuLogo,
       subHeader: "BSc in Internet and Multimedia Technologies",
       duration: "September 2021 - August 2025 (Expected)",
       desc: " Focused on multimedia development, programming, and machine intelligence.",
@@ -129,7 +153,7 @@ const educationInfo = {
     },
     {
       schoolName: "University of Oxford - Lady Margaret Hall",
-      logo: require("./assets/images/oxfordLogo.png"), // 需要添加牛津大学的logo
+      logo: placeholderImages.oxfordLogo,
       subHeader: "Short Academic Programme: AI and Machine Learning",
       duration: "August 5 - August 23, 2024",
       desc: "Completed a short academic programme on Artificial Intelligence and Machine Learning: Theory and Practice",
@@ -169,22 +193,47 @@ const workExperiences = {
   display: true, //Set it to true to show workExperiences Section
   experience: [
     {
-      role: "Youth Mentoring Programme Contributor",
-      company: "The Institution of Engineering and Technology Hong Kong",
-      companylogo: require("./assets/images/ietLogo.png"), // 需要添加IET的logo
-      date: "2024",
-      desc: "Contributed to the Youth Mentoring Programme 2024, recognized with a Certificate of Gratitude.",
+      role: "Department Multimedia Producer",
+      company: "The Hong Kong Polytechnic University",
+      companylogo: placeholderImages.polyuLogo,
+      date: "Jun 2023 – Jun 2025",
+      desc: "Creating and producing multimedia content for the department, showcasing technical and creative expertise.",
+      descBullets: [
+        "Produced high-quality multimedia content for departmental communications",
+        "Designed visual assets and managed video production workflows",
+        "Collaborated with faculty and students on creative projects"
+      ]
     },
     {
-      role: "Internet and Multimedia Product Development",
-      company: "Hong Kong Polytechnic University",
-      companylogo: require("./assets/images/polyuLogo.png"), // 使用理工大学的logo
-      date: "May 2022 – July 2022",
-      desc: "Applied Python for scientific computing and developed solutions for mathematical problems.",
+      role: "Web Developer Intern",
+      company: "BornTea",
+      companylogo: placeholderImages.bornteaLogo,
+      date: "Jun 2024 – Aug 2024",
+      desc: "Developed and maintained eCommerce platform, improving user experience and web performance.",
       descBullets: [
-        "Gained experience with microcontroller and IoT",
-        "Created an interactive game with Python Pygame"
+        "Built responsive web interfaces using modern JavaScript frameworks",
+        "Integrated digital campaigns with marketing teams",
+        "Supported multimedia marketing strategies and content creation"
       ]
+    },
+    {
+      role: "Student Assistant",
+      company: "The Hong Kong Polytechnic University",
+      companylogo: placeholderImages.polyuLogo,
+      date: "Jul 2023 – Jul 2025",
+      desc: "Supporting campus initiatives and representing PolyU at various events.",
+      descBullets: [
+        "Guided 200+ freshmen annually as Student Ambassador",
+        "Represented PolyU at 20+ public events and seminars",
+        "Conducted campus surveys and assisted with administrative tasks"
+      ]
+    },
+    {
+      role: "IET Young Member Programme Contributor",
+      company: "The Institution of Engineering and Technology Hong Kong",
+      companylogo: placeholderImages.ietLogo,
+      date: "2024",
+      desc: "Active participant in promoting engineering innovation and mentoring young students.",
     }
   ]
 };
@@ -200,28 +249,50 @@ const openSource = {
 // Some big projects you have worked on
 
 const bigProjects = {
-  title: "Projects",
-  subtitle: "SOME CREATIVE PROJECTS I'VE WORKED ON",
+  title: "Featured Projects",
+  subtitle: "INNOVATIVE SOLUTIONS AT THE INTERSECTION OF AI, GAMES, AND WEB TECHNOLOGIES",
   projects: [
     {
-      image: require("./assets/images/gameDev.png"), // 需要添加游戏开发相关图片
-      projectName: "Independent Game Development",
-      projectDesc: "Creating immersive gaming experiences with Unity and creative storytelling",
+      image: placeholderImages.genaiFeedback,
+      projectName: "GenAI Feedback System",
+      projectDesc: "AI-powered educational feedback system using GPT-4 for automated, personalized assessment. Published at WAIE2025.",
       footerLink: [
         {
           name: "View Project",
-          url: "" // 可以添加项目链接
+          url: "https://github.com/KrisameReimu"
         }
       ]
     },
     {
-      image: require("./assets/images/photography.png"), // 需要添加摄影相关图片
-      projectName: "Photography Portfolio",
-      projectDesc: "Capturing moments and stories through the lens",
+      image: placeholderImages.melinaGame,
+      projectName: "Melina Dream of Hero",
+      projectDesc: "2D action-adventure puzzle game inspired by Hollow Knight, featuring intricate level design, combat mechanics, and narrative-driven gameplay.",
       footerLink: [
         {
-          name: "View Gallery",
-          url: "" // 可以添加摄影作品集链接
+          name: "View Details",
+          url: "#game-showcase"
+        }
+      ]
+    },
+    {
+      image: placeholderImages.ecommerceWeb,
+      projectName: "BornTea eCommerce Platform",
+      projectDesc: "Full-stack eCommerce web application with enhanced user experience and integrated marketing campaigns.",
+      footerLink: [
+        {
+          name: "Case Study",
+          url: "#"
+        }
+      ]
+    },
+    {
+      image: placeholderImages.multimediaPortfolio,
+      projectName: "Multimedia Production Works",
+      projectDesc: "Collection of multimedia productions including promotional videos, creative content, and visual storytelling projects.",
+      footerLink: [
+        {
+          name: "View Portfolio",
+          url: "#video-portfolio"
         }
       ]
     }
@@ -242,7 +313,7 @@ const achievementSection = {
       title: "Oxford University Short Programme",
       subtitle:
         "Completed the Artificial Intelligence and Machine Learning: Theory and Practice programme at Lady Margaret Hall, University of Oxford.",
-      image: require("./assets/images/oxfordLogo.png"), // 使用牛津大学的logo
+      image: placeholderImages.oxfordLogo, // 使用牛津大学的logo
       imageAlt: "Oxford University Logo",
       footerLink: [
         {
@@ -255,7 +326,7 @@ const achievementSection = {
       title: "Gold Award - Video Production",
       subtitle:
         "Received Gold Award for participation in the Video Production Programme on Whole-person Development Fund - Student-initiated Project at The Hong Kong Polytechnic University.",
-      image: require("./assets/images/polyuAward.png"), // 需要添加奖项相关图片
+      image: placeholderImages.polyuAward, // 需要添加奖项相关图片
       imageAlt: "Gold Award Logo",
       footerLink: [
         {
@@ -267,7 +338,7 @@ const achievementSection = {
     {
       title: "Special Award & Silver Award",
       subtitle: "Received Special Award and Silver Award for Video Production Programme at The Hong Kong Polytechnic University.",
-      image: require("./assets/images/polyuAward.png"), // 使用相同的奖项图片
+      image: placeholderImages.polyuAward, // 使用相同的奖项图片
       imageAlt: "Special Award Logo",
       footerLink: [
         {
@@ -328,17 +399,111 @@ const talkSection = {
   display: true // Set false to hide this section, defaults to true
 };
 
-// Podcast Section - 可以改为游戏开发部分
+// Game Development Showcase Section
 
-const podcastSection = {
+const gameDevSection = {
   title: emoji("Game Development 🎮"),
-  subtitle: "CREATING INTERACTIVE EXPERIENCES AND VIRTUAL WORLDS",
-
-  // Please Provide with Your Podcast embeded Link
-  podcast: [
-    "" // 可以添加游戏开发相关视频或演示链接
+  subtitle: "CREATING IMMERSIVE WORLDS AND MEMORABLE EXPERIENCES",
+  games: [
+    {
+      title: "Melina Dream of Hero",
+      description: "A 2D action-adventure puzzle game inspired by Hollow Knight. Features multi-layered game maps, atmospheric scenes, and intricate puzzle structures that integrate with narrative and combat mechanics.",
+      image: placeholderImages.melinaGame,
+      demoVideo: "https://www.youtube.com/watch?v=your-demo-video", // Add your demo video
+      downloadLink: "", // Add download link if available
+      technologies: ["Unity", "C#", "Adobe Photoshop", "Git"],
+      status: "In Development", // or "Completed", "Published"
+      highlights: [
+        "Game Map & Scene Designer - Created immersive game environments",
+        "Designed multi-layered maps with hidden secrets and exploration mechanics",
+        "Implemented movement mechanics and combat systems using C#",
+        "Collaborated in team of 4 using Agile methodologies"
+      ]
+    },
+    {
+      title: "Future Game Project", 
+      description: "Planning the next adventure - stay tuned for updates!",
+      image: placeholderImages.gamePlaceholder,
+      demoVideo: "",
+      downloadLink: "",
+      technologies: ["Unity", "C#", "Blender"],
+      status: "Planning",
+      highlights: [
+        "Concept development phase",
+        "Exploring new game mechanics",
+        "Story and world building"
+      ]
+    }
   ],
-  display: true // Set false to hide this section, defaults to true
+  display: true
+};
+
+// Video Portfolio Section
+
+const videoPortfolioSection = {
+  title: emoji("Video Production 🎬"),
+  subtitle: "AWARD-WINNING VIDEO CONTENT AND CREATIVE STORYTELLING",
+  videos: [
+    {
+      title: "University Promotional Video",
+      description: "Gold Award winning promotional content for PolyU",
+      thumbnail: placeholderImages.video1Thumb,
+      videoUrl: "", // YouTube or Vimeo embed URL
+      category: "Promotional",
+      awards: ["Gold Award - PolyU Video Production Programme"]
+    },
+    {
+      title: "Creative Short Film",
+      description: "Silver Award winning short film exploring urban life",
+      thumbnail: placeholderImages.video2Thumb,
+      videoUrl: "",
+      category: "Short Film",
+      awards: ["Silver Award - PolyU Video Production Programme"]
+    },
+    {
+      title: "Documentary Project",
+      description: "Special Award documentary on technology and society",
+      thumbnail: placeholderImages.video3Thumb,
+      videoUrl: "",
+      category: "Documentary",
+      awards: ["Special Award - PolyU Video Production Programme"]
+    }
+  ],
+  display: true
+};
+
+// Photography Portfolio Section
+
+const photographySection = {
+  title: emoji("Photography 📸"),
+  subtitle: "CAPTURING MOMENTS AND TELLING VISUAL STORIES",
+  categories: [
+    {
+      name: "Urban Photography",
+      description: "Exploring city life and architecture",
+      coverImage: placeholderImages.urbanCover,
+      photos: [
+        // Add photo paths here
+      ]
+    },
+    {
+      name: "Portrait Photography",
+      description: "Capturing human emotions and expressions",
+      coverImage: placeholderImages.portraitCover,
+      photos: [
+        // Add photo paths here
+      ]
+    },
+    {
+      name: "Nature & Landscape",
+      description: "Finding beauty in natural environments",
+      coverImage: placeholderImages.natureCover,
+      photos: [
+        // Add photo paths here
+      ]
+    }
+  ],
+  display: true
 };
 
 // Resume Section
@@ -381,7 +546,9 @@ export {
   achievementSection,
   blogSection,
   talkSection,
-  podcastSection,
+  gameDevSection,
+  videoPortfolioSection,
+  photographySection,
   contactInfo,
   twitterDetails,
   isHireable,
