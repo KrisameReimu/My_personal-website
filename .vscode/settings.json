@@ -1,6 +1,10 @@
 {
-    "chat.agent.todoList": {
-        
-        "position": "default"
-    }
+  // 设置 Copilot 使用英文
+  "github.copilot.editor.language": "en",
+  
+  // 设置 VS Code 界面语言为英文
+  "locale": "en",
+  
+  // 确保代码建议使用英文
+  "editor.suggest.localityBonus": false
 }
