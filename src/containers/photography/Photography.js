@@ -139,7 +139,7 @@ class Photography extends Component {
                 </button>
                 <img
                   src={currentPhotos[lightboxIndex]}
-                  alt={`Photo ${lightboxIndex + 1}`}
+                  alt={`${selectedCategory} ${lightboxIndex + 1}`}
                   onClick={e => e.stopPropagation()}
                 />
                 <button

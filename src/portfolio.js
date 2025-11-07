@@ -22,12 +22,12 @@ const illustration = {
 
 const greeting = {
   username: "Echo Chen",
-  title: "Hi all, I'm Echo (陈琛) Chen",
-  subTitle: emoji(
-    "A passionate AI & Full-Stack Developer 🚀 | Game Creator 🎮 | Digital Storyteller ✨ | Bridging technology and creativity to build innovative solutions that inspire and engage."
-  ),
-  resumeLink: "https://drive.google.com/file/d/your-cv-link", // Upload your CV to Google Drive and add link here
-  displayGreeting: true // Set false to hide this section, defaults to true
+  title: "Hi, I'm Echo Chen (陈琛)",
+  tagline: "AI Developer × Game Creator × Digital Storyteller",
+  subTitle: "I build experiences at the intersection of technology and creativity—from AI-powered education tools to immersive games and award-winning multimedia content.",
+  profileImage: placeholderImages.profilePhoto, // Replace with your actual photo
+  resumeLink: "https://drive.google.com/file/d/your-cv-link",
+  displayGreeting: true
 };
 
 // Social Media Links
@@ -36,10 +36,10 @@ const socialMediaLinks = {
   github: "https://github.com/KrisameReimu",
   linkedin: "https://www.linkedin.com/in/chenchenai/",
   gmail: "chen944420634@gmail.com",
-  instagram: "", // Add your Instagram if you have one
-  youtube: "", // Add your YouTube channel for video works
-  // To customize icons and social links, tweak src/components/SocialMedia
-  display: true // Set true to display this section, defaults to false
+  instagram: "https://www.instagram.com/your_instagram_handle", // 添加您的Instagram账号
+  twitter: "https://x.com/your_twitter_handle", // 添加您的X/Twitter账号
+  youtube: "", // 如果有YouTube频道可以添加
+  display: true
 };
 
 // Skills Section
@@ -515,6 +515,20 @@ const resumeSection = {
   display: true // Set false to hide this section, defaults to true
 };
 
+// Podcast Section (currently placeholder)
+// Add embed URLs (Spotify, Apple Podcasts, Ximalaya, etc.) into the podcast array when ready.
+// Set display to true only after populating real content to avoid empty iframes.
+const podcastSection = {
+  title: "Podcast",
+  subtitle: "Conversations & reflections blending AI, game dev, and creative storytelling (coming soon)",
+  podcast: [
+    // Example (commented out until real links available):
+    // "https://open.spotify.com/embed/episode/your-episode-id",
+    // "https://podcasts.apple.com/your-show-id"
+  ],
+  display: false // Hidden until real podcast links are added
+};
+
 const contactInfo = {
   title: emoji("Contact Me ☎️"),
   subtitle:
@@ -549,6 +563,7 @@ export {
   gameDevSection,
   videoPortfolioSection,
   photographySection,
+  podcastSection,
   contactInfo,
   twitterDetails,
   isHireable,

@@ -1,13 +1,11 @@
 import React, {useContext} from "react";
 import {Fade} from "react-reveal";
-import emoji from "react-easy-emoji";
 import "./Greeting.scss";
-import landingPerson from "../../assets/lottie/landingPerson";
-import DisplayLottie from "../../components/displayLottie/DisplayLottie";
 import SocialMedia from "../../components/socialMedia/SocialMedia";
 import Button from "../../components/button/Button";
-import {illustration, greeting} from "../../portfolio";
+import {greeting} from "../../portfolio";
 import StyleContext from "../../contexts/StyleContext";
+import placeholderImages from "../../placeholderImages";
 
 export default function Greeting() {
   const {isDark} = useContext(StyleContext);
@@ -23,10 +21,11 @@ export default function Greeting() {
               <h1
                 className={isDark ? "dark-mode greeting-text" : "greeting-text"}
               >
-                {" "}
-                {greeting.title}{" "}
-                <span className="wave-emoji">{emoji("👋")}</span>
+                {greeting.title}
               </h1>
+              <p className="greeting-tagline">
+                {greeting.tagline}
+              </p>
               <p
                 className={
                   isDark
@@ -39,28 +38,19 @@ export default function Greeting() {
               <div id="resume" className="empty-div"></div>
               <SocialMedia />
               <div className="button-greeting-div">
-                <Button text="Contact me" href="#contact" />
-                {greeting.resumeLink && (
-                  <a
-                    href={require("./resume.pdf")}
-                    download="Resume.pdf"
-                    className="download-link-button"
-                  >
-                    <Button text="Download my resume" />
-                  </a>
-                )}
+                <Button text="Explore My Work" href="#highlights" />
+                <Button text="Contact Me" href="#contact" />
               </div>
             </div>
           </div>
           <div className="greeting-image-div">
-            {illustration.animated ? (
-              <DisplayLottie animationData={landingPerson} />
-            ) : (
+            <div className="profile-image-wrapper">
               <img
-                alt="man sitting on table"
-                src={require("../../assets/images/manOnTable.svg")}
-              ></img>
-            )}
+                className="profile-image"
+                alt="Echo Chen Portrait"
+                src={greeting.profileImage || placeholderImages.profilePhoto}
+              />
+            </div>
           </div>
         </div>
       </div>

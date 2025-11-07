@@ -2,6 +2,10 @@
 // 在没有真实图片时，可以使用这些在线占位符URL
 
 const placeholderImages = {
+  // 个人照片 - 600x600 (用于首页Hero区)
+  // 使用专业的头像占位符（可以用unsplash的portrait照片）
+  profilePhoto: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=600&fit=crop",
+
   // 公司Logo - 200x200
   polyuLogo: "https://via.placeholder.com/200x200/1a1a2e/ffffff?text=PolyU",
   oxfordLogo: "https://via.placeholder.com/200x200/002147/ffffff?text=Oxford",

@@ -1,0 +1,66 @@
+@import "../_globalColor";
+
+.page-container {
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+.page-hero {
+  text-align: center;
+  padding: 80px 20px 60px;
+  background: linear-gradient(135deg, rgba(85, 25, 139, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+}
+
+.page-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: $textColor;
+  margin-bottom: 1rem;
+}
+
+.dark-mode .page-title {
+  color: $textColorDark;
+}
+
+.page-subtitle {
+  font-size: 1.25rem;
+  color: $subTitle;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.dark-mode .page-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.related-section {
+  margin: 60px auto;
+  max-width: 1200px;
+  padding: 0 20px;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: $textColor;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.dark-mode .section-title {
+  color: $textColorDark;
+}
+
+@media (max-width: 768px) {
+  .page-hero {
+    padding: 60px 20px 40px;
+  }
+
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .page-subtitle {
+    font-size: 1rem;
+  }
+}

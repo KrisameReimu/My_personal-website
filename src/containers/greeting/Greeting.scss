@@ -53,9 +53,53 @@
   line-height: 40px;
 }
 
-.greeting-image-div > img {
-  max-width: 100%;
+.greeting-image-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-image-wrapper {
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: linear-gradient(135deg, $buttonColor 0%, $purple 50%, $goldColor 100%);
+    border-radius: 50%;
+    z-index: -1;
+    opacity: 0.3;
+    filter: blur(20px);
+  }
+}
+
+.profile-image {
+  width: 100%;
   height: auto;
+  border-radius: 50%;
+  object-fit: cover;
+  aspect-ratio: 1 / 1;
+  border: 4px solid white;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.greeting-tagline {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: $buttonColor;
+  margin: 1.5rem 0;
+  line-height: 1.4;
 }
 
 .wave-emoji {

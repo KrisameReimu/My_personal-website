@@ -1,24 +1,17 @@
 import React, {useEffect, useState} from "react";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Header from "../components/header/Header";
-import Greeting from "./greeting/Greeting";
-import Skills from "./skills/Skills";
-import StackProgress from "./skillProgress/skillProgress";
-import WorkExperience from "./workExperience/WorkExperience";
-import Projects from "./projects/Projects";
-import StartupProject from "./StartupProjects/StartupProject";
-import Achievement from "./achievement/Achievement";
 import Footer from "../components/footer/Footer";
-import Talks from "./talks/Talks";
-import Podcast from "./podcast/Podcast";
-import Education from "./education/Education";
+import ScrollToTop from "../components/ScrollToTop";
 import ScrollToTopButton from "./topbutton/Top";
-import Twitter from "./twitter-embed/twitter";
-import Profile from "./profile/Profile";
 import SplashScreen from "./splashScreen/SplashScreen";
-import VideoPortfolio from "./videoPortfolio/VideoPortfolio";
-import Photography from "./photography/Photography";
-import GameDevShowcase from "./gameDevShowcase/GameDevShowcase";
-import WritingShowcase from "./writingShowcase/WritingShowcase";
+import HomePage from "../pages/HomePage";
+import GameDevPage from "../pages/GameDevPage";
+import VideoPage from "../pages/VideoPage";
+import PhotographyPage from "../pages/PhotographyPage";
+import WritingPage from "../pages/WritingPage";
+import AboutPage from "../pages/AboutPage";
+import Contact from "./contact/Contact";
 import {splashScreen} from "../portfolio";
 import {StyleProvider} from "../contexts/StyleContext";
 import {useLocalStorage} from "../hooks/useLocalStorage";
@@ -52,27 +45,21 @@ const Main = () => {
         {isShowingSplashAnimation && splashScreen.enabled ? (
           <SplashScreen />
         ) : (
-          <>
+          <Router>
+            <ScrollToTop />
             <Header />
-            <Greeting />
-            <Skills />
-            <StackProgress />
-            <Education />
-            <WorkExperience />
-            <Projects />
-            <StartupProject />
-            <GameDevShowcase />
-            <Achievement />
-            <VideoPortfolio />
-            <Photography />
-            <WritingShowcase />
-            <Talks />
-            <Twitter />
-            <Podcast />
-            <Profile />
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/game-dev" element={<GameDevPage />} />
+              <Route path="/videos" element={<VideoPage />} />
+              <Route path="/photography" element={<PhotographyPage />} />
+              <Route path="/writing" element={<WritingPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/contact" element={<Contact />} />
+            </Routes>
             <Footer />
             <ScrollToTopButton />
-          </>
+          </Router>
         )}
       </StyleProvider>
     </div>
