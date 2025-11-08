@@ -11,6 +11,7 @@ import VideoPage from "../pages/VideoPage";
 import PhotographyPage from "../pages/PhotographyPage";
 import WritingPage from "../pages/WritingPage";
 import AboutPage from "../pages/AboutPage";
+import ArticlePage from "../pages/ArticlePage";
 import Contact from "./contact/Contact";
 import {splashScreen} from "../portfolio";
 import {StyleProvider} from "../contexts/StyleContext";
@@ -54,6 +55,7 @@ const Main = () => {
               <Route path="/videos" element={<VideoPage />} />
               <Route path="/photography" element={<PhotographyPage />} />
               <Route path="/writing" element={<WritingPage />} />
+              <Route path="/articles/:slug" element={<ArticlePage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<Contact />} />
             </Routes>
