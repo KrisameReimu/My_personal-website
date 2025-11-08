@@ -24,23 +24,7 @@ const Photography = () => {
   const [currentPhotos, setCurrentPhotos] = useState([]);
   const { loadedImages, loadImage } = useImageLoader();
 
-  // Keyboard navigation for lightbox
-  const handleKeydown = useCallback((e) => {
-    if (!lightboxOpen) return;
-    
-    if (e.key === 'Escape') {
-      closeLightbox();
-    } else if (e.key === 'ArrowRight') {
-      nextPhoto();
-    } else if (e.key === 'ArrowLeft') {
-      prevPhoto();
-    }
-  }, [lightboxOpen, closeLightbox, nextPhoto, prevPhoto]);
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeydown);
-    return () => window.removeEventListener('keydown', handleKeydown);
-  }, [handleKeydown]);
+  // Note: move keyboard listener AFTER dependent callbacks are defined to avoid TDZ ReferenceErrors
 
   // Preload images when category is selected
   useEffect(() => {
@@ -70,6 +54,23 @@ const Photography = () => {
   const prevPhoto = useCallback(() => {
     setLightboxIndex(prev => (prev - 1 + currentPhotos.length) % currentPhotos.length);
   }, [currentPhotos]);
+
+  // Keyboard navigation (defined after callbacks to prevent 'Cannot access before initialization')
+  const handleKeydown = useCallback((e) => {
+    if (!lightboxOpen) return;
+    if (e.key === 'Escape') {
+      closeLightbox();
+    } else if (e.key === 'ArrowRight') {
+      nextPhoto();
+    } else if (e.key === 'ArrowLeft') {
+      prevPhoto();
+    }
+  }, [lightboxOpen, closeLightbox, nextPhoto, prevPhoto]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeydown);
+    return () => window.removeEventListener('keydown', handleKeydown);
+  }, [handleKeydown]);
 
   if (!photographySection.display) return null;
 
