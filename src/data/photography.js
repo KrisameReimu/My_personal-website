@@ -273,7 +273,7 @@ export const categories = [
   },
 ];
 
-export default {
+const photographyData = {
   photographyConfig,
   allPhotos,
   photosByCategory,
@@ -282,3 +282,5 @@ export default {
   naturePhotos,
   categories
 };
+
+export default photographyData;

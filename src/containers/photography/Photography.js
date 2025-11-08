@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./Photography.scss";
 import { Fade } from "react-reveal";
-import { photographyConfig, categories, photosByCategory } from "../../data/photography";
+import { categories, photosByCategory } from "../../data/photography";
 import { useImageLoader } from "../../hooks/useImageLoader";
 
 // Backwards compatibility: maintain photographySection export shape for legacy imports

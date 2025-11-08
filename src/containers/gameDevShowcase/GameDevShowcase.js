@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./GameDevShowcase.scss";
 import { Fade } from "react-reveal";
-import { gameDevConfig, projects, calculateProgress } from "../../data/gamedev";
+import { projects, calculateProgress } from "../../data/gamedev";
 
 // Backwards compatibility: maintain gameDevSection export shape for legacy imports
 const gameDevSection = {

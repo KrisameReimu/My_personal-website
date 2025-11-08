@@ -9,7 +9,7 @@
  * - 错误处理
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 /**
  * useImageLoader
@@ -34,6 +34,25 @@ export const useImageLoader = (src, options = {}) => {
   const [error, setError] = useState(null);
   const imageRef = useRef(null);
   const observerRef = useRef(null);
+
+  const loadImage = useCallback(() => {
+    const img = new Image();
+    
+    img.onload = () => {
+      setImageSrc(src);
+      setLoading(false);
+      setError(null);
+      if (onLoad) onLoad();
+    };
+
+    img.onerror = () => {
+      setLoading(false);
+      setError('Failed to load image');
+      if (onError) onError();
+    };
+
+    img.src = src;
+  }, [src, onLoad, onError]);
 
   useEffect(() => {
     // 如果不需要懒加载，直接加载
@@ -61,33 +80,17 @@ export const useImageLoader = (src, options = {}) => {
       }
     );
 
-    observerRef.current.observe(imageRef.current);
+    const currentImage = imageRef.current;
+    if (currentImage) {
+      observerRef.current.observe(currentImage);
+    }
 
     return () => {
-      if (observerRef.current && imageRef.current) {
-        observerRef.current.unobserve(imageRef.current);
+      if (observerRef.current && currentImage) {
+        observerRef.current.unobserve(currentImage);
       }
     };
-  }, [src, lazy]);
-
-  const loadImage = () => {
-    const img = new Image();
-    
-    img.onload = () => {
-      setImageSrc(src);
-      setLoading(false);
-      setError(null);
-      if (onLoad) onLoad();
-    };
-
-    img.onerror = () => {
-      setLoading(false);
-      setError('Failed to load image');
-      if (onError) onError();
-    };
-
-    img.src = src;
-  };
+  }, [src, lazy, loadImage]);
 
   return {
     imageSrc,
@@ -110,17 +113,17 @@ export const useImageGallery = (images = []) => {
     setIsLightboxOpen(true);
   };
 
-  const closeLightbox = () => {
+  const closeLightbox = useCallback(() => {
     setIsLightboxOpen(false);
-  };
+  }, []);
 
-  const goToNext = () => {
+  const goToNext = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % images.length);
-  };
+  }, [images.length]);
 
-  const goToPrevious = () => {
+  const goToPrevious = useCallback(() => {
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
+  }, [images.length]);
 
   const goToIndex = (index) => {
     if (index >= 0 && index < images.length) {
@@ -150,7 +153,7 @@ export const useImageGallery = (images = []) => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isLightboxOpen, currentIndex, images.length]);
+  }, [isLightboxOpen, closeLightbox, goToNext, goToPrevious]);
 
   return {
     currentIndex,

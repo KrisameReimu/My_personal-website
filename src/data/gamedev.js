@@ -247,11 +247,11 @@ export const getAllTechnologies = () => {
   return Array.from(techSet);
 };
 
-export default {
+const gamedevData = {
   gameDevConfig,
   projects,
-  activeProjects,
-  completedProjects,
   calculateProgress,
   getAllTechnologies
 };
+
+export default gamedevData;

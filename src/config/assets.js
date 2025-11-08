@@ -133,9 +133,11 @@ export const IMGUR_BASE = "https://i.imgur.com";
 // GitHub Assets仓库（完全免费）
 export const GITHUB_ASSETS = "https://raw.githubusercontent.com/KrisameReimu/website-assets/main";
 
-export default {
+const assetsConfig = {
   getImageUrl,
   getVideoEmbedUrl,
   getArticleUrl,
   getPhotoGallery
 };
+
+export default assetsConfig;

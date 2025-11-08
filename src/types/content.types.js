@@ -169,8 +169,10 @@ export const AwardLevels = {
   BRONZE: 'bronze'
 };
 
-export default {
+const contentTypes = {
   ContentTypes,
   ContentCategories,
   AwardLevels
 };
+
+export default contentTypes;

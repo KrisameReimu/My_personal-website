@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import "./WritingShowcase.scss";
 import { Fade } from "react-reveal";
-import { writingConfig, featuredArticles, categories } from "../../data/writings";
+import { featuredArticles, categories } from "../../data/writings";
 import { getArticleUrl } from "../../config/assets";
 
 // Backwards compatibility export (legacy shape used elsewhere)

@@ -9,7 +9,7 @@
  * - 支持外部链接（微信公众号等）
  */
 
-import { getImageUrl, getArticleUrl } from '../config/assets';
+import { getImageUrl } from '../config/assets';
 
 export const writingConfig = {
   brandColor: {
@@ -199,10 +199,12 @@ export const categories = [
   },
 ];
 
-export default {
+const writingsData = {
   writingConfig,
   articles,
   articlesByCategory,
   featuredArticles,
   categories
 };
+
+export default writingsData;

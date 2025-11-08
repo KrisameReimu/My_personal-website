@@ -78,9 +78,9 @@ const ArticlePage = () => {
             <span className="article-category"><i className="fas fa-tag" /> {article.category}</span>
           )}
         </div>
-        <div className="lang-toggle" role="tablist" aria-label="Language toggle">
-          <button onClick={() => setLang('zh')} className={lang==='zh' ? 'active' : ''} aria-selected={lang==='zh'}>中文</button>
-          <button onClick={() => setLang('en')} className={lang==='en' ? 'active' : ''} aria-selected={lang==='en'}>EN</button>
+        <div className="lang-toggle" role="group" aria-label="Language toggle">
+          <button onClick={() => setLang('zh')} className={lang==='zh' ? 'active' : ''} aria-pressed={lang==='zh'}>中文</button>
+          <button onClick={() => setLang('en')} className={lang==='en' ? 'active' : ''} aria-pressed={lang==='en'}>EN</button>
         </div>
       </div>
       {article.coverImage && (

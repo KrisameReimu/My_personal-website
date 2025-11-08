@@ -347,7 +347,7 @@ export const getContentSource = () => {
   return CMS_CONFIG.enabled ? 'cms' : 'local';
 };
 
-export default {
+const contentAPI = {
   getArticles,
   getArticleById,
   getArticleBySlug,
@@ -360,3 +360,5 @@ export default {
   checkCMSHealth,
   getContentSource
 };
+
+export default contentAPI;

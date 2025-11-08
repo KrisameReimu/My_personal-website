@@ -9,7 +9,7 @@
  * - 双语标题与描述
  */
 
-import { getVideoEmbedUrl, getImageUrl } from '../config/assets';
+import { getImageUrl } from '../config/assets';
 import { AwardLevels } from '../types/content.types';
 
 export const videoConfig = {
@@ -208,7 +208,7 @@ export const awardStats = {
   specialCount: videosByAwardLevel.special.length
 };
 
-export default {
+const videosData = {
   videoConfig,
   videos,
   videosByAwardLevel,
@@ -217,3 +217,5 @@ export default {
   categories,
   awardStats
 };
+
+export default videosData;
