@@ -399,111 +399,23 @@ const talkSection = {
   display: true // Set false to hide this section, defaults to true
 };
 
-// Game Development Showcase Section
+// Feature Display Toggles for New Sections
+// NOTE: Detailed content for these sections has been migrated to:
+// - Game Dev: src/data/gamedev.js + GameDevShowcase component
+// - Videos: src/data/videos.js + VideoPortfolio component  
+// - Photography: src/data/photography.js + Photography component
+// These objects are kept minimal for Header navigation display control
 
 const gameDevSection = {
-  title: emoji("Game Development 🎮"),
-  subtitle: "CREATING IMMERSIVE WORLDS AND MEMORABLE EXPERIENCES",
-  games: [
-    {
-      title: "Melina Dream of Hero",
-      description: "A 2D action-adventure puzzle game inspired by Hollow Knight. Features multi-layered game maps, atmospheric scenes, and intricate puzzle structures that integrate with narrative and combat mechanics.",
-      image: placeholderImages.melinaGame,
-      demoVideo: "https://www.youtube.com/watch?v=your-demo-video", // Add your demo video
-      downloadLink: "", // Add download link if available
-      technologies: ["Unity", "C#", "Adobe Photoshop", "Git"],
-      status: "In Development", // or "Completed", "Published"
-      highlights: [
-        "Game Map & Scene Designer - Created immersive game environments",
-        "Designed multi-layered maps with hidden secrets and exploration mechanics",
-        "Implemented movement mechanics and combat systems using C#",
-        "Collaborated in team of 4 using Agile methodologies"
-      ]
-    },
-    {
-      title: "Future Game Project", 
-      description: "Planning the next adventure - stay tuned for updates!",
-      image: placeholderImages.gamePlaceholder,
-      demoVideo: "",
-      downloadLink: "",
-      technologies: ["Unity", "C#", "Blender"],
-      status: "Planning",
-      highlights: [
-        "Concept development phase",
-        "Exploring new game mechanics",
-        "Story and world building"
-      ]
-    }
-  ],
-  display: true
+  display: true // Toggle Game Dev section visibility
 };
-
-// Video Portfolio Section
 
 const videoPortfolioSection = {
-  title: emoji("Video Production 🎬"),
-  subtitle: "AWARD-WINNING VIDEO CONTENT AND CREATIVE STORYTELLING",
-  videos: [
-    {
-      title: "University Promotional Video",
-      description: "Gold Award winning promotional content for PolyU",
-      thumbnail: placeholderImages.video1Thumb,
-      videoUrl: "", // YouTube or Vimeo embed URL
-      category: "Promotional",
-      awards: ["Gold Award - PolyU Video Production Programme"]
-    },
-    {
-      title: "Creative Short Film",
-      description: "Silver Award winning short film exploring urban life",
-      thumbnail: placeholderImages.video2Thumb,
-      videoUrl: "",
-      category: "Short Film",
-      awards: ["Silver Award - PolyU Video Production Programme"]
-    },
-    {
-      title: "Documentary Project",
-      description: "Special Award documentary on technology and society",
-      thumbnail: placeholderImages.video3Thumb,
-      videoUrl: "",
-      category: "Documentary",
-      awards: ["Special Award - PolyU Video Production Programme"]
-    }
-  ],
-  display: true
+  display: true // Toggle Video Portfolio section visibility
 };
 
-// Photography Portfolio Section
-
 const photographySection = {
-  title: emoji("Photography 📸"),
-  subtitle: "CAPTURING MOMENTS AND TELLING VISUAL STORIES",
-  categories: [
-    {
-      name: "Urban Photography",
-      description: "Exploring city life and architecture",
-      coverImage: placeholderImages.urbanCover,
-      photos: [
-        // Add photo paths here
-      ]
-    },
-    {
-      name: "Portrait Photography",
-      description: "Capturing human emotions and expressions",
-      coverImage: placeholderImages.portraitCover,
-      photos: [
-        // Add photo paths here
-      ]
-    },
-    {
-      name: "Nature & Landscape",
-      description: "Finding beauty in natural environments",
-      coverImage: placeholderImages.natureCover,
-      photos: [
-        // Add photo paths here
-      ]
-    }
-  ],
-  display: true
+  display: true // Toggle Photography section visibility
 };
 
 // Resume Section

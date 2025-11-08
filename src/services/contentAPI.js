@@ -146,6 +146,29 @@ export const getArticleById = async (id) => {
 };
 
 /**
+ * 通过 slug 获取文章（适用于详情页路由）
+ * @param {string} slug
+ * @returns {Promise<Object|null>}
+ */
+export const getArticleBySlug = async (slug) => {
+  try {
+    if (CMS_CONFIG.enabled) {
+      // Strapi v4 常用过滤方式：/api/articles?filters[slug][$eq]=my-slug
+      const query = new URLSearchParams({ [`filters[slug][$eq]`]: slug });
+      const data = await fetchFromCMS(`articles?${query.toString()}`);
+      const item = data.data?.[0];
+      return item || null;
+    }
+  } catch (error) {
+    console.warn('Falling back to local article by slug');
+  }
+
+  const localData = await getLocalData(ContentTypes.ARTICLE);
+  const articles = localData?.articles || [];
+  return articles.find(a => a.id === slug) || null; // 本地id即slug
+};
+
+/**
  * 获取照片列表
  * @param {Object} options - 查询选项
  * @param {string} options.category - 分类（urban/portrait/nature）
@@ -327,6 +350,7 @@ export const getContentSource = () => {
 export default {
   getArticles,
   getArticleById,
+  getArticleBySlug,
   getPhotos,
   getVideos,
   getGameProjects,
