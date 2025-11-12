@@ -25,7 +25,7 @@ const greeting = {
   title: "Hi, I'm Echo Chen (陈琛)",
   tagline: "AI Developer × Game Creator × Digital Storyteller",
   subTitle: "I build experiences at the intersection of technology and creativity—from AI-powered education tools to immersive games and award-winning multimedia content.",
-  profileImage: placeholderImages.profilePhoto, // Replace with your actual photo
+  profileImage: require("./assets/images/profile.jpg"), // 你的个人头像
   resumeLink: "https://drive.google.com/file/d/your-cv-link",
   displayGreeting: true
 };
