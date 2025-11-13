@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import "./GameDevShowcase.scss";
-import { Fade } from "react-reveal";
-import { projects, calculateProgress } from "../../data/gamedev";
+import {Fade} from "react-reveal";
+import {projects, calculateProgress} from "../../data/gamedev";
 
 // Backwards compatibility: maintain gameDevSection export shape for legacy imports
 const gameDevSection = {
@@ -27,12 +27,16 @@ const GameDevShowcase = () => {
   if (!gameDevSection.display) return null;
 
   // Get milestone icon based on status
-  const getMilestoneIcon = (status) => {
+  const getMilestoneIcon = status => {
     switch (status) {
-      case 'completed': return 'fas fa-check-circle';
-      case 'in-progress': return 'fas fa-spinner';
-      case 'planned': return 'far fa-circle';
-      default: return 'far fa-circle';
+      case "completed":
+        return "fas fa-check-circle";
+      case "in-progress":
+        return "fas fa-spinner";
+      case "planned":
+        return "far fa-circle";
+      default:
+        return "far fa-circle";
     }
   };
 
@@ -54,9 +58,13 @@ const GameDevShowcase = () => {
               const progress = calculateProgress(project);
               return (
                 <Fade key={project.id} bottom duration={2000} distance="40px">
-                  <div 
+                  <div
                     className="game-card"
-                    onClick={() => setSelectedProject(selectedProject === project.id ? null : project.id)}
+                    onClick={() =>
+                      setSelectedProject(
+                        selectedProject === project.id ? null : project.id
+                      )
+                    }
                   >
                     <div className="game-image-container">
                       <img
@@ -65,18 +73,23 @@ const GameDevShowcase = () => {
                         className="game-image"
                         loading="lazy"
                       />
-                      <div className="game-status-badge" data-status={project.status}>
+                      <div
+                        className="game-status-badge"
+                        data-status={project.status}
+                      >
                         {project.status}
                       </div>
-                      {project.status === 'In Development' && (
+                      {project.status === "In Development" && (
                         <div className="progress-overlay">
                           <div className="progress-bar">
-                            <div 
-                              className="progress-fill" 
-                              style={{ width: `${progress}%` }}
+                            <div
+                              className="progress-fill"
+                              style={{width: `${progress}%`}}
                             />
                           </div>
-                          <span className="progress-text">{progress}% Complete</span>
+                          <span className="progress-text">
+                            {progress}% Complete
+                          </span>
                         </div>
                       )}
                     </div>
@@ -84,8 +97,10 @@ const GameDevShowcase = () => {
                     <div className="game-content">
                       <h3 className="game-title">{project.title.zh}</h3>
                       <h4 className="game-title-en">{project.title.en}</h4>
-                      <p className="game-description">{project.description.zh}</p>
-                      
+                      <p className="game-description">
+                        {project.description.zh}
+                      </p>
+
                       <div className="game-tech-stack">
                         <strong>Technologies:</strong>
                         <div className="tech-tags">
@@ -141,7 +156,8 @@ const GameDevShowcase = () => {
                         <Fade>
                           <div className="milestones-section">
                             <h4 className="milestones-heading">
-                              <i className="fas fa-flag-checkered"></i> Development Milestones
+                              <i className="fas fa-flag-checkered"></i>{" "}
+                              Development Milestones
                             </h4>
                             <div className="milestones-timeline">
                               {project.milestones.map((milestone, idx) => (
@@ -152,10 +168,16 @@ const GameDevShowcase = () => {
                                   onMouseLeave={() => setHoveredMilestone(null)}
                                 >
                                   <div className="milestone-marker">
-                                    <i className={getMilestoneIcon(milestone.status)}></i>
+                                    <i
+                                      className={getMilestoneIcon(
+                                        milestone.status
+                                      )}
+                                    ></i>
                                   </div>
                                   <div className="milestone-content">
-                                    <h5 className="milestone-title">{milestone.title}</h5>
+                                    <h5 className="milestone-title">
+                                      {milestone.title}
+                                    </h5>
                                     {hoveredMilestone === idx && (
                                       <p className="milestone-description">
                                         {milestone.description}
@@ -163,7 +185,8 @@ const GameDevShowcase = () => {
                                     )}
                                     {milestone.completedDate && (
                                       <span className="milestone-date">
-                                        <i className="far fa-calendar-check"></i> {milestone.completedDate}
+                                        <i className="far fa-calendar-check"></i>{" "}
+                                        {milestone.completedDate}
                                       </span>
                                     )}
                                   </div>
@@ -200,7 +223,9 @@ const GameDevShowcase = () => {
                   </div>
                   <div className="timeline-content">
                     <h4>Development</h4>
-                    <p>Programming gameplay systems and implementing features</p>
+                    <p>
+                      Programming gameplay systems and implementing features
+                    </p>
                   </div>
                 </div>
                 <div className="timeline-item">
@@ -231,4 +256,4 @@ const GameDevShowcase = () => {
 };
 
 export default GameDevShowcase;
-export { gameDevSection };
+export {gameDevSection};

@@ -24,7 +24,8 @@ const greeting = {
   username: "Echo Chen",
   title: "Hi, I'm Echo Chen (陈琛)",
   tagline: "AI Developer × Game Creator × Digital Storyteller",
-  subTitle: "I build experiences at the intersection of technology and creativity—from AI-powered education tools to immersive games and award-winning multimedia content.",
+  subTitle:
+    "I build experiences at the intersection of technology and creativity—from AI-powered education tools to immersive games and award-winning multimedia content.",
   profileImage: require("./assets/images/profile.jpg"), // 你的个人头像
   resumeLink: "https://drive.google.com/file/d/your-cv-link",
   displayGreeting: true
@@ -51,7 +52,9 @@ const skillsSection = {
     emoji(
       "⚡ Develop AI-powered educational tools using GPT-4 and Azure OpenAI for personalized learning experiences"
     ),
-    emoji("⚡ Create immersive 2D action-adventure games with Unity, featuring intricate level design and narrative-driven gameplay"),
+    emoji(
+      "⚡ Create immersive 2D action-adventure games with Unity, featuring intricate level design and narrative-driven gameplay"
+    ),
     emoji(
       "⚡ Build responsive full-stack web applications with React.js, Flask, and modern JavaScript frameworks"
     ),
@@ -233,7 +236,7 @@ const workExperiences = {
       company: "The Institution of Engineering and Technology Hong Kong",
       companylogo: placeholderImages.ietLogo,
       date: "2024",
-      desc: "Active participant in promoting engineering innovation and mentoring young students.",
+      desc: "Active participant in promoting engineering innovation and mentoring young students."
     }
   ]
 };
@@ -250,12 +253,14 @@ const openSource = {
 
 const bigProjects = {
   title: "Featured Projects",
-  subtitle: "INNOVATIVE SOLUTIONS AT THE INTERSECTION OF AI, GAMES, AND WEB TECHNOLOGIES",
+  subtitle:
+    "INNOVATIVE SOLUTIONS AT THE INTERSECTION OF AI, GAMES, AND WEB TECHNOLOGIES",
   projects: [
     {
       image: placeholderImages.genaiFeedback,
       projectName: "GenAI Feedback System",
-      projectDesc: "AI-powered educational feedback system using GPT-4 for automated, personalized assessment. Published at WAIE2025.",
+      projectDesc:
+        "AI-powered educational feedback system using GPT-4 for automated, personalized assessment. Published at WAIE2025.",
       footerLink: [
         {
           name: "View Project",
@@ -266,7 +271,8 @@ const bigProjects = {
     {
       image: placeholderImages.melinaGame,
       projectName: "Melina Dream of Hero",
-      projectDesc: "2D action-adventure puzzle game inspired by Hollow Knight, featuring intricate level design, combat mechanics, and narrative-driven gameplay.",
+      projectDesc:
+        "2D action-adventure puzzle game inspired by Hollow Knight, featuring intricate level design, combat mechanics, and narrative-driven gameplay.",
       footerLink: [
         {
           name: "View Details",
@@ -277,7 +283,8 @@ const bigProjects = {
     {
       image: placeholderImages.ecommerceWeb,
       projectName: "BornTea eCommerce Platform",
-      projectDesc: "Full-stack eCommerce web application with enhanced user experience and integrated marketing campaigns.",
+      projectDesc:
+        "Full-stack eCommerce web application with enhanced user experience and integrated marketing campaigns.",
       footerLink: [
         {
           name: "Case Study",
@@ -288,7 +295,8 @@ const bigProjects = {
     {
       image: placeholderImages.multimediaPortfolio,
       projectName: "Multimedia Production Works",
-      projectDesc: "Collection of multimedia productions including promotional videos, creative content, and visual storytelling projects.",
+      projectDesc:
+        "Collection of multimedia productions including promotional videos, creative content, and visual storytelling projects.",
       footerLink: [
         {
           name: "View Portfolio",
@@ -337,7 +345,8 @@ const achievementSection = {
     },
     {
       title: "Special Award & Silver Award",
-      subtitle: "Received Special Award and Silver Award for Video Production Programme at The Hong Kong Polytechnic University.",
+      subtitle:
+        "Received Special Award and Silver Award for Video Production Programme at The Hong Kong Polytechnic University.",
       image: placeholderImages.polyuAward, // 使用相同的奖项图片
       imageAlt: "Special Award Logo",
       footerLink: [
@@ -361,14 +370,12 @@ const blogSection = {
     {
       url: "", // 可以添加散文链接
       title: "思考的边界",
-      description:
-        "关于人类思考极限的随想..."
+      description: "关于人类思考极限的随想..."
     },
     {
       url: "", // 可以添加散文链接
       title: "城市中的孤独",
-      description:
-        "现代都市生活中的孤独感受..."
+      description: "现代都市生活中的孤独感受..."
     }
   ],
   display: true // Set false to hide this section, defaults to true
@@ -378,9 +385,7 @@ const blogSection = {
 
 const talkSection = {
   title: "PHOTOGRAPHY",
-  subtitle: emoji(
-    "CAPTURING MOMENTS AND TELLING STORIES THROUGH IMAGES 📸"
-  ),
+  subtitle: emoji("CAPTURING MOMENTS AND TELLING STORIES THROUGH IMAGES 📸"),
 
   talks: [
     {
@@ -402,7 +407,7 @@ const talkSection = {
 // Feature Display Toggles for New Sections
 // NOTE: Detailed content for these sections has been migrated to:
 // - Game Dev: src/data/gamedev.js + GameDevShowcase component
-// - Videos: src/data/videos.js + VideoPortfolio component  
+// - Videos: src/data/videos.js + VideoPortfolio component
 // - Photography: src/data/photography.js + Photography component
 // These objects are kept minimal for Header navigation display control
 
@@ -432,7 +437,8 @@ const resumeSection = {
 // Set display to true only after populating real content to avoid empty iframes.
 const podcastSection = {
   title: "Podcast",
-  subtitle: "Conversations & reflections blending AI, game dev, and creative storytelling (coming soon)",
+  subtitle:
+    "Conversations & reflections blending AI, game dev, and creative storytelling (coming soon)",
   podcast: [
     // Example (commented out until real links available):
     // "https://open.spotify.com/embed/episode/your-episode-id",

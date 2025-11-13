@@ -1,7 +1,7 @@
 /**
  * CMS集成配置文件
  * 支持Strapi和Contentful，可通过环境变量切换
- * 
+ *
  * 环境变量：
  * - REACT_APP_USE_CMS: 是否启用CMS (true/false)
  * - REACT_APP_CMS_PROVIDER: CMS提供商 (strapi/contentful)
@@ -13,18 +13,18 @@
 // ===== CMS提供商配置 =====
 
 export const CMS_PROVIDERS = {
-  STRAPI: 'strapi',
-  CONTENTFUL: 'contentful',
-  LOCAL: 'local'
+  STRAPI: "strapi",
+  CONTENTFUL: "contentful",
+  LOCAL: "local"
 };
 
 // 当前CMS配置
 export const cmsConfig = {
-  enabled: process.env.REACT_APP_USE_CMS === 'true',
+  enabled: process.env.REACT_APP_USE_CMS === "true",
   provider: process.env.REACT_APP_CMS_PROVIDER || CMS_PROVIDERS.LOCAL,
-  baseUrl: process.env.REACT_APP_CMS_URL || 'http://localhost:1337',
-  apiKey: process.env.REACT_APP_CMS_API_KEY || '',
-  spaceId: process.env.REACT_APP_CMS_SPACE_ID || '',
+  baseUrl: process.env.REACT_APP_CMS_URL || "http://localhost:1337",
+  apiKey: process.env.REACT_APP_CMS_API_KEY || "",
+  spaceId: process.env.REACT_APP_CMS_SPACE_ID || "",
   timeout: 5000,
   retryAttempts: 3,
   retryDelay: 1000
@@ -33,20 +33,20 @@ export const cmsConfig = {
 // ===== Strapi配置 =====
 
 export const strapiConfig = {
-  apiVersion: 'api',
+  apiVersion: "api",
   endpoints: {
-    articles: '/articles',
-    photos: '/photos',
-    videos: '/videos',
-    gameProjects: '/game-projects',
-    workExperiences: '/work-experiences',
-    education: '/education'
+    articles: "/articles",
+    photos: "/photos",
+    videos: "/videos",
+    gameProjects: "/game-projects",
+    workExperiences: "/work-experiences",
+    education: "/education"
   },
   populateFields: {
-    articles: '?populate=*',
-    photos: '?populate=*',
-    videos: '?populate=awards',
-    gameProjects: '?populate=screenshots,milestones'
+    articles: "?populate=*",
+    photos: "?populate=*",
+    videos: "?populate=awards",
+    gameProjects: "?populate=screenshots,milestones"
   }
 };
 
@@ -58,11 +58,11 @@ export const strapiConfig = {
  */
 export const buildStrapiUrl = (endpoint, params = {}) => {
   if (!cmsConfig.enabled || cmsConfig.provider !== CMS_PROVIDERS.STRAPI) {
-    return '';
+    return "";
   }
 
   let url = `${cmsConfig.baseUrl}/${strapiConfig.apiVersion}${strapiConfig.endpoints[endpoint]}`;
-  
+
   // 添加populate字段
   if (strapiConfig.populateFields[endpoint]) {
     url += strapiConfig.populateFields[endpoint];
@@ -71,7 +71,7 @@ export const buildStrapiUrl = (endpoint, params = {}) => {
   // 添加查询参数
   const queryParams = new URLSearchParams(params);
   if (queryParams.toString()) {
-    url += (url.includes('?') ? '&' : '?') + queryParams.toString();
+    url += (url.includes("?") ? "&" : "?") + queryParams.toString();
   }
 
   return url;
@@ -81,16 +81,16 @@ export const buildStrapiUrl = (endpoint, params = {}) => {
 
 export const contentfulConfig = {
   endpoints: {
-    entries: '/entries',
-    assets: '/assets'
+    entries: "/entries",
+    assets: "/assets"
   },
   contentTypes: {
-    article: 'article',
-    photo: 'photo',
-    video: 'video',
-    gameProject: 'gameProject',
-    workExperience: 'workExperience',
-    education: 'education'
+    article: "article",
+    photo: "photo",
+    video: "video",
+    gameProject: "gameProject",
+    workExperience: "workExperience",
+    education: "education"
   }
 };
 
@@ -102,7 +102,7 @@ export const contentfulConfig = {
  */
 export const buildContentfulUrl = (contentType, params = {}) => {
   if (!cmsConfig.enabled || cmsConfig.provider !== CMS_PROVIDERS.CONTENTFUL) {
-    return '';
+    return "";
   }
 
   const baseUrl = `https://cdn.contentful.com/spaces/${cmsConfig.spaceId}/environments/master`;
@@ -112,7 +112,9 @@ export const buildContentfulUrl = (contentType, params = {}) => {
     ...params
   });
 
-  return `${baseUrl}${contentfulConfig.endpoints.entries}?${queryParams.toString()}`;
+  return `${baseUrl}${
+    contentfulConfig.endpoints.entries
+  }?${queryParams.toString()}`;
 };
 
 // ===== 通用CMS请求方法 =====
@@ -132,7 +134,7 @@ export const fetchFromCMS = async (url, options = {}) => {
       ...options,
       signal: controller.signal,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...options.headers
       }
     });
@@ -140,17 +142,19 @@ export const fetchFromCMS = async (url, options = {}) => {
     clearTimeout(timeoutId);
 
     if (!response.ok) {
-      throw new Error(`CMS API error: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `CMS API error: ${response.status} ${response.statusText}`
+      );
     }
 
     return await response.json();
   } catch (error) {
     clearTimeout(timeoutId);
-    
-    if (error.name === 'AbortError') {
-      throw new Error('CMS request timeout');
+
+    if (error.name === "AbortError") {
+      throw new Error("CMS request timeout");
     }
-    
+
     throw error;
   }
 };
@@ -161,14 +165,17 @@ export const fetchFromCMS = async (url, options = {}) => {
  * @param {number} attempts - 重试次数
  * @returns {Promise<Object>} 响应数据
  */
-export const fetchWithRetry = async (requestFn, attempts = cmsConfig.retryAttempts) => {
+export const fetchWithRetry = async (
+  requestFn,
+  attempts = cmsConfig.retryAttempts
+) => {
   try {
     return await requestFn();
   } catch (error) {
     if (attempts <= 1) {
       throw error;
     }
-    
+
     // 等待后重试
     await new Promise(resolve => setTimeout(resolve, cmsConfig.retryDelay));
     return fetchWithRetry(requestFn, attempts - 1);
@@ -188,23 +195,23 @@ export const checkCMSHealth = async () => {
 
   try {
     let healthUrl;
-    
+
     if (cmsConfig.provider === CMS_PROVIDERS.STRAPI) {
       healthUrl = `${cmsConfig.baseUrl}/_health`;
     } else if (cmsConfig.provider === CMS_PROVIDERS.CONTENTFUL) {
-      healthUrl = buildContentfulUrl('article', { limit: 1 });
+      healthUrl = buildContentfulUrl("article", {limit: 1});
     }
 
     if (!healthUrl) return false;
 
     const response = await fetch(healthUrl, {
-      method: 'GET',
+      method: "GET",
       signal: AbortSignal.timeout(3000)
     });
 
     return response.ok;
   } catch (error) {
-    console.warn('CMS health check failed:', error);
+    console.warn("CMS health check failed:", error);
     return false;
   }
 };
@@ -216,14 +223,14 @@ export const checkCMSHealth = async () => {
  * @param {Object} strapiData - Strapi响应数据
  * @returns {Array|Object} 标准化数据
  */
-export const transformStrapiResponse = (strapiData) => {
+export const transformStrapiResponse = strapiData => {
   if (Array.isArray(strapiData.data)) {
     return strapiData.data.map(item => ({
       id: item.id,
       ...item.attributes
     }));
   }
-  
+
   return {
     id: strapiData.data.id,
     ...strapiData.data.attributes
@@ -235,7 +242,7 @@ export const transformStrapiResponse = (strapiData) => {
  * @param {Object} contentfulData - Contentful响应数据
  * @returns {Array|Object} 标准化数据
  */
-export const transformContentfulResponse = (contentfulData) => {
+export const transformContentfulResponse = contentfulData => {
   return contentfulData.items.map(item => ({
     id: item.sys.id,
     ...item.fields

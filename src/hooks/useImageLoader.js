@@ -1,7 +1,7 @@
 /**
  * useImageLoader Hook
  * 渐进式图片加载，优化性能和用户体验
- * 
+ *
  * 功能：
  * - 懒加载
  * - 渐进式加载（低质量预览 -> 高质量原图）
@@ -9,7 +9,7 @@
  * - 错误处理
  */
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import {useState, useEffect, useRef, useCallback} from "react";
 
 /**
  * useImageLoader
@@ -22,12 +22,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
  * @returns {Object} { imageSrc, loading, error, imageRef }
  */
 export const useImageLoader = (src, options = {}) => {
-  const {
-    placeholder = '',
-    lazy = true,
-    onLoad,
-    onError
-  } = options;
+  const {placeholder = "", lazy = true, onLoad, onError} = options;
 
   const [imageSrc, setImageSrc] = useState(placeholder);
   const [loading, setLoading] = useState(true);
@@ -37,7 +32,7 @@ export const useImageLoader = (src, options = {}) => {
 
   const loadImage = useCallback(() => {
     const img = new Image();
-    
+
     img.onload = () => {
       setImageSrc(src);
       setLoading(false);
@@ -47,7 +42,7 @@ export const useImageLoader = (src, options = {}) => {
 
     img.onerror = () => {
       setLoading(false);
-      setError('Failed to load image');
+      setError("Failed to load image");
       if (onError) onError();
     };
 
@@ -65,8 +60,8 @@ export const useImageLoader = (src, options = {}) => {
     if (!imageRef.current) return;
 
     observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+      entries => {
+        entries.forEach(entry => {
           if (entry.isIntersecting) {
             loadImage();
             // 加载后取消观察
@@ -75,7 +70,7 @@ export const useImageLoader = (src, options = {}) => {
         });
       },
       {
-        rootMargin: '50px', // 提前50px开始加载
+        rootMargin: "50px", // 提前50px开始加载
         threshold: 0.01
       }
     );
@@ -108,7 +103,7 @@ export const useImageGallery = (images = []) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
-  const openLightbox = (index) => {
+  const openLightbox = index => {
     setCurrentIndex(index);
     setIsLightboxOpen(true);
   };
@@ -118,14 +113,14 @@ export const useImageGallery = (images = []) => {
   }, []);
 
   const goToNext = useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % images.length);
+    setCurrentIndex(prev => (prev + 1) % images.length);
   }, [images.length]);
 
   const goToPrevious = useCallback(() => {
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+    setCurrentIndex(prev => (prev - 1 + images.length) % images.length);
   }, [images.length]);
 
-  const goToIndex = (index) => {
+  const goToIndex = index => {
     if (index >= 0 && index < images.length) {
       setCurrentIndex(index);
     }
@@ -135,15 +130,15 @@ export const useImageGallery = (images = []) => {
   useEffect(() => {
     if (!isLightboxOpen) return;
 
-    const handleKeyDown = (e) => {
+    const handleKeyDown = e => {
       switch (e.key) {
-        case 'Escape':
+        case "Escape":
           closeLightbox();
           break;
-        case 'ArrowRight':
+        case "ArrowRight":
           goToNext();
           break;
-        case 'ArrowLeft':
+        case "ArrowLeft":
           goToPrevious();
           break;
         default:
@@ -151,8 +146,8 @@ export const useImageGallery = (images = []) => {
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isLightboxOpen, closeLightbox, goToNext, goToPrevious]);
 
   return {
@@ -185,7 +180,7 @@ export const useProgressiveImage = (lowQualitySrc, highQualitySrc) => {
     // 在后台加载高质量图片
     const img = new Image();
     img.src = highQualitySrc;
-    
+
     img.onload = () => {
       setSrc(highQualitySrc);
       setLoading(false);
@@ -197,7 +192,7 @@ export const useProgressiveImage = (lowQualitySrc, highQualitySrc) => {
     };
   }, [lowQualitySrc, highQualitySrc]);
 
-  return { src, loading };
+  return {src, loading};
 };
 
 export default useImageLoader;

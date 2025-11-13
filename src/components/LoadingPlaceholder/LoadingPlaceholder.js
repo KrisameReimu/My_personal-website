@@ -1,24 +1,24 @@
 /**
  * LoadingPlaceholder Component
  * 提供优雅的内容加载状态
- * 
+ *
  * 使用方式：
  * <LoadingPlaceholder type="article" count={3} />
  */
 
-import React from 'react';
-import './LoadingPlaceholder.scss';
+import React from "react";
+import "./LoadingPlaceholder.scss";
 
-const LoadingPlaceholder = ({ type = 'default', count = 1, message }) => {
+const LoadingPlaceholder = ({type = "default", count = 1, message}) => {
   const renderPlaceholder = () => {
     switch (type) {
-      case 'article':
+      case "article":
         return <ArticlePlaceholder />;
-      case 'photo':
+      case "photo":
         return <PhotoPlaceholder />;
-      case 'video':
+      case "video":
         return <VideoPlaceholder />;
-      case 'card':
+      case "card":
         return <CardPlaceholder />;
       default:
         return <DefaultPlaceholder />;
@@ -28,7 +28,7 @@ const LoadingPlaceholder = ({ type = 'default', count = 1, message }) => {
   return (
     <div className="loading-placeholder-container">
       {message && <p className="loading-message">{message}</p>}
-      {Array.from({ length: count }).map((_, index) => (
+      {Array.from({length: count}).map((_, index) => (
         <div key={index} className="placeholder-item">
           {renderPlaceholder()}
         </div>
@@ -83,19 +83,16 @@ const DefaultPlaceholder = () => (
 /**
  * Simple spinner for inline loading
  */
-export const LoadingSpinner = ({ size = 'medium', color = '#764ba2' }) => (
+export const LoadingSpinner = ({size = "medium", color = "#764ba2"}) => (
   <div className={`loading-spinner loading-spinner-${size}`}>
-    <div 
-      className="spinner" 
-      style={{ borderTopColor: color }}
-    />
+    <div className="spinner" style={{borderTopColor: color}} />
   </div>
 );
 
 /**
  * Full page loading overlay
  */
-export const LoadingOverlay = ({ message = 'Loading...', show = true }) => {
+export const LoadingOverlay = ({message = "Loading...", show = true}) => {
   if (!show) return null;
 
   return (

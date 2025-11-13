@@ -42,14 +42,15 @@ export const getVideoEmbedUrl = (platform, videoId) => {
 // ===== 文章资源配置 =====
 
 // 方案1: 使用独立GitHub仓库存储文章
-export const ARTICLES_BASE_URL = "https://raw.githubusercontent.com/KrisameReimu/website-articles/main";
+export const ARTICLES_BASE_URL =
+  "https://raw.githubusercontent.com/KrisameReimu/website-articles/main";
 
 // 方案2: 使用本地public文件夹
 export const LOCAL_ARTICLES_PATH = "/articles";
 
-export const getArticleUrl = (filename) => {
+export const getArticleUrl = filename => {
   // 根据环境选择本地或远程
-  return process.env.NODE_ENV === 'development'
+  return process.env.NODE_ENV === "development"
     ? `${LOCAL_ARTICLES_PATH}/${filename}`
     : `${ARTICLES_BASE_URL}/${filename}`;
 };
@@ -66,7 +67,7 @@ export const PHOTO_FOLDERS = {
 // 批量生成照片URLs
 export const getPhotoGallery = (category, photoNames) => {
   const folder = PHOTO_FOLDERS[category];
-  return photoNames.map(name => 
+  return photoNames.map(name =>
     getImageUrl(`${folder}/${name}`, {width: 1200, quality: 85})
   );
 };
@@ -131,7 +132,8 @@ export const IMGBB_BASE = "https://i.ibb.co";
 export const IMGUR_BASE = "https://i.imgur.com";
 
 // GitHub Assets仓库（完全免费）
-export const GITHUB_ASSETS = "https://raw.githubusercontent.com/KrisameReimu/website-assets/main";
+export const GITHUB_ASSETS =
+  "https://raw.githubusercontent.com/KrisameReimu/website-assets/main";
 
 const assetsConfig = {
   getImageUrl,

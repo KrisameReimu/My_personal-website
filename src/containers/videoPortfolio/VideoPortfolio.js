@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import "./VideoPortfolio.scss";
-import { Fade } from "react-reveal";
-import { videoConfig, videos, videosByAwardLevel, categories, awardStats } from "../../data/videos";
-import { getVideoEmbedUrl } from "../../config/assets";
+import {Fade} from "react-reveal";
+import {
+  videoConfig,
+  videos,
+  videosByAwardLevel,
+  categories,
+  awardStats
+} from "../../data/videos";
+import {getVideoEmbedUrl} from "../../config/assets";
 
 // Backwards compatibility: maintain videoPortfolioSection export shape
 const videoPortfolioSection = {
@@ -12,30 +18,34 @@ const videoPortfolioSection = {
   videos: videos.map(video => ({
     title: video.title.en,
     description: video.description.en,
-    videoUrl: video.videoId ? getVideoEmbedUrl(video.platform, video.videoId) : '',
+    videoUrl: video.videoId
+      ? getVideoEmbedUrl(video.platform, video.videoId)
+      : "",
     thumbnail: video.thumbnailUrl,
-    category: categories.find(c => c.id === video.category)?.name.en || video.category,
+    category:
+      categories.find(c => c.id === video.category)?.name.en || video.category,
     awards: video.awards.map(a => a.name)
   }))
 };
 
 const VideoPortfolio = () => {
-  const [selectedFilter, setSelectedFilter] = useState('all'); // 'all', 'gold', 'silver', 'special'
+  const [selectedFilter, setSelectedFilter] = useState("all"); // 'all', 'gold', 'silver', 'special'
   const [hoveredVideo, setHoveredVideo] = useState(null);
 
   if (!videoPortfolioSection.display) return null;
 
   // Filter videos based on selected award level
-  const filteredVideos = selectedFilter === 'all' 
-    ? videos 
-    : videosByAwardLevel[selectedFilter] || [];
+  const filteredVideos =
+    selectedFilter === "all"
+      ? videos
+      : videosByAwardLevel[selectedFilter] || [];
 
   // Get award badge styling
-  const getAwardBadgeStyle = (level) => {
+  const getAwardBadgeStyle = level => {
     const colors = videoConfig.awardBadgeColors;
     return {
       backgroundColor: colors[level] || colors.special,
-      color: level === 'silver' ? '#333' : '#fff'
+      color: level === "silver" ? "#333" : "#fff"
     };
   };
 
@@ -84,26 +94,34 @@ const VideoPortfolio = () => {
           {/* Filter Buttons */}
           <div className="filter-buttons">
             <button
-              className={`filter-btn ${selectedFilter === 'all' ? 'active' : ''}`}
-              onClick={() => setSelectedFilter('all')}
+              className={`filter-btn ${
+                selectedFilter === "all" ? "active" : ""
+              }`}
+              onClick={() => setSelectedFilter("all")}
             >
               <i className="fas fa-th"></i> All Videos
             </button>
             <button
-              className={`filter-btn ${selectedFilter === 'gold' ? 'active' : ''}`}
-              onClick={() => setSelectedFilter('gold')}
+              className={`filter-btn ${
+                selectedFilter === "gold" ? "active" : ""
+              }`}
+              onClick={() => setSelectedFilter("gold")}
             >
               <i className="fas fa-trophy"></i> Gold Awards
             </button>
             <button
-              className={`filter-btn ${selectedFilter === 'silver' ? 'active' : ''}`}
-              onClick={() => setSelectedFilter('silver')}
+              className={`filter-btn ${
+                selectedFilter === "silver" ? "active" : ""
+              }`}
+              onClick={() => setSelectedFilter("silver")}
             >
               <i className="fas fa-medal"></i> Silver Awards
             </button>
             <button
-              className={`filter-btn ${selectedFilter === 'special' ? 'active' : ''}`}
-              onClick={() => setSelectedFilter('special')}
+              className={`filter-btn ${
+                selectedFilter === "special" ? "active" : ""
+              }`}
+              onClick={() => setSelectedFilter("special")}
             >
               <i className="fas fa-star"></i> Special Awards
             </button>
@@ -118,11 +136,13 @@ const VideoPortfolio = () => {
               </div>
             )}
             {filteredVideos.map((video, i) => {
-              const embedUrl = video.videoId ? getVideoEmbedUrl(video.platform, video.videoId) : null;
-              
+              const embedUrl = video.videoId
+                ? getVideoEmbedUrl(video.platform, video.videoId)
+                : null;
+
               return (
-                <div 
-                  key={video.id} 
+                <div
+                  key={video.id}
                   className="video-card"
                   onMouseEnter={() => setHoveredVideo(video.id)}
                   onMouseLeave={() => setHoveredVideo(null)}
@@ -153,33 +173,38 @@ const VideoPortfolio = () => {
                           </div>
                         </div>
                       )}
-                      
+
                       <div className="video-info">
                         <h3 className="video-title">{video.title.zh}</h3>
                         <h4 className="video-title-en">{video.title.en}</h4>
                         <p className="video-description">
                           {video.description.zh}
                         </p>
-                        
+
                         <div className="video-meta">
                           <span className="video-category">
-                            <i className="fas fa-tag"></i> 
-                            {categories.find(c => c.id === video.category)?.name.zh}
+                            <i className="fas fa-tag"></i>
+                            {
+                              categories.find(c => c.id === video.category)
+                                ?.name.zh
+                            }
                           </span>
                           <span className="video-duration">
-                            <i className="far fa-clock"></i> 
-                            {Math.floor(video.duration / 60)}:{String(video.duration % 60).padStart(2, '0')}
+                            <i className="far fa-clock"></i>
+                            {Math.floor(video.duration / 60)}:
+                            {String(video.duration % 60).padStart(2, "0")}
                           </span>
                           <span className="video-date">
-                            <i className="far fa-calendar"></i> {video.publishedDate}
+                            <i className="far fa-calendar"></i>{" "}
+                            {video.publishedDate}
                           </span>
                         </div>
 
                         {video.awards && video.awards.length > 0 && (
                           <div className="video-awards">
                             {video.awards.map((award, index) => (
-                              <span 
-                                key={index} 
+                              <span
+                                key={index}
                                 className={`award-badge ${award.level}`}
                                 style={getAwardBadgeStyle(award.level)}
                               >
@@ -214,4 +239,4 @@ const VideoPortfolio = () => {
 };
 
 export default VideoPortfolio;
-export { videoPortfolioSection };
+export {videoPortfolioSection};

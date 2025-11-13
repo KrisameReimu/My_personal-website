@@ -1,15 +1,15 @@
 /**
  * ErrorBoundary Component
  * 捕获React组件错误，提供优雅的降级体验
- * 
+ *
  * 使用方式：
  * <ErrorBoundary fallback={<CustomFallback />}>
  *   <YourComponent />
  * </ErrorBoundary>
  */
 
-import React from 'react';
-import './ErrorBoundary.scss';
+import React from "react";
+import "./ErrorBoundary.scss";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -22,7 +22,7 @@ class ErrorBoundary extends React.Component {
   }
 
   static getDerivedStateFromError(error) {
-    return { hasError: true };
+    return {hasError: true};
   }
 
   componentDidCatch(error, errorInfo) {
@@ -32,8 +32,8 @@ class ErrorBoundary extends React.Component {
     });
 
     // 可以将错误日志发送到监控服务
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
-    
+    console.error("ErrorBoundary caught an error:", error, errorInfo);
+
     // TODO: 集成错误监控服务（如Sentry）
     // Sentry.captureException(error);
   }
@@ -60,11 +60,11 @@ class ErrorBoundary extends React.Component {
             <div className="error-icon">⚠️</div>
             <h2>Oops! Something went wrong</h2>
             <p className="error-message">
-              {this.props.errorMessage || 
+              {this.props.errorMessage ||
                 "We're sorry for the inconvenience. The content couldn't be loaded."}
             </p>
-            
-            {process.env.NODE_ENV === 'development' && this.state.error && (
+
+            {process.env.NODE_ENV === "development" && this.state.error && (
               <details className="error-details">
                 <summary>Error Details (Development Only)</summary>
                 <pre>{this.state.error.toString()}</pre>
@@ -73,15 +73,12 @@ class ErrorBoundary extends React.Component {
             )}
 
             <div className="error-actions">
-              <button 
-                className="btn-retry" 
-                onClick={this.handleReset}
-              >
+              <button className="btn-retry" onClick={this.handleReset}>
                 Try Again
               </button>
-              <button 
-                className="btn-home" 
-                onClick={() => window.location.href = '/'}
+              <button
+                className="btn-home"
+                onClick={() => (window.location.href = "/")}
               >
                 Go Home
               </button>
@@ -102,15 +99,15 @@ class ErrorBoundary extends React.Component {
 export class ContentErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = {hasError: false};
   }
 
   static getDerivedStateFromError(error) {
-    return { hasError: true };
+    return {hasError: true};
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error('Content loading error:', error, errorInfo);
+    console.error("Content loading error:", error, errorInfo);
   }
 
   render() {

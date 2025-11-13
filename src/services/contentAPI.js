@@ -1,7 +1,7 @@
 /**
  * Content API Service Layer
  * 统一的内容获取接口，支持本地数据和远程CMS无缝切换
- * 
+ *
  * 设计原则：
  * 1. 本地优先：开发和离线时使用本地数据
  * 2. CMS可选：生产环境可切换到CMS
@@ -9,33 +9,33 @@
  * 4. 保持个人IP特色：双语、分类、多媒体支持
  */
 
-import { ContentTypes } from '../types/content.types';
+import {ContentTypes} from "../types/content.types";
 
 // CMS配置 - 通过环境变量控制
 const CMS_CONFIG = {
-  enabled: process.env.REACT_APP_USE_CMS === 'true',
-  baseUrl: process.env.REACT_APP_CMS_URL || 'http://localhost:1337',
-  apiVersion: process.env.REACT_APP_CMS_API_VERSION || 'v1',
+  enabled: process.env.REACT_APP_USE_CMS === "true",
+  baseUrl: process.env.REACT_APP_CMS_URL || "http://localhost:1337",
+  apiVersion: process.env.REACT_APP_CMS_API_VERSION || "v1",
   timeout: 5000 // 5秒超时
 };
 
 // ====== 本地数据导入 ======
 // 懒加载本地数据，按需加载以优化性能
-const getLocalData = async (type) => {
+const getLocalData = async type => {
   try {
-    switch(type) {
+    switch (type) {
       case ContentTypes.ARTICLE:
-        return (await import('../data/writings')).default;
+        return (await import("../data/writings")).default;
       case ContentTypes.PHOTO:
-        return (await import('../data/photography')).default;
+        return (await import("../data/photography")).default;
       case ContentTypes.VIDEO:
-        return (await import('../data/videos')).default;
+        return (await import("../data/videos")).default;
       case ContentTypes.GAME:
-        return (await import('../data/gamedev')).default;
+        return (await import("../data/gamedev")).default;
       case ContentTypes.WORK:
-        return (await import('../portfolio')).workExperiences;
+        return (await import("../portfolio")).workExperiences;
       case ContentTypes.EDUCATION:
-        return (await import('../portfolio')).educationInfo;
+        return (await import("../portfolio")).educationInfo;
       default:
         return null;
     }
@@ -48,11 +48,11 @@ const getLocalData = async (type) => {
 // ====== CMS API调用 ======
 const fetchFromCMS = async (endpoint, options = {}) => {
   if (!CMS_CONFIG.enabled) {
-    throw new Error('CMS is not enabled');
+    throw new Error("CMS is not enabled");
   }
 
   const url = `${CMS_CONFIG.baseUrl}/api/${CMS_CONFIG.apiVersion}/${endpoint}`;
-  
+
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), CMS_CONFIG.timeout);
 
@@ -61,7 +61,7 @@ const fetchFromCMS = async (endpoint, options = {}) => {
       ...options,
       signal: controller.signal,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...options.headers
       }
     });
@@ -75,7 +75,7 @@ const fetchFromCMS = async (endpoint, options = {}) => {
     return await response.json();
   } catch (error) {
     clearTimeout(timeoutId);
-    console.error('CMS fetch error:', error);
+    console.error("CMS fetch error:", error);
     throw error;
   }
 };
@@ -94,15 +94,15 @@ export const getArticles = async (options = {}) => {
   try {
     if (CMS_CONFIG.enabled) {
       const queryParams = new URLSearchParams();
-      if (options.category) queryParams.append('category', options.category);
-      if (options.featured) queryParams.append('featured', 'true');
-      if (options.limit) queryParams.append('limit', options.limit);
-      
+      if (options.category) queryParams.append("category", options.category);
+      if (options.featured) queryParams.append("featured", "true");
+      if (options.limit) queryParams.append("limit", options.limit);
+
       const data = await fetchFromCMS(`articles?${queryParams.toString()}`);
       return data.data || [];
     }
   } catch (error) {
-    console.warn('Falling back to local articles data');
+    console.warn("Falling back to local articles data");
   }
 
   // 回退到本地数据
@@ -110,7 +110,7 @@ export const getArticles = async (options = {}) => {
   if (!localData) return [];
 
   let articles = localData.articles || [];
-  
+
   // 应用过滤
   if (options.category) {
     articles = articles.filter(a => a.category === options.category);
@@ -130,14 +130,14 @@ export const getArticles = async (options = {}) => {
  * @param {string} id - 文章ID
  * @returns {Promise<Object|null>}
  */
-export const getArticleById = async (id) => {
+export const getArticleById = async id => {
   try {
     if (CMS_CONFIG.enabled) {
       const data = await fetchFromCMS(`articles/${id}`);
       return data.data || null;
     }
   } catch (error) {
-    console.warn('Falling back to local article data');
+    console.warn("Falling back to local article data");
   }
 
   const localData = await getLocalData(ContentTypes.ARTICLE);
@@ -150,17 +150,17 @@ export const getArticleById = async (id) => {
  * @param {string} slug
  * @returns {Promise<Object|null>}
  */
-export const getArticleBySlug = async (slug) => {
+export const getArticleBySlug = async slug => {
   try {
     if (CMS_CONFIG.enabled) {
       // Strapi v4 常用过滤方式：/api/articles?filters[slug][$eq]=my-slug
-      const query = new URLSearchParams({ [`filters[slug][$eq]`]: slug });
+      const query = new URLSearchParams({[`filters[slug][$eq]`]: slug});
       const data = await fetchFromCMS(`articles?${query.toString()}`);
       const item = data.data?.[0];
       return item || null;
     }
   } catch (error) {
-    console.warn('Falling back to local article by slug');
+    console.warn("Falling back to local article by slug");
   }
 
   const localData = await getLocalData(ContentTypes.ARTICLE);
@@ -179,21 +179,21 @@ export const getPhotos = async (options = {}) => {
   try {
     if (CMS_CONFIG.enabled) {
       const queryParams = new URLSearchParams();
-      if (options.category) queryParams.append('category', options.category);
-      if (options.limit) queryParams.append('limit', options.limit);
-      
+      if (options.category) queryParams.append("category", options.category);
+      if (options.limit) queryParams.append("limit", options.limit);
+
       const data = await fetchFromCMS(`photos?${queryParams.toString()}`);
       return data.data || [];
     }
   } catch (error) {
-    console.warn('Falling back to local photos data');
+    console.warn("Falling back to local photos data");
   }
 
   const localData = await getLocalData(ContentTypes.PHOTO);
   if (!localData) return [];
 
   let photos = localData.photos || [];
-  
+
   if (options.category) {
     photos = photos.filter(p => p.category === options.category);
   }
@@ -215,26 +215,27 @@ export const getVideos = async (options = {}) => {
   try {
     if (CMS_CONFIG.enabled) {
       const queryParams = new URLSearchParams();
-      if (options.category) queryParams.append('category', options.category);
-      if (options.awardLevel) queryParams.append('awardLevel', options.awardLevel);
-      
+      if (options.category) queryParams.append("category", options.category);
+      if (options.awardLevel)
+        queryParams.append("awardLevel", options.awardLevel);
+
       const data = await fetchFromCMS(`videos?${queryParams.toString()}`);
       return data.data || [];
     }
   } catch (error) {
-    console.warn('Falling back to local videos data');
+    console.warn("Falling back to local videos data");
   }
 
   const localData = await getLocalData(ContentTypes.VIDEO);
   if (!localData) return [];
 
   let videos = localData.videos || [];
-  
+
   if (options.category) {
     videos = videos.filter(v => v.category === options.category);
   }
   if (options.awardLevel) {
-    videos = videos.filter(v => 
+    videos = videos.filter(v =>
       v.awards?.some(award => award.level === options.awardLevel)
     );
   }
@@ -250,11 +251,11 @@ export const getVideos = async (options = {}) => {
 export const getGameProjects = async (options = {}) => {
   try {
     if (CMS_CONFIG.enabled) {
-      const data = await fetchFromCMS('game-projects');
+      const data = await fetchFromCMS("game-projects");
       return data.data || [];
     }
   } catch (error) {
-    console.warn('Falling back to local game projects data');
+    console.warn("Falling back to local game projects data");
   }
 
   const localData = await getLocalData(ContentTypes.GAME);
@@ -268,11 +269,11 @@ export const getGameProjects = async (options = {}) => {
 export const getWorkExperiences = async () => {
   try {
     if (CMS_CONFIG.enabled) {
-      const data = await fetchFromCMS('work-experiences');
+      const data = await fetchFromCMS("work-experiences");
       return data.data || [];
     }
   } catch (error) {
-    console.warn('Falling back to local work experiences');
+    console.warn("Falling back to local work experiences");
   }
 
   const localData = await getLocalData(ContentTypes.WORK);
@@ -286,11 +287,11 @@ export const getWorkExperiences = async () => {
 export const getEducation = async () => {
   try {
     if (CMS_CONFIG.enabled) {
-      const data = await fetchFromCMS('education');
+      const data = await fetchFromCMS("education");
       return data.data || [];
     }
   } catch (error) {
-    console.warn('Falling back to local education data');
+    console.warn("Falling back to local education data");
   }
 
   const localData = await getLocalData(ContentTypes.EDUCATION);
@@ -304,7 +305,7 @@ export const getEducation = async () => {
  * @returns {Promise<Array>}
  */
 export const getContent = async (contentType, options = {}) => {
-  switch(contentType) {
+  switch (contentType) {
     case ContentTypes.ARTICLE:
       return getArticles(options);
     case ContentTypes.PHOTO:
@@ -332,7 +333,7 @@ export const checkCMSHealth = async () => {
   if (!CMS_CONFIG.enabled) return false;
 
   try {
-    await fetchFromCMS('health');
+    await fetchFromCMS("health");
     return true;
   } catch (error) {
     return false;
@@ -344,7 +345,7 @@ export const checkCMSHealth = async () => {
  * @returns {string} 'cms' | 'local'
  */
 export const getContentSource = () => {
-  return CMS_CONFIG.enabled ? 'cms' : 'local';
+  return CMS_CONFIG.enabled ? "cms" : "local";
 };
 
 const contentAPI = {

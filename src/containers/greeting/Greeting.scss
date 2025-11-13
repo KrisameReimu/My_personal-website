@@ -63,7 +63,7 @@
   width: 100%;
   max-width: 400px;
   position: relative;
-  
+
   &::before {
     content: "";
     position: absolute;
@@ -71,7 +71,12 @@
     left: -10px;
     right: -10px;
     bottom: -10px;
-    background: linear-gradient(135deg, $buttonColor 0%, $purple 50%, $goldColor 100%);
+    background: linear-gradient(
+      135deg,
+      $buttonColor 0%,
+      $purple 50%,
+      $goldColor 100%
+    );
     border-radius: 50%;
     z-index: -1;
     opacity: 0.3;

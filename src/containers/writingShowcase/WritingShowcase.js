@@ -1,15 +1,16 @@
-import React, { useState, useMemo } from "react";
+import React, {useState, useMemo} from "react";
 import "./WritingShowcase.scss";
-import { Fade } from "react-reveal";
-import { featuredArticles, categories } from "../../data/writings";
-import { getArticleUrl } from "../../config/assets";
+import {Fade} from "react-reveal";
+import {featuredArticles, categories} from "../../data/writings";
+import {getArticleUrl} from "../../config/assets";
 
 // Backwards compatibility export (legacy shape used elsewhere)
 // Maps new data layer into previous "writingShowcaseSection" structure so existing imports won't break.
 const writingShowcaseSection = {
   title: "✍️ Written Words",
   subtitle: "THOUGHTS, STORIES, AND INSIGHTS FROM MY JOURNEY",
-  description: "Exploring the intersection of technology, creativity, and human experience through words.",
+  description:
+    "Exploring the intersection of technology, creativity, and human experience through words.",
   categories: categories.map(c => ({
     name: c.name.en || c.id,
     icon: "fas fa-book", // Unified icon; can specialize later
@@ -38,7 +39,8 @@ const WritingShowcase = () => {
 
   // Memoize filtered articles to avoid unnecessary re-renders.
   const filteredArticles = useMemo(() => {
-    if (selectedCategory === "All") return writingShowcaseSection.featuredArticles;
+    if (selectedCategory === "All")
+      return writingShowcaseSection.featuredArticles;
     return writingShowcaseSection.featuredArticles.filter(
       article => article.category === selectedCategory
     );
@@ -64,7 +66,9 @@ const WritingShowcase = () => {
           {/* Category Pills */}
           <div className="category-filter">
             <button
-              className={`category-pill ${selectedCategory === "All" ? "active" : ""}`}
+              className={`category-pill ${
+                selectedCategory === "All" ? "active" : ""
+              }`}
               onClick={() => setSelectedCategory("All")}
             >
               <i className="fas fa-th"></i> All Stories
@@ -72,12 +76,18 @@ const WritingShowcase = () => {
             {writingShowcaseSection.categories.map((category, index) => (
               <button
                 key={index}
-                className={`category-pill ${selectedCategory === category.name ? "active" : ""}`}
+                className={`category-pill ${
+                  selectedCategory === category.name ? "active" : ""
+                }`}
                 onClick={() => setSelectedCategory(category.name)}
-                style={selectedCategory === category.name ? {
-                  backgroundColor: category.color,
-                  color: 'white'
-                } : {}}
+                style={
+                  selectedCategory === category.name
+                    ? {
+                        backgroundColor: category.color,
+                        color: "white"
+                      }
+                    : {}
+                }
               >
                 <i className={category.icon}></i> {category.name}
               </button>
@@ -94,7 +104,9 @@ const WritingShowcase = () => {
             {filteredArticles.map((article, index) => (
               <Fade key={index} bottom duration={1500} distance="40px">
                 <div
-                  className={`article-card ${hoveredArticle === index ? "hovered" : ""}`}
+                  className={`article-card ${
+                    hoveredArticle === index ? "hovered" : ""
+                  }`}
                   onMouseEnter={() => setHoveredArticle(index)}
                   onMouseLeave={() => setHoveredArticle(null)}
                 >
@@ -111,7 +123,7 @@ const WritingShowcase = () => {
                       </span>
                     </div>
                   </div>
-                  
+
                   <div className="article-content">
                     <div className="article-meta">
                       <span className="article-category">
@@ -127,7 +139,7 @@ const WritingShowcase = () => {
 
                     <h3 className="article-title">{article.title}</h3>
                     <h4 className="article-subtitle">{article.subtitle}</h4>
-                    
+
                     <p className="article-excerpt">{article.excerpt}</p>
 
                     <div className="article-tags">
@@ -164,4 +176,4 @@ const WritingShowcase = () => {
 };
 
 export default WritingShowcase;
-export { writingShowcaseSection };
+export {writingShowcaseSection};

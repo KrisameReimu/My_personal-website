@@ -72,17 +72,17 @@
   font-size: 0.85rem;
   font-weight: 600;
   backdrop-filter: blur(10px);
-  
+
   &[data-status="Completed"] {
     background-color: rgba(76, 175, 80, 0.9);
     color: white;
   }
-  
+
   &[data-status="In Development"] {
     background-color: rgba(255, 152, 0, 0.9);
     color: white;
   }
-  
+
   &[data-status="Published"] {
     background-color: rgba(33, 150, 243, 0.9);
     color: white;
@@ -120,24 +120,24 @@
 
 .game-highlights {
   margin-bottom: 1.5rem;
-  
+
   strong {
     display: block;
     margin-bottom: 0.8rem;
     color: $textColor;
     font-size: 1rem;
   }
-  
+
   ul {
     list-style: none;
     padding-left: 0;
-    
+
     li {
       padding: 0.5rem 0 0.5rem 1.5rem;
       position: relative;
       color: $subTitle;
       line-height: 1.6;
-      
+
       &:before {
         content: "✨";
         position: absolute;
@@ -179,7 +179,7 @@
   border-radius: 8px;
   font-weight: 600;
   transition: all 0.3s ease;
-  
+
   &:hover {
     background-color: darken($buttonColor, 10%);
     transform: translateY(-2px);

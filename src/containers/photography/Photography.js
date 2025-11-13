@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import "./Photography.scss";
-import { Fade } from "react-reveal";
-import { categories, photosByCategory } from "../../data/photography";
-import { useImageLoader } from "../../hooks/useImageLoader";
+import {Fade} from "react-reveal";
+import {categories, photosByCategory} from "../../data/photography";
+import {useImageLoader} from "../../hooks/useImageLoader";
 
 // Backwards compatibility: maintain photographySection export shape for legacy imports
 const photographySection = {
@@ -22,7 +22,7 @@ const Photography = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [currentPhotos, setCurrentPhotos] = useState([]);
-  const { loadedImages, loadImage } = useImageLoader();
+  const {loadedImages, loadImage} = useImageLoader();
 
   // Note: move keyboard listener AFTER dependent callbacks are defined to avoid TDZ ReferenceErrors
 
@@ -52,30 +52,39 @@ const Photography = () => {
   }, [currentPhotos]);
 
   const prevPhoto = useCallback(() => {
-    setLightboxIndex(prev => (prev - 1 + currentPhotos.length) % currentPhotos.length);
+    setLightboxIndex(
+      prev => (prev - 1 + currentPhotos.length) % currentPhotos.length
+    );
   }, [currentPhotos]);
 
   // Keyboard navigation (defined after callbacks to prevent 'Cannot access before initialization')
-  const handleKeydown = useCallback((e) => {
-    if (!lightboxOpen) return;
-    if (e.key === 'Escape') {
-      closeLightbox();
-    } else if (e.key === 'ArrowRight') {
-      nextPhoto();
-    } else if (e.key === 'ArrowLeft') {
-      prevPhoto();
-    }
-  }, [lightboxOpen, closeLightbox, nextPhoto, prevPhoto]);
+  const handleKeydown = useCallback(
+    e => {
+      if (!lightboxOpen) return;
+      if (e.key === "Escape") {
+        closeLightbox();
+      } else if (e.key === "ArrowRight") {
+        nextPhoto();
+      } else if (e.key === "ArrowLeft") {
+        prevPhoto();
+      }
+    },
+    [lightboxOpen, closeLightbox, nextPhoto, prevPhoto]
+  );
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeydown);
-    return () => window.removeEventListener('keydown', handleKeydown);
+    window.addEventListener("keydown", handleKeydown);
+    return () => window.removeEventListener("keydown", handleKeydown);
   }, [handleKeydown]);
 
   if (!photographySection.display) return null;
 
-  const selectedCategoryData = selectedCategory ? categories.find(c => c.id === selectedCategory.id) : null;
-  const selectedPhotos = selectedCategory ? photosByCategory[selectedCategory.id] : [];
+  const selectedCategoryData = selectedCategory
+    ? categories.find(c => c.id === selectedCategory.id)
+    : null;
+  const selectedPhotos = selectedCategory
+    ? photosByCategory[selectedCategory.id]
+    : [];
 
   return (
     <Fade bottom duration={1000} distance="20px">
@@ -92,7 +101,12 @@ const Photography = () => {
             <div className="photo-categories-grid">
               {categories.map((category, i) => {
                 return (
-                  <Fade key={category.id} bottom duration={2000} distance="40px">
+                  <Fade
+                    key={category.id}
+                    bottom
+                    duration={2000}
+                    distance="40px"
+                  >
                     <div
                       className="category-card"
                       onClick={() => setSelectedCategory(category)}
@@ -107,12 +121,15 @@ const Photography = () => {
                         <div className="category-overlay">
                           <span className="category-icon">{category.icon}</span>
                           <h3 className="category-name">{category.name.zh}</h3>
-                          <h4 className="category-name-en">{category.name.en}</h4>
+                          <h4 className="category-name-en">
+                            {category.name.en}
+                          </h4>
                           <p className="category-description">
                             {category.description.zh}
                           </p>
                           <span className="photo-count">
-                            <i className="fas fa-images"></i> {category.photoCount} Photos
+                            <i className="fas fa-images"></i>{" "}
+                            {category.photoCount} Photos
                           </span>
                         </div>
                       </div>
@@ -130,7 +147,9 @@ const Photography = () => {
                 <i className="fas fa-arrow-left"></i> Back to Categories
               </button>
               <h2 className="gallery-title">{selectedCategoryData?.name.zh}</h2>
-              <h3 className="gallery-title-en">{selectedCategoryData?.name.en}</h3>
+              <h3 className="gallery-title-en">
+                {selectedCategoryData?.name.en}
+              </h3>
               <p className="gallery-description">
                 {selectedCategoryData?.description.zh}
               </p>
@@ -141,8 +160,8 @@ const Photography = () => {
                     className="photo-item"
                     onClick={() => openLightbox(selectedPhotos, index)}
                   >
-                    <img 
-                      src={loadedImages[photo.thumbnail] || photo.thumbnail} 
+                    <img
+                      src={loadedImages[photo.thumbnail] || photo.thumbnail}
                       alt={photo.title.en}
                       loading="lazy"
                     />
@@ -180,8 +199,11 @@ const Photography = () => {
               >
                 <i className="fas fa-chevron-left"></i>
               </button>
-              
-              <div className="lightbox-content" onClick={e => e.stopPropagation()}>
+
+              <div
+                className="lightbox-content"
+                onClick={e => e.stopPropagation()}
+              >
                 <img
                   src={currentPhotos[lightboxIndex].url}
                   alt={currentPhotos[lightboxIndex].title.en}
@@ -189,11 +211,19 @@ const Photography = () => {
                 <div className="lightbox-info">
                   <h3>{currentPhotos[lightboxIndex].title.zh}</h3>
                   <h4>{currentPhotos[lightboxIndex].title.en}</h4>
-                  <p className="photo-description">{currentPhotos[lightboxIndex].description.zh}</p>
+                  <p className="photo-description">
+                    {currentPhotos[lightboxIndex].description.zh}
+                  </p>
                   {currentPhotos[lightboxIndex].exifData && (
                     <div className="exif-data">
-                      <span><i className="fas fa-camera"></i> {currentPhotos[lightboxIndex].exifData.camera}</span>
-                      <span><i className="fas fa-cog"></i> {currentPhotos[lightboxIndex].exifData.settings}</span>
+                      <span>
+                        <i className="fas fa-camera"></i>{" "}
+                        {currentPhotos[lightboxIndex].exifData.camera}
+                      </span>
+                      <span>
+                        <i className="fas fa-cog"></i>{" "}
+                        {currentPhotos[lightboxIndex].exifData.settings}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -221,4 +251,4 @@ const Photography = () => {
 };
 
 export default Photography;
-export { photographySection };
+export {photographySection};

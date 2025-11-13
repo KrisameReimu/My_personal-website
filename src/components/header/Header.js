@@ -10,7 +10,7 @@ import {
   videoPortfolioSection,
   photographySection
 } from "../../portfolio";
-import { writingShowcaseSection } from "../../containers/writingShowcase/WritingShowcase";
+import {writingShowcaseSection} from "../../containers/writingShowcase/WritingShowcase";
 
 function Header() {
   const {isDark} = useContext(StyleContext);

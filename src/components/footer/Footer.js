@@ -78,7 +78,13 @@ export default function Footer() {
             </a>
           )}
         </div>
-        <p className={isDark ? "dark-mode footer-text footer-tagline" : "footer-text footer-tagline"}>
+        <p
+          className={
+            isDark
+              ? "dark-mode footer-text footer-tagline"
+              : "footer-text footer-tagline"
+          }
+        >
           AI Developer × Game Creator × Digital Storyteller
         </p>
       </div>

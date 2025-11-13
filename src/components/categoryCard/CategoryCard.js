@@ -9,9 +9,13 @@ export default function CategoryCard({category}) {
 
   return (
     <Fade bottom duration={1000} distance="20px">
-      <Link 
+      <Link
         to={category.route}
-        className={isDark ? "category-card-dark category-card-link" : "category-card category-card-link"}
+        className={
+          isDark
+            ? "category-card-dark category-card-link"
+            : "category-card category-card-link"
+        }
         style={{textDecoration: "none"}}
       >
         <div className="category-icon-wrapper">

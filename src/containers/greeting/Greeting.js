@@ -23,9 +23,7 @@ export default function Greeting() {
               >
                 {greeting.title}
               </h1>
-              <p className="greeting-tagline">
-                {greeting.tagline}
-              </p>
+              <p className="greeting-tagline">{greeting.tagline}</p>
               <p
                 className={
                   isDark

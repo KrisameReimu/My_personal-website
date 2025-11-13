@@ -127,46 +127,46 @@
  */
 
 export const ContentTypes = {
-  ARTICLE: 'article',
-  PHOTO: 'photo',
-  VIDEO: 'video',
-  GAME: 'game',
-  WORK: 'work',
-  EDUCATION: 'education'
+  ARTICLE: "article",
+  PHOTO: "photo",
+  VIDEO: "video",
+  GAME: "game",
+  WORK: "work",
+  EDUCATION: "education"
 };
 
 export const ContentCategories = {
   WRITING: {
-    ESSAY: 'essay',
-    TECH: 'tech',
-    CREATIVE: 'creative',
-    REFLECTION: 'reflection'
+    ESSAY: "essay",
+    TECH: "tech",
+    CREATIVE: "creative",
+    REFLECTION: "reflection"
   },
   PHOTOGRAPHY: {
-    URBAN: 'urban',
-    PORTRAIT: 'portrait',
-    NATURE: 'nature'
+    URBAN: "urban",
+    PORTRAIT: "portrait",
+    NATURE: "nature"
   },
   VIDEO: {
-    PROMOTIONAL: 'promotional',
-    SHORT_FILM: 'short-film',
-    DOCUMENTARY: 'documentary'
+    PROMOTIONAL: "promotional",
+    SHORT_FILM: "short-film",
+    DOCUMENTARY: "documentary"
   },
   GAME: {
     STATUS: {
-      PLANNING: 'planning',
-      IN_DEVELOPMENT: 'in-development',
-      COMPLETED: 'completed',
-      PUBLISHED: 'published'
+      PLANNING: "planning",
+      IN_DEVELOPMENT: "in-development",
+      COMPLETED: "completed",
+      PUBLISHED: "published"
     }
   }
 };
 
 export const AwardLevels = {
-  GOLD: 'gold',
-  SILVER: 'silver',
-  SPECIAL: 'special',
-  BRONZE: 'bronze'
+  GOLD: "gold",
+  SILVER: "silver",
+  SPECIAL: "special",
+  BRONZE: "bronze"
 };
 
 const contentTypes = {
