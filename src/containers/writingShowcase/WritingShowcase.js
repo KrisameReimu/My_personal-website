@@ -1,8 +1,10 @@
-import React, {useState, useMemo} from "react";
+import React, {useState, useMemo, useContext} from "react";
 import "./WritingShowcase.scss";
 import {Fade} from "react-reveal";
-import {featuredArticles, categories} from "../../data/writings";
+import {writingContent} from "../../data/contentIndex";
 import {getArticleUrl} from "../../config/assets";
+import LanguageContext from "../../contexts/LanguageContext";
+import {formatDate, getText} from "../../utils/i18n";
 
 // Backwards compatibility export (legacy shape used elsewhere)
 // Maps new data layer into previous "writingShowcaseSection" structure so existing imports won't break.
@@ -11,16 +13,18 @@ const writingShowcaseSection = {
   subtitle: "THOUGHTS, STORIES, AND INSIGHTS FROM MY JOURNEY",
   description:
     "Exploring the intersection of technology, creativity, and human experience through words.",
-  categories: categories.map(c => ({
+  categories: writingContent.categories.map(c => ({
     name: c.name.en || c.id,
     icon: "fas fa-book", // Unified icon; can specialize later
     color: c.color,
     description: c.description.en
   })),
-  featuredArticles: featuredArticles.map(a => ({
+  featuredArticles: writingContent.featuredArticles.map(a => ({
     title: a.title.zh, // Maintain bilingual emphasis (zh primary display here)
     subtitle: a.title.en,
-    category: categories.find(c => c.id === a.category)?.name.en || a.category,
+    category:
+      writingContent.categories.find(c => c.id === a.category)?.name.en ||
+      a.category,
     date: a.publishedDate,
     readTime: `${a.readingTime} min read`,
     excerpt: a.excerpt.zh,
@@ -34,14 +38,52 @@ const writingShowcaseSection = {
 // Functional component refactor using hook-friendly state.
 // Future enhancement: integrate useContent('article') to fetch from CMS when enabled.
 const WritingShowcase = () => {
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const {language} = useContext(LanguageContext);
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [hoveredArticle, setHoveredArticle] = useState(null);
 
-  // Memoize filtered articles to avoid unnecessary re-renders.
-  const filteredArticles = useMemo(() => {
-    if (selectedCategory === "All")
-      return writingShowcaseSection.featuredArticles;
-    return writingShowcaseSection.featuredArticles.filter(
+  const copy = {
+    title: writingContent.config.sectionTitle,
+    subtitle: writingContent.config.subtitle,
+    description: {
+      zh: "探索技术、创意与人文的交汇，让文字成为理解世界的方式。",
+      en: "Exploring the intersection of technology, creativity, and human experience through words."
+    },
+    allStories: {
+      zh: "全部文章",
+      en: "All Stories"
+    },
+    readArticle: {
+      zh: "阅读文章",
+      en: "Read Article"
+    },
+    continueReading: {
+      zh: "继续阅读",
+      en: "Continue Reading"
+    },
+    emptyState: {
+      zh: "该分类暂时还没有文章，敬请期待。",
+      en: "No articles yet for this category. Stay tuned."
+    },
+    ctaTitle: {
+      zh: "想继续阅读？",
+      en: "Want to read more?"
+    },
+    ctaSubtitle: {
+      zh: "订阅获取最新文章与作品更新",
+      en: "Subscribe to get notified about new articles and stories"
+    },
+    ctaButton: {
+      zh: "订阅更新",
+      en: "Subscribe to Newsletter"
+    }
+  };
+
+  const getCategoryName = category => getText(category.name, language);
+
+  const filteredWithCategories = useMemo(() => {
+    if (selectedCategory === "all") return writingContent.featuredArticles;
+    return writingContent.featuredArticles.filter(
       article => article.category === selectedCategory
     );
   }, [selectedCategory]);
@@ -54,12 +96,12 @@ const WritingShowcase = () => {
         <div className="writing-container">
           {/* Header Section */}
           <div className="writing-header">
-            <h1 className="writing-heading">{writingShowcaseSection.title}</h1>
+            <h1 className="writing-heading">{getText(copy.title, language)}</h1>
             <p className="subTitle writing-subtitle">
-              {writingShowcaseSection.subtitle}
+              {getText(copy.subtitle, language)}
             </p>
             <p className="writing-description">
-              {writingShowcaseSection.description}
+              {getText(copy.description, language)}
             </p>
           </div>
 
@@ -67,21 +109,21 @@ const WritingShowcase = () => {
           <div className="category-filter">
             <button
               className={`category-pill ${
-                selectedCategory === "All" ? "active" : ""
+                selectedCategory === "all" ? "active" : ""
               }`}
-              onClick={() => setSelectedCategory("All")}
+              onClick={() => setSelectedCategory("all")}
             >
-              <i className="fas fa-th"></i> All Stories
+              <i className="fas fa-th"></i> {getText(copy.allStories, language)}
             </button>
-            {writingShowcaseSection.categories.map((category, index) => (
+            {writingContent.categories.map((category, index) => (
               <button
                 key={index}
                 className={`category-pill ${
-                  selectedCategory === category.name ? "active" : ""
+                  selectedCategory === category.id ? "active" : ""
                 }`}
-                onClick={() => setSelectedCategory(category.name)}
+                onClick={() => setSelectedCategory(category.id)}
                 style={
-                  selectedCategory === category.name
+                  selectedCategory === category.id
                     ? {
                         backgroundColor: category.color,
                         color: "white"
@@ -89,19 +131,19 @@ const WritingShowcase = () => {
                     : {}
                 }
               >
-                <i className={category.icon}></i> {category.name}
+                <i className="fas fa-book"></i> {getCategoryName(category)}
               </button>
             ))}
           </div>
 
           {/* Featured Articles Grid */}
           <div className="articles-grid">
-            {filteredArticles.length === 0 && (
+            {filteredWithCategories.length === 0 && (
               <div className="empty-state">
-                <p>No articles found for this category yet. Stay tuned ✨</p>
+                <p>{getText(copy.emptyState, language)} ✨</p>
               </div>
             )}
-            {filteredArticles.map((article, index) => (
+            {filteredWithCategories.map((article, index) => (
               <Fade key={index} bottom duration={1500} distance="40px">
                 <div
                   className={`article-card ${
@@ -119,7 +161,8 @@ const WritingShowcase = () => {
                     />
                     <div className="article-overlay">
                       <span className="read-more-btn">
-                        <i className="fas fa-book-open"></i> Read Article
+                        <i className="fas fa-book-open"></i>{" "}
+                        {getText(copy.readArticle, language)}
                       </span>
                     </div>
                   </div>
@@ -127,20 +170,29 @@ const WritingShowcase = () => {
                   <div className="article-content">
                     <div className="article-meta">
                       <span className="article-category">
-                        {article.category}
+                        {getCategoryName(
+                          writingContent.categories.find(
+                            c => c.id === article.category
+                          )
+                        )}
                       </span>
                       <span className="article-date">
-                        <i className="far fa-calendar"></i> {article.date}
+                        <i className="far fa-calendar"></i>{" "}
+                        {formatDate(article.publishedDate, language)}
                       </span>
                       <span className="article-read-time">
-                        <i className="far fa-clock"></i> {article.readTime}
+                        <i className="far fa-clock"></i> {article.readingTime}{" "}
+                        min
                       </span>
                     </div>
 
-                    <h3 className="article-title">{article.title}</h3>
-                    <h4 className="article-subtitle">{article.subtitle}</h4>
+                    <h3 className="article-title">
+                      {getText(article.title, language)}
+                    </h3>
 
-                    <p className="article-excerpt">{article.excerpt}</p>
+                    <p className="article-excerpt">
+                      {getText(article.excerpt, language)}
+                    </p>
 
                     <div className="article-tags">
                       {article.tags.map((tag, tagIndex) => (
@@ -150,8 +202,12 @@ const WritingShowcase = () => {
                       ))}
                     </div>
 
-                    <a href={article.link} className="article-link">
-                      Continue Reading <i className="fas fa-arrow-right"></i>
+                    <a
+                      href={getArticleUrl(article.id)}
+                      className="article-link"
+                    >
+                      {getText(copy.continueReading, language)}{" "}
+                      <i className="fas fa-arrow-right"></i>
                     </a>
                   </div>
                 </div>
@@ -162,10 +218,11 @@ const WritingShowcase = () => {
           {/* Call to Action */}
           <div className="writing-cta">
             <Fade bottom duration={1500}>
-              <h3>Want to read more?</h3>
-              <p>Subscribe to get notified about new articles and stories</p>
+              <h3>{getText(copy.ctaTitle, language)}</h3>
+              <p>{getText(copy.ctaSubtitle, language)}</p>
               <button className="subscribe-btn">
-                <i className="fas fa-envelope"></i> Subscribe to Newsletter
+                <i className="fas fa-envelope"></i>{" "}
+                {getText(copy.ctaButton, language)}
               </button>
             </Fade>
           </div>

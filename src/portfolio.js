@@ -2,7 +2,6 @@
 
 // To change portfolio colors globally go to the  _globalColor.scss file
 
-import emoji from "react-easy-emoji";
 import splashAnimation from "./assets/lottie/splashAnimation"; // Rename to your file name for custom animation
 import placeholderImages from "./placeholderImages"; // Placeholder images for quick start
 
@@ -22,12 +21,24 @@ const illustration = {
 
 const greeting = {
   username: "Echo Chen",
-  title: "Hi, I'm Echo Chen (陈琛)",
-  tagline: "AI Developer × Game Creator × Digital Storyteller",
-  subTitle:
-    "I build experiences at the intersection of technology and creativity—from AI-powered education tools to immersive games and award-winning multimedia content.",
+  title: {
+    zh: "你好，我是陈琛",
+    en: "Hi, I'm Echo Chen"
+  },
+  tagline: {
+    zh: "AI 开发者 × 游戏创作者 × 数字叙事者",
+    en: "AI Developer × Game Creator × Digital Storyteller"
+  },
+  subTitle: {
+    zh: "我在技术与创意的交汇处创造体验：从 AI 教育工具到沉浸式游戏与获奖影像作品。作为 PolyU 的研究项目助理，我持续探索 AI 与多媒体如何放大人类表达。",
+    en: "I build experiences at the intersection of technology and creativity—from AI education tools to immersive games and award-winning multimedia. As a research project assistant at PolyU, I explore how AI and multimedia can amplify human expression."
+  },
+  story: {
+    zh: "我相信技术的意义在于让故事被更多人看见。无论是纪录片镜头、摄影作品，还是交互式游戏，我都在寻找能够连接人心的叙事方式。",
+    en: "I believe technology matters when it helps stories reach people. Through documentaries, photography, and interactive games, I'm always searching for narratives that connect with hearts."
+  },
   profileImage: require("./assets/images/profile.jpg"), // 你的个人头像
-  resumeLink: "https://drive.google.com/file/d/your-cv-link",
+  resumeLink: "https://img.chenchen-echo.com/ChenChen_Personal_CV_2026.pdf",
   displayGreeting: true
 };
 
@@ -36,9 +47,9 @@ const greeting = {
 const socialMediaLinks = {
   github: "https://github.com/KrisameReimu",
   linkedin: "https://www.linkedin.com/in/chenchenai/",
-  gmail: "chen944420634@gmail.com",
-  instagram: "https://www.instagram.com/your_instagram_handle", // 添加您的Instagram账号
-  twitter: "https://x.com/your_twitter_handle", // 添加您的X/Twitter账号
+  gmail: "krisamegreimu@flounderfantasy.com",
+  instagram: "https://www.instagram.com/krisame_reimu/",
+  twitter: "",
   youtube: "", // 如果有YouTube频道可以添加
   display: true
 };
@@ -49,21 +60,11 @@ const skillsSection = {
   title: "What I do",
   subTitle: "FULL-STACK DEVELOPER & AI ENTHUSIAST WHO TURNS IDEAS INTO REALITY",
   skills: [
-    emoji(
-      "⚡ Develop AI-powered educational tools using GPT-4 and Azure OpenAI for personalized learning experiences"
-    ),
-    emoji(
-      "⚡ Create immersive 2D action-adventure games with Unity, featuring intricate level design and narrative-driven gameplay"
-    ),
-    emoji(
-      "⚡ Build responsive full-stack web applications with React.js, Flask, and modern JavaScript frameworks"
-    ),
-    emoji(
-      "⚡ Design and produce multimedia content as a Department Multimedia Producer, bringing creative visions to life"
-    ),
-    emoji(
-      "⚡ Write compelling articles and stories that blend technical insights with creative narratives"
-    )
+    "Develop AI-powered educational tools using GPT-4 and Azure OpenAI for personalized learning experiences",
+    "Create immersive 2D action-adventure games with Unity, featuring intricate level design and narrative-driven gameplay",
+    "Build responsive full-stack web applications with React.js, Flask, and modern JavaScript frameworks",
+    "Design and produce multimedia content as a Department Multimedia Producer, bringing creative visions to life",
+    "Write compelling articles and stories that blend technical insights with creative narratives"
   ],
 
   /* Make Sure to include correct Font Awesome Classname to view your icon
@@ -312,7 +313,7 @@ const bigProjects = {
 // Include certificates, talks etc
 
 const achievementSection = {
-  title: emoji("Achievements And Certifications 🏆 "),
+  title: "Achievements And Certifications",
   subtitle:
     "Awards, Certifications and Recognition for my contributions and skills",
 
@@ -385,7 +386,7 @@ const blogSection = {
 
 const talkSection = {
   title: "PHOTOGRAPHY",
-  subtitle: emoji("CAPTURING MOMENTS AND TELLING STORIES THROUGH IMAGES 📸"),
+  subtitle: "CAPTURING MOMENTS AND TELLING STORIES THROUGH IMAGES",
 
   talks: [
     {
@@ -448,11 +449,16 @@ const podcastSection = {
 };
 
 const contactInfo = {
-  title: emoji("Contact Me ☎️"),
-  subtitle:
-    "Discuss a project or just want to say hi? My Inbox is open for all.",
+  title: {
+    zh: "联系我",
+    en: "Contact Me"
+  },
+  subtitle: {
+    zh: "无论是项目合作还是简单聊聊，都欢迎联系我。",
+    en: "Discuss a project or just want to say hi? My inbox is open for all."
+  },
   number: "852 91303739",
-  email_address: "chen944420634@gmail.com"
+  email_address: "krisamegreimu@flounderfantasy.com"
 };
 
 // Twitter Section

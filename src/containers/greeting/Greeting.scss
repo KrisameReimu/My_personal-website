@@ -53,6 +53,18 @@
   line-height: 40px;
 }
 
+.greeting-story {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: $subTitle;
+  margin-top: 1.25rem;
+  max-width: 540px;
+}
+
+.dark-mode .greeting-story {
+  color: rgba(255, 255, 255, 0.7);
+}
+
 .greeting-image-div {
   display: flex;
   align-items: center;

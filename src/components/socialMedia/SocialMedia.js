@@ -1,8 +1,19 @@
-import React from "react";
+import React, {useContext, useEffect, useState} from "react";
 import "./SocialMedia.scss";
 import {socialMediaLinks} from "../../portfolio";
+import LanguageContext from "../../contexts/LanguageContext";
 
-export default function socialMedia() {
+export default function SocialMedia() {
+  const {language} = useContext(LanguageContext);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!copied) return;
+    const timer = setTimeout(() => setCopied(false), 2000);
+    return () => clearTimeout(timer);
+  }, [copied]);
+
+  const copyLabel = language === "zh" ? "邮箱已复制" : "Email address copied";
   if (!socialMediaLinks.display) {
     return null;
   }
@@ -36,13 +47,30 @@ export default function socialMedia() {
         <a
           href={`mailto:${socialMediaLinks.gmail}`}
           className="icon-button google"
-          target="_blank"
-          rel="noopener noreferrer"
+          onClick={event => {
+            // Some browsers with no mail client configured may silently fail.
+            // Provide a fallback that still exposes the email address.
+            if (navigator?.clipboard?.writeText) {
+              navigator.clipboard
+                .writeText(socialMediaLinks.gmail)
+                .catch(() => {
+                  // no-op
+                });
+            }
+            try {
+              window.location.href = `mailto:${socialMediaLinks.gmail}`;
+            } catch (error) {
+              // no-op
+            }
+            setCopied(true);
+          }}
+          title={socialMediaLinks.gmail}
         >
           <i className="fas fa-envelope"></i>
           <span></span>
         </a>
       ) : null}
+      {copied && <span className="email-copied">{copyLabel}</span>}
 
       {socialMediaLinks.gitlab ? (
         <a

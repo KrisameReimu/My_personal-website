@@ -1,21 +1,17 @@
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
 import "./VideoPortfolio.scss";
 import {Fade} from "react-reveal";
-import {
-  videoConfig,
-  videos,
-  videosByAwardLevel,
-  categories,
-  awardStats
-} from "../../data/videos";
+import {videoContent} from "../../data/contentIndex";
 import {getVideoEmbedUrl} from "../../config/assets";
+import LanguageContext from "../../contexts/LanguageContext";
+import {formatDate, getText} from "../../utils/i18n";
 
 // Backwards compatibility: maintain videoPortfolioSection export shape
 const videoPortfolioSection = {
   display: true,
-  title: "🎬 Video Portfolio",
+  title: "Video Portfolio",
   subtitle: "AWARD-WINNING WORKS - STORYTELLING THROUGH MOVING IMAGES",
-  videos: videos.map(video => ({
+  videos: videoContent.videos.map(video => ({
     title: video.title.en,
     description: video.description.en,
     videoUrl: video.videoId
@@ -23,26 +19,55 @@ const videoPortfolioSection = {
       : "",
     thumbnail: video.thumbnailUrl,
     category:
-      categories.find(c => c.id === video.category)?.name.en || video.category,
+      videoContent.categories.find(c => c.id === video.category)?.name.en ||
+      video.category,
     awards: video.awards.map(a => a.name)
   }))
 };
 
 const VideoPortfolio = () => {
+  const {language} = useContext(LanguageContext);
   const [selectedFilter, setSelectedFilter] = useState("all"); // 'all', 'gold', 'silver', 'special'
   const [hoveredVideo, setHoveredVideo] = useState(null);
 
   if (!videoPortfolioSection.display) return null;
 
+  const copy = {
+    title: {
+      zh: "视频作品集",
+      en: "Video Portfolio"
+    },
+    subtitle: {
+      zh: "获奖作品 · 用影像讲述故事",
+      en: "Award-winning works · Storytelling through moving images"
+    },
+    filters: {
+      all: {zh: "全部作品", en: "All Videos"},
+      gold: {zh: "金奖", en: "Gold Awards"},
+      silver: {zh: "银奖", en: "Silver Awards"},
+      special: {zh: "特别奖", en: "Special Awards"}
+    },
+    stats: {
+      total: {zh: "奖项总数", en: "Total Awards"},
+      gold: {zh: "金奖", en: "Gold"},
+      silver: {zh: "银奖", en: "Silver"},
+      special: {zh: "特别奖", en: "Special"}
+    },
+    empty: {
+      zh: "该分类暂时没有作品。",
+      en: "No videos found in this category yet."
+    }
+  };
+
   // Filter videos based on selected award level
   const filteredVideos =
     selectedFilter === "all"
-      ? videos
-      : videosByAwardLevel[selectedFilter] || [];
+      ? videoContent.videos
+      : videoContent.videosByAwardLevel[selectedFilter] || [];
 
   // Get award badge styling
   const getAwardBadgeStyle = level => {
-    const colors = videoConfig.awardBadgeColors;
+    const colors = videoContent.config.awardBadgeColors;
     return {
       backgroundColor: colors[level] || colors.special,
       color: level === "silver" ? "#333" : "#fff"
@@ -56,10 +81,10 @@ const VideoPortfolio = () => {
           {/* Header */}
           <div>
             <h1 className="video-portfolio-heading">
-              {videoPortfolioSection.title}
+              {getText(copy.title, language)}
             </h1>
             <p className="subTitle video-portfolio-subtitle">
-              {videoPortfolioSection.subtitle}
+              {getText(copy.subtitle, language)}
             </p>
           </div>
 
@@ -69,23 +94,39 @@ const VideoPortfolio = () => {
               <div className="stats-grid">
                 <div className="stat-card">
                   <i className="fas fa-trophy"></i>
-                  <span className="stat-number">{awardStats.totalAwards}</span>
-                  <span className="stat-label">Total Awards</span>
+                  <span className="stat-number">
+                    {videoContent.awardStats.totalAwards}
+                  </span>
+                  <span className="stat-label">
+                    {getText(copy.stats.total, language)}
+                  </span>
                 </div>
                 <div className="stat-card gold">
                   <i className="fas fa-medal"></i>
-                  <span className="stat-number">{awardStats.goldCount}</span>
-                  <span className="stat-label">Gold</span>
+                  <span className="stat-number">
+                    {videoContent.awardStats.goldCount}
+                  </span>
+                  <span className="stat-label">
+                    {getText(copy.stats.gold, language)}
+                  </span>
                 </div>
                 <div className="stat-card silver">
                   <i className="fas fa-medal"></i>
-                  <span className="stat-number">{awardStats.silverCount}</span>
-                  <span className="stat-label">Silver</span>
+                  <span className="stat-number">
+                    {videoContent.awardStats.silverCount}
+                  </span>
+                  <span className="stat-label">
+                    {getText(copy.stats.silver, language)}
+                  </span>
                 </div>
                 <div className="stat-card special">
                   <i className="fas fa-star"></i>
-                  <span className="stat-number">{awardStats.specialCount}</span>
-                  <span className="stat-label">Special</span>
+                  <span className="stat-number">
+                    {videoContent.awardStats.specialCount}
+                  </span>
+                  <span className="stat-label">
+                    {getText(copy.stats.special, language)}
+                  </span>
                 </div>
               </div>
             </Fade>
@@ -99,7 +140,8 @@ const VideoPortfolio = () => {
               }`}
               onClick={() => setSelectedFilter("all")}
             >
-              <i className="fas fa-th"></i> All Videos
+              <i className="fas fa-th"></i>{" "}
+              {getText(copy.filters.all, language)}
             </button>
             <button
               className={`filter-btn ${
@@ -107,7 +149,8 @@ const VideoPortfolio = () => {
               }`}
               onClick={() => setSelectedFilter("gold")}
             >
-              <i className="fas fa-trophy"></i> Gold Awards
+              <i className="fas fa-trophy"></i>{" "}
+              {getText(copy.filters.gold, language)}
             </button>
             <button
               className={`filter-btn ${
@@ -115,7 +158,8 @@ const VideoPortfolio = () => {
               }`}
               onClick={() => setSelectedFilter("silver")}
             >
-              <i className="fas fa-medal"></i> Silver Awards
+              <i className="fas fa-medal"></i>{" "}
+              {getText(copy.filters.silver, language)}
             </button>
             <button
               className={`filter-btn ${
@@ -123,7 +167,8 @@ const VideoPortfolio = () => {
               }`}
               onClick={() => setSelectedFilter("special")}
             >
-              <i className="fas fa-star"></i> Special Awards
+              <i className="fas fa-star"></i>{" "}
+              {getText(copy.filters.special, language)}
             </button>
           </div>
 
@@ -132,7 +177,7 @@ const VideoPortfolio = () => {
             {filteredVideos.length === 0 && (
               <div className="empty-state">
                 <i className="fas fa-video-slash"></i>
-                <p>No videos found in this category yet.</p>
+                <p>{getText(copy.empty, language)}</p>
               </div>
             )}
             {filteredVideos.map((video, i) => {
@@ -153,7 +198,7 @@ const VideoPortfolio = () => {
                         <div className="video-embed">
                           <iframe
                             src={embedUrl}
-                            title={video.title.en}
+                            title={getText(video.title, language)}
                             frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
@@ -164,7 +209,7 @@ const VideoPortfolio = () => {
                         <div className="video-thumbnail">
                           <img
                             src={video.thumbnailUrl}
-                            alt={video.title.en}
+                            alt={getText(video.title, language)}
                             className="video-thumbnail-img"
                             loading="lazy"
                           />
@@ -175,19 +220,26 @@ const VideoPortfolio = () => {
                       )}
 
                       <div className="video-info">
-                        <h3 className="video-title">{video.title.zh}</h3>
-                        <h4 className="video-title-en">{video.title.en}</h4>
+                        <h3 className="video-title">
+                          {getText(video.title, language)}
+                        </h3>
                         <p className="video-description">
-                          {video.description.zh}
+                          {getText(video.description, language)}
                         </p>
 
                         <div className="video-meta">
                           <span className="video-category">
                             <i className="fas fa-tag"></i>
-                            {
-                              categories.find(c => c.id === video.category)
-                                ?.name.zh
-                            }
+                            {videoContent.categories.find(
+                              c => c.id === video.category
+                            )?.name
+                              ? getText(
+                                  videoContent.categories.find(
+                                    c => c.id === video.category
+                                  ).name,
+                                  language
+                                )
+                              : video.category}
                           </span>
                           <span className="video-duration">
                             <i className="far fa-clock"></i>
@@ -196,7 +248,7 @@ const VideoPortfolio = () => {
                           </span>
                           <span className="video-date">
                             <i className="far fa-calendar"></i>{" "}
-                            {video.publishedDate}
+                            {formatDate(video.publishedDate, language)}
                           </span>
                         </div>
 

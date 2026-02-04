@@ -10,8 +10,10 @@
 
 import React from "react";
 import "./ErrorBoundary.scss";
+import LanguageContext from "../../contexts/LanguageContext";
 
 class ErrorBoundary extends React.Component {
+  static contextType = LanguageContext;
   constructor(props) {
     super(props);
     this.state = {
@@ -47,6 +49,29 @@ class ErrorBoundary extends React.Component {
   };
 
   render() {
+    const language = this.context?.language || "en";
+    const copy = {
+      title: {
+        zh: "出错了",
+        en: "Oops! Something went wrong"
+      },
+      message: {
+        zh: "抱歉，内容加载失败，请稍后再试。",
+        en: "We're sorry for the inconvenience. The content couldn't be loaded."
+      },
+      details: {
+        zh: "错误详情（仅开发环境）",
+        en: "Error Details (Development Only)"
+      },
+      retry: {
+        zh: "重试",
+        en: "Try Again"
+      },
+      home: {
+        zh: "返回首页",
+        en: "Go Home"
+      }
+    };
     if (this.state.hasError) {
       // 如果提供了自定义fallback，使用它
       if (this.props.fallback) {
@@ -57,16 +82,17 @@ class ErrorBoundary extends React.Component {
       return (
         <div className="error-boundary">
           <div className="error-boundary-content">
-            <div className="error-icon">⚠️</div>
-            <h2>Oops! Something went wrong</h2>
+            <div className="error-icon">
+              <i className="fas fa-exclamation-triangle"></i>
+            </div>
+            <h2>{copy.title[language]}</h2>
             <p className="error-message">
-              {this.props.errorMessage ||
-                "We're sorry for the inconvenience. The content couldn't be loaded."}
+              {this.props.errorMessage || copy.message[language]}
             </p>
 
             {process.env.NODE_ENV === "development" && this.state.error && (
               <details className="error-details">
-                <summary>Error Details (Development Only)</summary>
+                <summary>{copy.details[language]}</summary>
                 <pre>{this.state.error.toString()}</pre>
                 <pre>{this.state.errorInfo?.componentStack}</pre>
               </details>
@@ -74,13 +100,13 @@ class ErrorBoundary extends React.Component {
 
             <div className="error-actions">
               <button className="btn-retry" onClick={this.handleReset}>
-                Try Again
+                {copy.retry[language]}
               </button>
               <button
                 className="btn-home"
                 onClick={() => (window.location.href = "/")}
               >
-                Go Home
+                {copy.home[language]}
               </button>
             </div>
           </div>
@@ -97,6 +123,7 @@ class ErrorBoundary extends React.Component {
  * 专门用于内容加载失败的错误边界
  */
 export class ContentErrorBoundary extends React.Component {
+  static contextType = LanguageContext;
   constructor(props) {
     super(props);
     this.state = {hasError: false};
@@ -111,16 +138,27 @@ export class ContentErrorBoundary extends React.Component {
   }
 
   render() {
+    const language = this.context?.language || "en";
+    const copy = {
+      message: {
+        zh: "内容暂时不可用",
+        en: "Content temporarily unavailable"
+      },
+      hint: {
+        zh: "请检查网络连接或稍后再试。",
+        en: "Please check your internet connection or try again later."
+      }
+    };
     if (this.state.hasError) {
       return (
         <div className="content-error">
-          <p className="content-error-icon">📭</p>
+          <p className="content-error-icon">
+            <i className="fas fa-inbox"></i>
+          </p>
           <p className="content-error-message">
-            {this.props.message || "Content temporarily unavailable"}
+            {this.props.message || copy.message[language]}
           </p>
-          <p className="content-error-hint">
-            Please check your internet connection or try again later.
-          </p>
+          <p className="content-error-hint">{copy.hint[language]}</p>
         </div>
       );
     }

@@ -164,7 +164,7 @@ export const categories = [
       zh: "生活的观察与感悟",
       en: "Observations and Reflections on Life"
     },
-    icon: "✍️",
+    icon: "fas fa-pen-nib",
     color: "#764ba2"
   },
   {
@@ -174,7 +174,7 @@ export const categories = [
       zh: "AI、游戏开发与编程思考",
       en: "Thoughts on AI, Game Dev, and Programming"
     },
-    icon: "💻",
+    icon: "fas fa-laptop-code",
     color: "#667eea"
   },
   {
@@ -184,7 +184,7 @@ export const categories = [
       zh: "艺术与技术的融合探索",
       en: "Exploring the Fusion of Art and Technology"
     },
-    icon: "🎨",
+    icon: "fas fa-palette",
     color: "#9d50bb"
   },
   {
@@ -194,7 +194,7 @@ export const categories = [
       zh: "对世界与自我的哲学思考",
       en: "Philosophical Thoughts on World and Self"
     },
-    icon: "🤔",
+    icon: "fas fa-lightbulb",
     color: "#6b5b95"
   }
 ];

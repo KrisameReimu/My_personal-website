@@ -1,19 +1,21 @@
-import React, {useEffect, useState, useMemo} from "react";
+import React, {useEffect, useState, useMemo, useContext} from "react";
 import {useParams, Link} from "react-router-dom";
 import {getArticleBySlug, getArticles} from "../services/contentAPI";
 import DOMPurify from "dompurify";
 import {marked} from "marked";
 import "./ArticlePage.scss";
+import LanguageContext from "../contexts/LanguageContext";
+import {formatDate} from "../utils/i18n";
 
 // Article detail page with bilingual toggle and markdown rendering.
 // CMS future-proof: tries fields content_zh/content_en; falls back to excerpt.
 
 const ArticlePage = () => {
   const {slug} = useParams();
+  const {language} = useContext(LanguageContext);
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [lang, setLang] = useState("zh"); // 'zh' | 'en'
   const [siblings, setSiblings] = useState([]);
 
   useEffect(() => {
@@ -55,10 +57,10 @@ const ArticlePage = () => {
   const safeHtml = useMemo(() => {
     if (!article) return "";
     const raw =
-      (lang === "zh"
+      (language === "zh"
         ? article.content_zh || article.contentZh
         : article.content_en || article.contentEn) ||
-      (lang === "zh"
+      (language === "zh"
         ? article.excerpt?.zh || article.excerpt_zh
         : article.excerpt?.en || article.excerpt_en) ||
       "";
@@ -67,11 +69,28 @@ const ArticlePage = () => {
     } catch {
       return DOMPurify.sanitize(raw);
     }
-  }, [article, lang]);
+  }, [article, language]);
 
-  if (loading) return <div className="article-loading">Loading...</div>;
-  if (error) return <div className="article-error">{error}</div>;
-  if (!article) return <div className="article-empty">Article not found.</div>;
+  const copy = {
+    loading: {zh: "加载中...", en: "Loading..."},
+    notFound: {zh: "未找到文章。", en: "Article not found."},
+    failed: {zh: "文章加载失败。", en: "Failed to load article."},
+    readingTime: {zh: "分钟", en: "min"},
+    prev: {zh: "上一篇", en: "Previous"},
+    next: {zh: "下一篇", en: "Next"},
+    back: {zh: "返回写作", en: "Back to Writing"}
+  };
+
+  if (loading)
+    return <div className="article-loading">{copy.loading[language]}</div>;
+  if (error)
+    return (
+      <div className="article-error">
+        {language === "zh" ? copy.failed.zh : error}
+      </div>
+    );
+  if (!article)
+    return <div className="article-empty">{copy.notFound[language]}</div>;
 
   const displayTitleZh =
     article.title_zh || article.title?.zh || article.titleZh;
@@ -82,17 +101,19 @@ const ArticlePage = () => {
     <div className="article-page">
       <div className="article-header">
         <h1 className="article-title">
-          {lang === "zh" ? displayTitleZh : displayTitleEn}
+          {language === "zh" ? displayTitleZh : displayTitleEn}
         </h1>
         <div className="article-meta">
           {article.publishedDate && (
             <span>
-              <i className="far fa-calendar" /> {article.publishedDate}
+              <i className="far fa-calendar" />{" "}
+              {formatDate(article.publishedDate, language)}
             </span>
           )}
           {article.readingTime && (
             <span>
-              <i className="far fa-clock" /> {article.readingTime} min
+              <i className="far fa-clock" /> {article.readingTime}{" "}
+              {copy.readingTime[language]}
             </span>
           )}
           {article.category && (
@@ -101,28 +122,12 @@ const ArticlePage = () => {
             </span>
           )}
         </div>
-        <div className="lang-toggle" role="group" aria-label="Language toggle">
-          <button
-            onClick={() => setLang("zh")}
-            className={lang === "zh" ? "active" : ""}
-            aria-pressed={lang === "zh"}
-          >
-            中文
-          </button>
-          <button
-            onClick={() => setLang("en")}
-            className={lang === "en" ? "active" : ""}
-            aria-pressed={lang === "en"}
-          >
-            EN
-          </button>
-        </div>
       </div>
       {article.coverImage && (
         <figure className="article-cover">
           <img
             src={article.coverImage}
-            alt={displayTitleEn || displayTitleZh}
+            alt={language === "zh" ? displayTitleZh : displayTitleEn}
             loading="lazy"
           />
         </figure>
@@ -147,9 +152,13 @@ const ArticlePage = () => {
             className="prev-article"
           >
             ←{" "}
-            {prevArticle.title?.zh ||
-              prevArticle.title_zh ||
-              prevArticle.titleZh}
+            {(language === "zh"
+              ? prevArticle.title?.zh ||
+                prevArticle.title_zh ||
+                prevArticle.titleZh
+              : prevArticle.title?.en ||
+                prevArticle.title_en ||
+                prevArticle.titleEn) || prevArticle.id}
           </Link>
         )}
         {nextArticle && (
@@ -157,16 +166,20 @@ const ArticlePage = () => {
             to={`/articles/${nextArticle.slug || nextArticle.id}`}
             className="next-article"
           >
-            {nextArticle.title?.zh ||
-              nextArticle.title_zh ||
-              nextArticle.titleZh}{" "}
+            {(language === "zh"
+              ? nextArticle.title?.zh ||
+                nextArticle.title_zh ||
+                nextArticle.titleZh
+              : nextArticle.title?.en ||
+                nextArticle.title_en ||
+                nextArticle.titleEn) || nextArticle.id}{" "}
             →
           </Link>
         )}
       </nav>
       <div className="back-link">
         <Link to="/writing">
-          <i className="fas fa-arrow-left" /> 返回 Writing
+          <i className="fas fa-arrow-left" /> {copy.back[language]}
         </Link>
       </div>
     </div>

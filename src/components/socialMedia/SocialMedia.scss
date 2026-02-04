@@ -28,6 +28,21 @@
   transition: 0.2s ease-in;
 }
 
+.email-copied {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 0.85rem;
+  color: $textColor;
+  background: rgba(0, 0, 0, 0.08);
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+.dark-mode .email-copied {
+  color: $textColorDark;
+  background: rgba(255, 255, 255, 0.12);
+}
+
 .facebook i {
   background-color: $faceBook;
 }

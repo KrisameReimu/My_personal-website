@@ -6,15 +6,20 @@ import {Fade} from "react-reveal";
 import email from "../../assets/lottie/email";
 import DisplayLottie from "../../components/displayLottie/DisplayLottie";
 import StyleContext from "../../contexts/StyleContext";
+import LanguageContext from "../../contexts/LanguageContext";
+import {getText} from "../../utils/i18n";
 
 export default function Contact() {
   const {isDark} = useContext(StyleContext);
+  const {language} = useContext(LanguageContext);
   return (
     <Fade bottom duration={1000} distance="20px">
       <div className="main contact-margin-top" id="contact">
         <div className="contact-div-main">
           <div className="contact-header">
-            <h1 className="heading contact-title">{contactInfo.title}</h1>
+            <h1 className="heading contact-title">
+              {getText(contactInfo.title, language)}
+            </h1>
             <p
               className={
                 isDark
@@ -22,7 +27,7 @@ export default function Contact() {
                   : "subTitle contact-subtitle"
               }
             >
-              {contactInfo.subtitle}
+              {getText(contactInfo.subtitle, language)}
             </p>
             <div
               className={
@@ -50,6 +55,17 @@ export default function Contact() {
               <br />
               <br />
               <SocialMedia />
+              <div className="contact-qr">
+                <h3>
+                  {language === "zh" ? "微信公众号" : "WeChat Official Account"}
+                </h3>
+                <p className="contact-qr-subtitle">
+                  {language === "zh"
+                    ? "扫码关注，获取最新文章与作品更新"
+                    : "Scan to follow and get the latest updates"}
+                </p>
+                <img src="/wechat_qrcode_echo.jpg" alt="WeChat QR Code" />
+              </div>
             </div>
           </div>
           <div className="contact-image-div">

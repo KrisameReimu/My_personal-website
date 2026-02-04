@@ -44,7 +44,10 @@ const placeholderImages = {
     "https://source.unsplash.com/1200x800/?artificial-intelligence,creativity",
   blogGameJourney: "https://source.unsplash.com/1200x800/?game,development",
   blogFullstackUx: "https://source.unsplash.com/1200x800/?web,design",
-  blogHkStory: "https://source.unsplash.com/1200x800/?hongkong,city"
+  blogHkStory: "https://source.unsplash.com/1200x800/?hongkong,city",
+
+  // 微信公众号二维码占位符 - 400x400
+  wechatQr: "https://via.placeholder.com/400x400/1a1a2e/ffffff?text=WeChat+QR"
 };
 
 // 导出配置
