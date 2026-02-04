@@ -1,18 +1,23 @@
 @import "../_globalColor";
 
-.video-hero {
+.photo-archive-hero {
   background: linear-gradient(
     135deg,
-    rgba(255, 0, 0, 0.05) 0%,
-    rgba(255, 100, 100, 0.05) 100%
-  ) !important;
+    rgba(85, 25, 139, 0.06) 0%,
+    rgba(118, 75, 162, 0.04) 100%
+  );
 }
 
-.achievements-section {
-  margin-top: 60px;
+.photo-archive-grid {
+  max-width: 1200px;
+  margin: 40px auto 80px;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
 }
 
-.archive-tabs {
+.photo-archive-tabs {
   max-width: 1200px;
   margin: 30px auto 0;
   padding: 0 20px;
@@ -21,7 +26,7 @@
   justify-content: center;
 }
 
-.archive-tabs button {
+.photo-archive-tabs button {
   border: 1px solid $lightBorder1;
   background: transparent;
   color: $textColor;
@@ -32,22 +37,17 @@
   transition: all 0.2s ease;
 }
 
-.archive-tabs button.active {
+.photo-archive-tabs button.active {
   background: $buttonColor;
   color: #fff;
   border-color: $buttonColor;
 }
 
-.archive-grid {
-  max-width: 1200px;
+.photo-archive-collections {
   margin: 40px auto 80px;
-  padding: 0 20px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
 }
 
-.archive-card {
+.photo-year-card {
   background: $lightBackground2;
   border-radius: 18px;
   overflow: hidden;
@@ -57,63 +57,63 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.archive-card img {
+.photo-year-card img {
   width: 100%;
   height: 200px;
   object-fit: cover;
 }
 
-.archive-card:hover {
+.photo-year-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
 }
 
-.archive-content {
+.photo-year-content {
   padding: 20px;
 }
 
-.archive-label {
+.photo-year-label {
   font-size: 0.85rem;
   color: $subTitle;
 }
 
-.archive-content h3 {
+.photo-year-content h3 {
   margin: 10px 0 12px;
   font-size: 1.4rem;
   color: $textColor;
 }
 
-.archive-content p {
+.photo-year-content p {
   margin: 0 0 16px;
   color: $subTitle;
   line-height: 1.6;
 }
 
-.archive-link {
+.photo-year-link {
   text-decoration: none;
   color: $buttonColor;
   font-weight: 600;
 }
 
-.dark-mode .archive-card {
+.dark-mode .photo-year-card {
   background: $darkBackground;
   border-color: rgba(255, 255, 255, 0.08);
 }
 
-.dark-mode .archive-content h3 {
-  color: $textColorDark;
-}
-
-.dark-mode .archive-content p,
-.dark-mode .archive-label {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.dark-mode .archive-tabs button {
+.dark-mode .photo-archive-tabs button {
   color: $textColorDark;
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-.dark-mode .archive-tabs button.active {
+.dark-mode .photo-archive-tabs button.active {
   color: #fff;
+}
+
+.dark-mode .photo-year-content h3 {
+  color: $textColorDark;
+}
+
+.dark-mode .photo-year-content p,
+.dark-mode .photo-year-label {
+  color: rgba(255, 255, 255, 0.7);
 }

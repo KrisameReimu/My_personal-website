@@ -2,4 +2,20 @@
 
 .home-page {
   min-height: 100vh;
+  padding-bottom: 60px;
+  background: radial-gradient(
+      circle at 15% 20%,
+      rgba(244, 114, 182, 0.12),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 85% 0%,
+      rgba(129, 140, 248, 0.15),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 70% 80%,
+      rgba(250, 204, 21, 0.08),
+      transparent 40%
+    );
 }

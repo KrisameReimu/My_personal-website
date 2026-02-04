@@ -187,7 +187,7 @@ export const categories = [
       zh: "品牌宣传与活动推广",
       en: "Brand Promotion and Event Marketing"
     },
-    icon: "📣",
+    icon: "fas fa-bullhorn",
     color: "#3498db"
   },
   {
@@ -197,7 +197,7 @@ export const categories = [
       zh: "艺术创作与故事叙述",
       en: "Artistic Creation and Storytelling"
     },
-    icon: "🎬",
+    icon: "fas fa-film",
     color: "#e74c3c"
   },
   {
@@ -207,7 +207,7 @@ export const categories = [
       zh: "真实记录与深度访谈",
       en: "Real Documentation and In-depth Interviews"
     },
-    icon: "🎥",
+    icon: "fas fa-video",
     color: "#27ae60"
   }
 ];

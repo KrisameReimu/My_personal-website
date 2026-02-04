@@ -1,0 +1,225 @@
+@import "../../_globalColor";
+
+.home-summary {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.summary-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+.summary-text {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: $textColor;
+  margin: 0;
+}
+
+.summary-cadence {
+  font-size: 0.95rem;
+  color: $subTitle;
+  margin: 0;
+}
+
+.dark-mode .summary-text {
+  color: $textColorDark;
+}
+
+.dark-mode .summary-cadence {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.summary-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+}
+
+.summary-header h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  color: $textColor;
+}
+
+.summary-link {
+  font-size: 0.95rem;
+  color: $buttonColor;
+  text-decoration: none;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.summary-card {
+  background: $lightBackground2;
+  border: 1px solid $lightBorder1;
+  border-radius: 16px;
+  padding: 20px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.summary-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+  border-color: $buttonColor;
+}
+
+.summary-card-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: $subTitle;
+  margin-bottom: 10px;
+}
+
+.summary-card h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.2rem;
+  color: $textColor;
+}
+
+.summary-card p {
+  margin: 0;
+  color: $subTitle;
+  line-height: 1.6;
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.featured-card {
+  background: linear-gradient(
+    135deg,
+    rgba(85, 25, 139, 0.06) 0%,
+    rgba(118, 75, 162, 0.04) 100%
+  );
+  border: 1px solid rgba(118, 75, 162, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.featured-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
+}
+
+.featured-meta {
+  font-size: 0.8rem;
+  color: $subTitle;
+  margin: 0 0 8px;
+}
+
+.featured-card h3 {
+  margin: 0 0 12px;
+  font-size: 1.3rem;
+  color: $textColor;
+}
+
+.featured-card p {
+  margin: 0;
+  color: $subTitle;
+  line-height: 1.6;
+}
+
+.visual-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.visual-card {
+  border-radius: 14px;
+  overflow: hidden;
+  background: $lightBackground2;
+  border: 1px solid $lightBorder1;
+  display: flex;
+  flex-direction: column;
+}
+
+.visual-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.visual-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  font-size: 0.85rem;
+  color: $subTitle;
+}
+
+.visual-meta span:first-child {
+  color: $textColor;
+  font-weight: 600;
+}
+
+.dark-mode .summary-header h2,
+.dark-mode .summary-card h3,
+.dark-mode .featured-card h3,
+.dark-mode .visual-meta span:first-child {
+  color: $textColorDark;
+}
+
+.dark-mode .summary-card,
+.dark-mode .featured-card,
+.dark-mode .visual-card {
+  background: $darkBackground;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark-mode .summary-card-meta,
+.dark-mode .summary-card p,
+.dark-mode .featured-card p,
+.dark-mode .featured-meta,
+.dark-mode .visual-meta {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+@media (max-width: 768px) {
+  .home-summary {
+    width: 95%;
+    gap: 40px;
+  }
+
+  .summary-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .summary-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .summary-text {
+    font-size: 1.05rem;
+  }
+}

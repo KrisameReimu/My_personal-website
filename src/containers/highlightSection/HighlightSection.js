@@ -1,7 +1,6 @@
 import React, {useContext} from "react";
 import "./HighlightSection.scss";
 import {Fade} from "react-reveal";
-import emoji from "react-easy-emoji";
 import StyleContext from "../../contexts/StyleContext";
 import CategoryCard from "../../components/categoryCard/CategoryCard";
 
@@ -10,25 +9,25 @@ export default function HighlightSection() {
 
   const highlights = [
     {
-      icon: "🎮",
+      iconClass: "fas fa-gamepad",
       title: "Game Creator",
       description:
         "Crafting immersive 2D action-adventure worlds with Unity & C#"
     },
     {
-      icon: "🤖",
+      iconClass: "fas fa-robot",
       title: "AI Innovator",
       description:
         "Building intelligent systems with GPT-4 for education & creativity"
     },
     {
-      icon: "🎬",
+      iconClass: "fas fa-film",
       title: "Digital Storyteller",
       description:
         "Award-winning multimedia producer blending video, photography & narrative"
     },
     {
-      icon: "✍️",
+      iconClass: "fas fa-pen-nib",
       title: "Writer & Thinker",
       description:
         "Exploring tech, games, and life through bilingual creative writing"
@@ -57,7 +56,7 @@ export default function HighlightSection() {
         "Capturing moments across urban, portrait, and nature genres",
       icon: "fa-camera-retro",
       count: "3 Collections",
-      route: "/photography"
+      route: "/photos"
     },
     {
       title: "Writing & Essays",
@@ -97,7 +96,9 @@ export default function HighlightSection() {
             distance="20px"
           >
             <div className={isDark ? "highlight-card-dark" : "highlight-card"}>
-              <div className="highlight-icon">{emoji(highlight.icon)}</div>
+              <div className="highlight-icon">
+                <i className={highlight.iconClass}></i>
+              </div>
               <h3 className="highlight-title">{highlight.title}</h3>
               <p className="highlight-description">{highlight.description}</p>
             </div>

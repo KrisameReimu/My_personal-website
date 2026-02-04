@@ -10,6 +10,7 @@
  */
 
 import {getImageUrl, PHOTO_FOLDERS} from "../config/assets";
+import placeholderImages from "../placeholderImages";
 
 export const photographyConfig = {
   sectionTitle: {
@@ -26,6 +27,45 @@ export const photographyConfig = {
     animationDuration: 300
   }
 };
+
+export const photoYearHighlights = [
+  {
+    year: "2024",
+    title: {
+      zh: "2024 摄影精选",
+      en: "2024 Photography Highlights"
+    },
+    description: {
+      zh: "城市、人像与自然的年度影像总结，记录我在香港与旅行中的视觉片段。",
+      en: "An annual visual summary across urban, portrait, and nature themes, capturing moments from Hong Kong and travels."
+    },
+    coverImage: placeholderImages.urbanCover
+  },
+  {
+    year: "2025",
+    title: {
+      zh: "2025 摄影记录",
+      en: "2025 Photo Journal"
+    },
+    description: {
+      zh: "持续更新中，整理我的长期影像计划与年度项目。",
+      en: "Work in progress. A living archive of long-term visual projects."
+    },
+    coverImage: placeholderImages.natureCover
+  },
+  {
+    year: "2023",
+    title: {
+      zh: "2023 影像回顾",
+      en: "2023 Visual Recap"
+    },
+    description: {
+      zh: "从校园到城市街头，记录成长与探索的影像片段。",
+      en: "From campus to street scenes, a visual recap of growth and exploration."
+    },
+    coverImage: placeholderImages.portraitCover
+  }
+];
 
 // Urban Photography - 城市摄影
 export const urbanPhotos = [
@@ -292,7 +332,7 @@ export const categories = [
     },
     coverImage: urbanPhotos[0]?.thumbnail || "",
     photoCount: urbanPhotos.length,
-    icon: "🏙️",
+    icon: "fas fa-city",
     color: "#3498db"
   },
   {
@@ -304,7 +344,7 @@ export const categories = [
     },
     coverImage: portraitPhotos[0]?.thumbnail || "",
     photoCount: portraitPhotos.length,
-    icon: "👤",
+    icon: "fas fa-user",
     color: "#e74c3c"
   },
   {
@@ -316,7 +356,7 @@ export const categories = [
     },
     coverImage: naturePhotos[0]?.thumbnail || "",
     photoCount: naturePhotos.length,
-    icon: "🌄",
+    icon: "fas fa-mountain",
     color: "#27ae60"
   }
 ];

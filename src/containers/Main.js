@@ -1,26 +1,41 @@
 import React, {useEffect, useState} from "react";
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate
+} from "react-router-dom";
 import Header from "../components/header/Header";
 import Footer from "../components/footer/Footer";
 import ScrollToTop from "../components/ScrollToTop";
 import ScrollToTopButton from "./topbutton/Top";
 import SplashScreen from "./splashScreen/SplashScreen";
+import AskEcho from "../components/askEcho/AskEcho";
 import HomePage from "../pages/HomePage";
 import GameDevPage from "../pages/GameDevPage";
 import VideoPage from "../pages/VideoPage";
-import PhotographyPage from "../pages/PhotographyPage";
+import VideoYearPage from "../pages/VideoYearPage";
+import PhotoArchivePage from "../pages/PhotoArchivePage";
+import PhotoYearPage from "../pages/PhotoYearPage";
 import WritingPage from "../pages/WritingPage";
+import WritingYearPage from "../pages/WritingYearPage";
 import AboutPage from "../pages/AboutPage";
 import ArticlePage from "../pages/ArticlePage";
 import Contact from "./contact/Contact";
 import {splashScreen} from "../portfolio";
 import {StyleProvider} from "../contexts/StyleContext";
+import LanguageContext from "../contexts/LanguageContext";
 import {useLocalStorage} from "../hooks/useLocalStorage";
 import "./Main.scss";
 
 const Main = () => {
   const darkPref = window.matchMedia("(prefers-color-scheme: dark)");
   const [isDark, setIsDark] = useLocalStorage("isDark", darkPref.matches);
+  const defaultLanguage =
+    window.navigator.language && window.navigator.language.startsWith("zh")
+      ? "zh"
+      : "en";
+  const [language, setLanguage] = useLocalStorage("language", defaultLanguage);
   const [isShowingSplashAnimation, setIsShowingSplashAnimation] =
     useState(true);
 
@@ -40,30 +55,44 @@ const Main = () => {
     setIsDark(!isDark);
   };
 
+  const toggleLanguage = () => {
+    setLanguage(language === "zh" ? "en" : "zh");
+  };
+
   return (
     <div className={isDark ? "dark-mode" : null}>
-      <StyleProvider value={{isDark: isDark, changeTheme: changeTheme}}>
-        {isShowingSplashAnimation && splashScreen.enabled ? (
-          <SplashScreen />
-        ) : (
-          <Router>
-            <ScrollToTop />
-            <Header />
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/game-dev" element={<GameDevPage />} />
-              <Route path="/videos" element={<VideoPage />} />
-              <Route path="/photography" element={<PhotographyPage />} />
-              <Route path="/writing" element={<WritingPage />} />
-              <Route path="/articles/:slug" element={<ArticlePage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/contact" element={<Contact />} />
-            </Routes>
-            <Footer />
-            <ScrollToTopButton />
-          </Router>
-        )}
-      </StyleProvider>
+      <LanguageContext.Provider value={{language, setLanguage, toggleLanguage}}>
+        <StyleProvider value={{isDark: isDark, changeTheme: changeTheme}}>
+          {isShowingSplashAnimation && splashScreen.enabled ? (
+            <SplashScreen />
+          ) : (
+            <Router>
+              <ScrollToTop />
+              <Header />
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/game-dev" element={<GameDevPage />} />
+                <Route path="/videos" element={<VideoPage />} />
+                <Route path="/videos/:year" element={<VideoYearPage />} />
+                <Route
+                  path="/photography"
+                  element={<Navigate to="/photos" replace />}
+                />
+                <Route path="/photos" element={<PhotoArchivePage />} />
+                <Route path="/photos/:year" element={<PhotoYearPage />} />
+                <Route path="/writing" element={<WritingPage />} />
+                <Route path="/writing/:year" element={<WritingYearPage />} />
+                <Route path="/articles/:slug" element={<ArticlePage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/contact" element={<Contact />} />
+              </Routes>
+              <Footer />
+              <AskEcho />
+              <ScrollToTopButton />
+            </Router>
+          )}
+        </StyleProvider>
+      </LanguageContext.Provider>
     </div>
   );
 };

@@ -1,29 +1,29 @@
 // 资源配置中心 - 管理所有外部资源链接
 // 便于统一管理和批量更新
 
-// ===== 图片CDN配置 =====
-// 推荐使用 Cloudinary: https://cloudinary.com/
-// 免费额度：10GB存储 + 25GB流量/月
+// ===== 内容托管配置 =====
+// 当前策略：R2 + YouTube
+// 提示：将 R2 public bucket 的访问域名填到 imageBaseUrl
 
-export const CLOUDINARY_CONFIG = {
-  cloudName: "your-cloud-name", // 替换为您的Cloudinary账号
-  baseUrl: "https://res.cloudinary.com/your-cloud-name/image/upload"
+export const CONTENT_SOURCES = {
+  imageProvider: "r2",
+  imageBaseUrl: "https://img.chenchen-echo.com",
+  videoProvider: "youtube"
 };
 
 // 图片URL生成器
 export const getImageUrl = (path, options = {}) => {
-  const {
-    width = 1200,
-    height = null,
-    quality = "auto",
-    format = "auto"
-  } = options;
+  const {width, height} = options;
+  if (CONTENT_SOURCES.imageProvider === "cloudflare-images") {
+    const params = new URLSearchParams();
+    if (width) params.append("width", width);
+    if (height) params.append("height", height);
+    return `${CONTENT_SOURCES.imageBaseUrl}/${path}${
+      params.toString() ? `?${params.toString()}` : ""
+    }`;
+  }
 
-  let transformations = `q_${quality},f_${format}`;
-  if (width) transformations += `,w_${width}`;
-  if (height) transformations += `,h_${height},c_fill`;
-
-  return `${CLOUDINARY_CONFIG.baseUrl}/${transformations}/${path}`;
+  return `${CONTENT_SOURCES.imageBaseUrl}/${path}`;
 };
 
 // ===== 视频配置 =====
@@ -36,7 +36,8 @@ export const VIDEO_PLATFORMS = {
 };
 
 export const getVideoEmbedUrl = (platform, videoId) => {
-  return VIDEO_PLATFORMS[platform] + videoId;
+  const provider = platform || CONTENT_SOURCES.videoProvider;
+  return VIDEO_PLATFORMS[provider] + videoId;
 };
 
 // ===== 文章资源配置 =====

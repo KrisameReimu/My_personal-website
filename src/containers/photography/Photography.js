@@ -1,23 +1,26 @@
-import React, {useState, useEffect, useCallback} from "react";
+import React, {useState, useEffect, useCallback, useContext} from "react";
 import "./Photography.scss";
 import {Fade} from "react-reveal";
-import {categories, photosByCategory} from "../../data/photography";
+import {photoContent} from "../../data/contentIndex";
 import {useImageLoader} from "../../hooks/useImageLoader";
+import LanguageContext from "../../contexts/LanguageContext";
+import {formatDate, getText} from "../../utils/i18n";
 
 // Backwards compatibility: maintain photographySection export shape for legacy imports
 const photographySection = {
   display: true,
-  title: "📷 Photography",
+  title: "Photography",
   subtitle: "CAPTURING MOMENTS, TELLING STORIES THROUGH LIGHT AND SHADOW",
-  categories: categories.map(cat => ({
+  categories: photoContent.categories.map(cat => ({
     name: cat.name.en,
     description: cat.description.en,
     coverImage: cat.coverImage,
-    photos: photosByCategory[cat.id].map(photo => photo.url)
+    photos: photoContent.photosByCategory[cat.id].map(photo => photo.url)
   }))
 };
 
 const Photography = () => {
+  const {language} = useContext(LanguageContext);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
@@ -29,7 +32,7 @@ const Photography = () => {
   // Preload images when category is selected
   useEffect(() => {
     if (selectedCategory) {
-      const photos = photosByCategory[selectedCategory.id];
+      const photos = photoContent.photosByCategory[selectedCategory.id];
       photos.forEach(photo => {
         loadImage(photo.thumbnail);
         loadImage(photo.url); // Preload full-size for lightbox
@@ -79,11 +82,25 @@ const Photography = () => {
 
   if (!photographySection.display) return null;
 
+  const copy = {
+    title: {zh: "摄影作品", en: "Photography"},
+    subtitle: {
+      zh: "记录光影与情绪的长期影像档案",
+      en: "A long-term visual archive of light, places, and emotions."
+    },
+    back: {zh: "返回分类", en: "Back to Categories"},
+    photoCount: {zh: "张", en: "Photos"},
+    empty: {
+      zh: "该分类暂时还没有作品。",
+      en: "Photos coming soon..."
+    }
+  };
+
   const selectedCategoryData = selectedCategory
-    ? categories.find(c => c.id === selectedCategory.id)
+    ? photoContent.categories.find(c => c.id === selectedCategory.id)
     : null;
   const selectedPhotos = selectedCategory
-    ? photosByCategory[selectedCategory.id]
+    ? photoContent.photosByCategory[selectedCategory.id]
     : [];
 
   return (
@@ -91,15 +108,17 @@ const Photography = () => {
       <div className="main" id="photography">
         <div className="photography-container">
           <div>
-            <h1 className="photography-heading">{photographySection.title}</h1>
+            <h1 className="photography-heading">
+              {getText(copy.title, language)}
+            </h1>
             <p className="subTitle photography-subtitle">
-              {photographySection.subtitle}
+              {getText(copy.subtitle, language)}
             </p>
           </div>
 
           {!selectedCategory ? (
             <div className="photo-categories-grid">
-              {categories.map((category, i) => {
+              {photoContent.categories.map((category, i) => {
                 return (
                   <Fade
                     key={category.id}
@@ -114,22 +133,24 @@ const Photography = () => {
                       <div className="category-image-container">
                         <img
                           src={category.coverImage}
-                          alt={category.name.en}
+                          alt={getText(category.name, language)}
                           className="category-cover"
                           loading="lazy"
                         />
                         <div className="category-overlay">
-                          <span className="category-icon">{category.icon}</span>
-                          <h3 className="category-name">{category.name.zh}</h3>
-                          <h4 className="category-name-en">
-                            {category.name.en}
-                          </h4>
+                          <span className="category-icon">
+                            <i className={category.icon}></i>
+                          </span>
+                          <h3 className="category-name">
+                            {getText(category.name, language)}
+                          </h3>
                           <p className="category-description">
-                            {category.description.zh}
+                            {getText(category.description, language)}
                           </p>
                           <span className="photo-count">
                             <i className="fas fa-images"></i>{" "}
-                            {category.photoCount} Photos
+                            {category.photoCount}{" "}
+                            {getText(copy.photoCount, language)}
                           </span>
                         </div>
                       </div>
@@ -144,14 +165,14 @@ const Photography = () => {
                 className="back-button"
                 onClick={() => setSelectedCategory(null)}
               >
-                <i className="fas fa-arrow-left"></i> Back to Categories
+                <i className="fas fa-arrow-left"></i>{" "}
+                {getText(copy.back, language)}
               </button>
-              <h2 className="gallery-title">{selectedCategoryData?.name.zh}</h2>
-              <h3 className="gallery-title-en">
-                {selectedCategoryData?.name.en}
-              </h3>
+              <h2 className="gallery-title">
+                {getText(selectedCategoryData?.name || {}, language)}
+              </h2>
               <p className="gallery-description">
-                {selectedCategoryData?.description.zh}
+                {getText(selectedCategoryData?.description || {}, language)}
               </p>
               <div className="photos-grid">
                 {selectedPhotos.map((photo, index) => (
@@ -162,13 +183,16 @@ const Photography = () => {
                   >
                     <img
                       src={loadedImages[photo.thumbnail] || photo.thumbnail}
-                      alt={photo.title.en}
+                      alt={getText(photo.title, language)}
                       loading="lazy"
                     />
                     <div className="photo-overlay">
-                      <h4 className="photo-title">{photo.title.zh}</h4>
+                      <h4 className="photo-title">
+                        {getText(photo.title, language)}
+                      </h4>
                       <p className="photo-meta">
-                        <i className="far fa-calendar"></i> {photo.captureDate}
+                        <i className="far fa-calendar"></i>{" "}
+                        {formatDate(photo.captureDate, language)}
                       </p>
                     </div>
                   </div>
@@ -176,7 +200,7 @@ const Photography = () => {
                 {selectedPhotos.length === 0 && (
                   <div className="empty-gallery">
                     <i className="fas fa-images"></i>
-                    <p>Photos coming soon...</p>
+                    <p>{getText(copy.empty, language)}</p>
                   </div>
                 )}
               </div>
@@ -206,13 +230,17 @@ const Photography = () => {
               >
                 <img
                   src={currentPhotos[lightboxIndex].url}
-                  alt={currentPhotos[lightboxIndex].title.en}
+                  alt={getText(currentPhotos[lightboxIndex].title, language)}
                 />
                 <div className="lightbox-info">
-                  <h3>{currentPhotos[lightboxIndex].title.zh}</h3>
-                  <h4>{currentPhotos[lightboxIndex].title.en}</h4>
+                  <h3>
+                    {getText(currentPhotos[lightboxIndex].title, language)}
+                  </h3>
                   <p className="photo-description">
-                    {currentPhotos[lightboxIndex].description.zh}
+                    {getText(
+                      currentPhotos[lightboxIndex].description,
+                      language
+                    )}
                   </p>
                   {currentPhotos[lightboxIndex].exifData && (
                     <div className="exif-data">
