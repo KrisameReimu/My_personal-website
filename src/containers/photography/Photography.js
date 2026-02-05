@@ -2,7 +2,6 @@ import React, {useState, useEffect, useCallback, useContext} from "react";
 import "./Photography.scss";
 import {Fade} from "react-reveal";
 import {photoContent} from "../../data/contentIndex";
-import {useImageLoader} from "../../hooks/useImageLoader";
 import LanguageContext from "../../contexts/LanguageContext";
 import {formatDate, getText} from "../../utils/i18n";
 
@@ -25,7 +24,26 @@ const Photography = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [currentPhotos, setCurrentPhotos] = useState([]);
-  const {loadedImages, loadImage} = useImageLoader();
+  const [loadedImages, setLoadedImages] = useState({});
+  const loadedImagesRef = React.useRef({});
+  const inFlightRef = React.useRef(new Set());
+
+  const loadImage = useCallback(src => {
+    if (!src) return;
+    if (loadedImagesRef.current[src]) return;
+    if (inFlightRef.current.has(src)) return;
+    inFlightRef.current.add(src);
+    const img = new Image();
+    img.src = src;
+    img.onload = () => {
+      loadedImagesRef.current = {...loadedImagesRef.current, [src]: src};
+      setLoadedImages(loadedImagesRef.current);
+      inFlightRef.current.delete(src);
+    };
+    img.onerror = () => {
+      inFlightRef.current.delete(src);
+    };
+  }, []);
 
   // Note: move keyboard listener AFTER dependent callbacks are defined to avoid TDZ ReferenceErrors
 
