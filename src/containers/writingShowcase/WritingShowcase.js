@@ -1,7 +1,8 @@
-import React, {useState, useMemo, useContext} from "react";
+import React, {useEffect, useMemo, useContext, useState} from "react";
 import "./WritingShowcase.scss";
 import {Fade} from "react-reveal";
 import {writingContent} from "../../data/contentIndex";
+import {getArticles} from "../../services/contentAPI";
 import {getArticleUrl} from "../../config/assets";
 import LanguageContext from "../../contexts/LanguageContext";
 import {formatDate, getText} from "../../utils/i18n";
@@ -9,7 +10,7 @@ import {formatDate, getText} from "../../utils/i18n";
 // Backwards compatibility export (legacy shape used elsewhere)
 // Maps new data layer into previous "writingShowcaseSection" structure so existing imports won't break.
 const writingShowcaseSection = {
-  title: "✍️ Written Words",
+  title: "Written Words",
   subtitle: "THOUGHTS, STORIES, AND INSIGHTS FROM MY JOURNEY",
   description:
     "Exploring the intersection of technology, creativity, and human experience through words.",
@@ -41,6 +42,8 @@ const WritingShowcase = () => {
   const {language} = useContext(LanguageContext);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [hoveredArticle, setHoveredArticle] = useState(null);
+  const [articles, setArticles] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const copy = {
     title: writingContent.config.sectionTitle,
@@ -65,6 +68,10 @@ const WritingShowcase = () => {
       zh: "该分类暂时还没有文章，敬请期待。",
       en: "No articles yet for this category. Stay tuned."
     },
+    loading: {
+      zh: "加载中...",
+      en: "Loading..."
+    },
     ctaTitle: {
       zh: "想继续阅读？",
       en: "Want to read more?"
@@ -81,12 +88,28 @@ const WritingShowcase = () => {
 
   const getCategoryName = category => getText(category.name, language);
 
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        setIsLoading(true);
+        // Prefer featured if available; otherwise fall back to all.
+        const featured = await getArticles({featured: true});
+        const all = featured?.length ? featured : await getArticles();
+        if (mounted) setArticles(all || []);
+      } finally {
+        if (mounted) setIsLoading(false);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   const filteredWithCategories = useMemo(() => {
-    if (selectedCategory === "all") return writingContent.featuredArticles;
-    return writingContent.featuredArticles.filter(
-      article => article.category === selectedCategory
-    );
-  }, [selectedCategory]);
+    if (selectedCategory === "all") return articles;
+    return articles.filter(article => article.category === selectedCategory);
+  }, [articles, selectedCategory]);
 
   if (!writingShowcaseSection.display) return null;
 
@@ -138,9 +161,14 @@ const WritingShowcase = () => {
 
           {/* Featured Articles Grid */}
           <div className="articles-grid">
-            {filteredWithCategories.length === 0 && (
+            {isLoading && (
               <div className="empty-state">
-                <p>{getText(copy.emptyState, language)} ✨</p>
+                <p>{getText(copy.loading, language)}</p>
+              </div>
+            )}
+            {!isLoading && filteredWithCategories.length === 0 && (
+              <div className="empty-state">
+                <p>{getText(copy.emptyState, language)}</p>
               </div>
             )}
             {filteredWithCategories.map((article, index) => (
@@ -195,7 +223,7 @@ const WritingShowcase = () => {
                     </p>
 
                     <div className="article-tags">
-                      {article.tags.map((tag, tagIndex) => (
+                      {(article.tags || []).map((tag, tagIndex) => (
                         <span key={tagIndex} className="article-tag">
                           #{tag}
                         </span>
@@ -203,7 +231,7 @@ const WritingShowcase = () => {
                     </div>
 
                     <a
-                      href={getArticleUrl(article.id)}
+                      href={`/articles/${article.id}`}
                       className="article-link"
                     >
                       {getText(copy.continueReading, language)}{" "}

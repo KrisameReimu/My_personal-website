@@ -1,0 +1,133 @@
+[
+  {
+    "id": "love-death-life",
+    "publishedDate": "2019-10-20",
+    "title": {
+      "zh": "爱，死亡与生活",
+      "en": ""
+    },
+    "excerpt": {
+      "zh": "纯真的孩子站在平静的水面中央，追问着我：世界从哪里开始？",
+      "en": ""
+    },
+    "category": "reflection",
+    "tags": ["爱", "死亡", "生活", "散文", "哲学", "记忆"],
+    "readingTime": 12,
+    "featured": true,
+    "source": {
+      "wechat": "https://mp.weixin.qq.com/s/xD2El0ix8-tAmhOZnHmUvA"
+    }
+  },
+  {
+    "id": "gathering-and-funeral",
+    "publishedDate": "2020-01-01",
+    "title": {
+      "zh": "聚会与葬礼",
+      "en": ""
+    },
+    "excerpt": {
+      "zh": "我冒着寒风，低头穿过枝叶已经茂盛到路边的路，去参加一场生日聚会。",
+      "en": ""
+    },
+    "category": "reflection",
+    "tags": ["聚会", "葬礼", "家族", "乡村", "记忆", "告别"],
+    "readingTime": 7,
+    "featured": true
+  },
+  {
+    "id": "the-power-of-powerlessness",
+    "publishedDate": "2019-10-05",
+    "title": {
+      "zh": "无能的力量",
+      "en": ""
+    },
+    "excerpt": {
+      "zh": "深夜，一篇一篇的论文从眼前滑过，我却仍然没有一丝思路。",
+      "en": ""
+    },
+    "category": "reflection",
+    "tags": ["理想主义", "无力", "沉默", "现实", "夜", "自省"],
+    "readingTime": 6,
+    "featured": false
+  },
+  {
+    "id": "one-day-i-will-forget",
+    "publishedDate": "2019-09-01",
+    "title": {
+      "zh": "终有一日，我会忘去",
+      "en": ""
+    },
+    "excerpt": {
+      "zh": "我费劲气力，终于爬上了这陡峭的山崖，抬头望去，久经雨水侵蚀的城市终于开始复苏。",
+      "en": ""
+    },
+    "category": "reflection",
+    "tags": ["遗忘", "记忆", "生命", "故事", "告别", "自我"],
+    "readingTime": 8,
+    "featured": false
+  },
+  {
+    "id": "buddha",
+    "publishedDate": "2019-01-17",
+    "title": {
+      "zh": "佛",
+      "en": ""
+    },
+    "excerpt": {
+      "zh": "傍晚回去的路上，在一條寂靜的道路邊忽然聽聞到了鐘聲——那是寺廟的大鐘。",
+      "en": ""
+    },
+    "category": "reflection",
+    "tags": ["佛", "祈祷", "信仰", "苦难", "希望", "婆婆"],
+    "readingTime": 7,
+    "featured": true
+  },
+  {
+    "id": "we-you-they",
+    "publishedDate": "2025-01-26",
+    "title": {
+      "zh": "我们，你们，他们",
+      "en": ""
+    },
+    "excerpt": {
+      "zh": "媒体就像摄像机，不约而同地对准了“最响”的声音，而不是“最有价值”的声音。",
+      "en": ""
+    },
+    "category": "reflection",
+    "tags": ["媒体", "算法", "同温层", "洞穴寓言", "沉默的螺旋", "理性"],
+    "readingTime": 9,
+    "featured": true
+  },
+  {
+    "id": "cruelty-packaged-as-happiness",
+    "publishedDate": "2025-12-03",
+    "title": {
+      "zh": "最残忍的不是苦难，而是把苦难包装成幸福",
+      "en": ""
+    },
+    "excerpt": {
+      "zh": "我困惑的是：以官方口吻把艰难的生活包装成轻松的选择，把被迫的现实描述成主动的追梦。",
+      "en": ""
+    },
+    "category": "reflection",
+    "tags": ["外卖", "劳动", "叙事", "结构性问题", "就业", "现实"],
+    "readingTime": 4,
+    "featured": true
+  },
+  {
+    "id": "never-let-me-go-in-a-copyable-future",
+    "publishedDate": "2025-12-09",
+    "title": {
+      "zh": "莫失莫忘——在可以被复制的未来里，记住那些无法被替代的事物",
+      "en": ""
+    },
+    "excerpt": {
+      "zh": "当机器开始学会作画、写诗、谱曲，不眠不休；当我们只需输入一句话，它便以惊人的速度“创造”——我第一次感到一种奇怪的空洞。",
+      "en": ""
+    },
+    "category": "reflection",
+    "tags": ["AI", "艺术", "石黑一雄", "莫失莫忘", "记忆", "复制", "情感"],
+    "readingTime": 9,
+    "featured": true
+  }
+]

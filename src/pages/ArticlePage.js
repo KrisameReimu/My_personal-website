@@ -54,20 +54,41 @@ const ArticlePage = () => {
       ? siblings[currentIndex + 1]
       : null;
 
-  const safeHtml = useMemo(() => {
-    if (!article) return "";
-    const raw =
-      (language === "zh"
+  const {
+    safeHtml,
+    usedFallbackLanguage // "zh" | "en" | null
+  } = useMemo(() => {
+    if (!article) return {safeHtml: "", usedFallbackLanguage: null};
+
+    const getRaw = lang =>
+      (lang === "zh"
         ? article.content_zh || article.contentZh
         : article.content_en || article.contentEn) ||
-      (language === "zh"
+      (lang === "zh"
         ? article.excerpt?.zh || article.excerpt_zh
         : article.excerpt?.en || article.excerpt_en) ||
       "";
+
+    // Prefer current UI language; if missing, fall back to the other language
+    // to avoid rendering an empty page.
+    const primaryRaw = getRaw(language);
+    const fallbackLang = language === "zh" ? "en" : "zh";
+    const fallbackRaw = primaryRaw ? "" : getRaw(fallbackLang);
+
+    const raw = primaryRaw || fallbackRaw || "";
+    const usedFallbackLanguage = primaryRaw
+      ? null
+      : fallbackRaw
+      ? fallbackLang
+      : null;
+
     try {
-      return DOMPurify.sanitize(marked.parse(raw));
+      return {
+        safeHtml: DOMPurify.sanitize(marked.parse(raw)),
+        usedFallbackLanguage
+      };
     } catch {
-      return DOMPurify.sanitize(raw);
+      return {safeHtml: DOMPurify.sanitize(raw), usedFallbackLanguage};
     }
   }, [article, language]);
 
@@ -78,6 +99,10 @@ const ArticlePage = () => {
     readingTime: {zh: "分钟", en: "min"},
     prev: {zh: "上一篇", en: "Previous"},
     next: {zh: "下一篇", en: "Next"},
+    fallbackNotice: {
+      zh: "英文版整理中，当前展示中文内容。",
+      en: "English version is in progress. Showing the Chinese version for now."
+    },
     back: {zh: "返回写作", en: "Back to Writing"}
   };
 
@@ -96,13 +121,15 @@ const ArticlePage = () => {
     article.title_zh || article.title?.zh || article.titleZh;
   const displayTitleEn =
     article.title_en || article.title?.en || article.titleEn;
+  const displayTitle =
+    language === "zh"
+      ? displayTitleZh || displayTitleEn
+      : displayTitleEn || displayTitleZh;
 
   return (
     <div className="article-page">
       <div className="article-header">
-        <h1 className="article-title">
-          {language === "zh" ? displayTitleZh : displayTitleEn}
-        </h1>
+        <h1 className="article-title">{displayTitle}</h1>
         <div className="article-meta">
           {article.publishedDate && (
             <span>
@@ -125,12 +152,13 @@ const ArticlePage = () => {
       </div>
       {article.coverImage && (
         <figure className="article-cover">
-          <img
-            src={article.coverImage}
-            alt={language === "zh" ? displayTitleZh : displayTitleEn}
-            loading="lazy"
-          />
+          <img src={article.coverImage} alt={displayTitle} loading="lazy" />
         </figure>
+      )}
+      {usedFallbackLanguage && (
+        <div className="article-fallback" role="note">
+          {copy.fallbackNotice[language]}
+        </div>
       )}
       <article
         className="article-body"

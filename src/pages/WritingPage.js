@@ -29,7 +29,7 @@ export default function WritingPage() {
     <div className="page-container">
       <div className="page-hero writing-hero">
         <h1 className="page-title">
-          {getText(writingContent.config.sectionTitle, language)} ✍️
+          {getText(writingContent.config.sectionTitle, language)}
         </h1>
         <p className="page-subtitle">
           {getText(writingContent.config.subtitle, language)}

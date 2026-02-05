@@ -1,19 +1,20 @@
-import React, {useContext, useMemo} from "react";
+import React, {useContext, useEffect, useMemo, useState} from "react";
 import "./HomeSummary.scss";
 import {
   writingContent,
   videoContent,
   photoContent
 } from "../../data/contentIndex";
-import {getArticleUrl} from "../../config/assets";
+import {getArticles} from "../../services/contentAPI";
 import LanguageContext from "../../contexts/LanguageContext";
 import {formatDate, getText} from "../../utils/i18n";
 
 const HomeSummary = () => {
   const {language} = useContext(LanguageContext);
+  const [articles, setArticles] = useState(writingContent.articles || []);
 
   const latestArticles = useMemo(() => {
-    return [...writingContent.articles]
+    return [...articles]
       .filter(article => article.publishedDate)
       .sort(
         (a, b) =>
@@ -21,6 +22,19 @@ const HomeSummary = () => {
           new Date(a.publishedDate).getTime()
       )
       .slice(0, 3);
+  }, [articles]);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      const remoteArticles = await getArticles();
+      if (mounted && Array.isArray(remoteArticles) && remoteArticles.length) {
+        setArticles(remoteArticles);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const latestPhotos = useMemo(() => {
@@ -162,7 +176,7 @@ const HomeSummary = () => {
             <a
               key={article.id}
               className="summary-card"
-              href={getArticleUrl(article.id)}
+              href={`/articles/${article.id}`}
             >
               <div className="summary-card-meta">
                 <span>{formatDate(article.publishedDate, language)}</span>

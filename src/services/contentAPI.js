@@ -19,6 +19,65 @@ const CMS_CONFIG = {
   timeout: 5000 // 5秒超时
 };
 
+const PUBLIC_CONTENT = {
+  articlesIndexUrl: "/content/index.json",
+  articlesBaseUrl: "/content/articles"
+};
+
+let publicArticlesIndexCache = null;
+let publicArticlesIndexPromise = null;
+
+const fetchWithTimeout = async (url, options = {}) => {
+  const controller = new AbortController();
+  const timeoutMs = options.timeoutMs ?? 5000;
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+    return response;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+};
+
+const getPublicArticlesIndex = async () => {
+  if (publicArticlesIndexCache) return publicArticlesIndexCache;
+  if (publicArticlesIndexPromise) return publicArticlesIndexPromise;
+
+  publicArticlesIndexPromise = (async () => {
+    try {
+      const response = await fetchWithTimeout(PUBLIC_CONTENT.articlesIndexUrl, {
+        timeoutMs: 3000
+      });
+      if (!response.ok) return null;
+      const data = await response.json();
+      if (!Array.isArray(data)) return null;
+      publicArticlesIndexCache = data;
+      return publicArticlesIndexCache;
+    } catch {
+      return null;
+    } finally {
+      publicArticlesIndexPromise = null;
+    }
+  })();
+
+  return publicArticlesIndexPromise;
+};
+
+const getPublicArticleMarkdown = async (id, language) => {
+  const suffix = language === "en" ? "en" : "zh";
+  const url = `${PUBLIC_CONTENT.articlesBaseUrl}/${id}.${suffix}.md`;
+  try {
+    const response = await fetchWithTimeout(url, {timeoutMs: 5000});
+    if (!response.ok) return "";
+    return await response.text();
+  } catch {
+    return "";
+  }
+};
+
 // ====== 本地数据导入 ======
 // 懒加载本地数据，按需加载以优化性能
 const getLocalData = async type => {
@@ -105,6 +164,29 @@ export const getArticles = async (options = {}) => {
     console.warn("Falling back to local articles data");
   }
 
+  // Public content (public/content) takes precedence over bundled local data.
+  const publicIndex = await getPublicArticlesIndex();
+  if (publicIndex) {
+    let articles = [...publicIndex].sort((a, b) => {
+      const da = new Date(a?.publishedDate || 0).getTime();
+      const db = new Date(b?.publishedDate || 0).getTime();
+      if (Number.isNaN(da) && Number.isNaN(db)) return 0;
+      if (Number.isNaN(da)) return 1;
+      if (Number.isNaN(db)) return -1;
+      return db - da; // newest first
+    });
+    if (options.category) {
+      articles = articles.filter(a => a.category === options.category);
+    }
+    if (options.featured) {
+      articles = articles.filter(a => a.featured);
+    }
+    if (options.limit) {
+      articles = articles.slice(0, options.limit);
+    }
+    return articles;
+  }
+
   // 回退到本地数据
   const localData = await getLocalData(ContentTypes.ARTICLE);
   if (!localData) return [];
@@ -140,6 +222,18 @@ export const getArticleById = async id => {
     console.warn("Falling back to local article data");
   }
 
+  const publicIndex = await getPublicArticlesIndex();
+  const publicArticle = publicIndex?.find(a => a.id === id) || null;
+  if (publicArticle) {
+    const contentZh = await getPublicArticleMarkdown(publicArticle.id, "zh");
+    const contentEn = await getPublicArticleMarkdown(publicArticle.id, "en");
+    return {
+      ...publicArticle,
+      content_zh: contentZh,
+      content_en: contentEn
+    };
+  }
+
   const localData = await getLocalData(ContentTypes.ARTICLE);
   const articles = localData?.articles || [];
   return articles.find(a => a.id === id) || null;
@@ -161,6 +255,19 @@ export const getArticleBySlug = async slug => {
     }
   } catch (error) {
     console.warn("Falling back to local article by slug");
+  }
+
+  const publicIndex = await getPublicArticlesIndex();
+  const publicArticle =
+    publicIndex?.find(a => a.id === slug || a.slug === slug) || null;
+  if (publicArticle) {
+    const contentZh = await getPublicArticleMarkdown(publicArticle.id, "zh");
+    const contentEn = await getPublicArticleMarkdown(publicArticle.id, "en");
+    return {
+      ...publicArticle,
+      content_zh: contentZh,
+      content_en: contentEn
+    };
   }
 
   const localData = await getLocalData(ContentTypes.ARTICLE);
