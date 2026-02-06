@@ -1,14 +1,14 @@
-import React, {useContext, useMemo, useState} from "react";
+import React, {useContext, useEffect, useMemo, useState} from "react";
 import {Link} from "react-router-dom";
 import "./AskEcho.scss";
 import LanguageContext from "../../contexts/LanguageContext";
 import {getText} from "../../utils/i18n";
 import {
-  writingContent,
-  videoContent,
-  photoContent
-} from "../../data/contentIndex";
-import {projects as gameProjects} from "../../data/gamedev";
+  getArticles,
+  getGameProjects,
+  getPhotos,
+  getVideos
+} from "../../services/contentAPI";
 
 const normalize = value =>
   value
@@ -20,6 +20,10 @@ const AskEcho = () => {
   const {language} = useContext(LanguageContext);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [articles, setArticles] = useState([]);
+  const [videos, setVideos] = useState([]);
+  const [photos, setPhotos] = useState([]);
+  const [projects, setProjects] = useState([]);
 
   const copy = {
     button: {zh: "Ask Echo", en: "Ask Echo"},
@@ -46,8 +50,30 @@ const AskEcho = () => {
     }
   };
 
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      const [allArticles, allVideos, allPhotos, allProjects] =
+        await Promise.all([
+          getArticles(),
+          getVideos(),
+          getPhotos(),
+          getGameProjects()
+        ]);
+      if (mounted) {
+        setArticles(allArticles || []);
+        setVideos(allVideos || []);
+        setPhotos(allPhotos || []);
+        setProjects(allProjects || []);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   const items = useMemo(() => {
-    const writingItems = writingContent.articles.map(article => ({
+    const writingItems = articles.map(article => ({
       id: article.id,
       type: "writing",
       title: getText(article.title, language),
@@ -56,7 +82,7 @@ const AskEcho = () => {
       tags: article.tags || []
     }));
 
-    const videoItems = videoContent.videos.map(video => ({
+    const videoItems = videos.map(video => ({
       id: video.id,
       type: "video",
       title: getText(video.title, language),
@@ -65,11 +91,7 @@ const AskEcho = () => {
       tags: video.tags || []
     }));
 
-    const photoItems = [
-      ...photoContent.urbanPhotos,
-      ...photoContent.portraitPhotos,
-      ...photoContent.naturePhotos
-    ].map(photo => ({
+    const photoItems = photos.map(photo => ({
       id: photo.id,
       type: "photo",
       title: getText(photo.title, language),
@@ -78,7 +100,7 @@ const AskEcho = () => {
       tags: photo.tags || []
     }));
 
-    const gameItems = gameProjects.map(project => ({
+    const gameItems = projects.map(project => ({
       id: project.id,
       type: "game",
       title: getText(project.title, language),
@@ -88,7 +110,7 @@ const AskEcho = () => {
     }));
 
     return [...writingItems, ...videoItems, ...photoItems, ...gameItems];
-  }, [language]);
+  }, [articles, videos, photos, projects, language]);
 
   const results = useMemo(() => {
     if (!query.trim()) return [];

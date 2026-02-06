@@ -1,17 +1,15 @@
 import React, {useContext, useEffect, useMemo, useState} from "react";
+import {Link} from "react-router-dom";
 import "./HomeSummary.scss";
-import {
-  writingContent,
-  videoContent,
-  photoContent
-} from "../../data/contentIndex";
-import {getArticles} from "../../services/contentAPI";
+import {getArticles, getPhotos, getVideos} from "../../services/contentAPI";
 import LanguageContext from "../../contexts/LanguageContext";
 import {formatDate, getText} from "../../utils/i18n";
 
 const HomeSummary = () => {
   const {language} = useContext(LanguageContext);
-  const [articles, setArticles] = useState(writingContent.articles || []);
+  const [articles, setArticles] = useState([]);
+  const [photos, setPhotos] = useState([]);
+  const [videos, setVideos] = useState([]);
 
   const latestArticles = useMemo(() => {
     return [...articles]
@@ -27,9 +25,15 @@ const HomeSummary = () => {
   useEffect(() => {
     let mounted = true;
     (async () => {
-      const remoteArticles = await getArticles();
-      if (mounted && Array.isArray(remoteArticles) && remoteArticles.length) {
-        setArticles(remoteArticles);
+      const [remoteArticles, remotePhotos, remoteVideos] = await Promise.all([
+        getArticles(),
+        getPhotos(),
+        getVideos()
+      ]);
+      if (mounted) {
+        setArticles(remoteArticles || []);
+        setPhotos(remotePhotos || []);
+        setVideos(remoteVideos || []);
       }
     })();
     return () => {
@@ -38,22 +42,17 @@ const HomeSummary = () => {
   }, []);
 
   const latestPhotos = useMemo(() => {
-    const allPhotos = [
-      ...photoContent.urbanPhotos,
-      ...photoContent.portraitPhotos,
-      ...photoContent.naturePhotos
-    ];
-    return allPhotos
+    return [...photos]
       .filter(photo => photo.captureDate)
       .sort(
         (a, b) =>
           new Date(b.captureDate).getTime() - new Date(a.captureDate).getTime()
       )
       .slice(0, 3);
-  }, []);
+  }, [photos]);
 
   const latestVideos = useMemo(() => {
-    return [...videoContent.videos]
+    return [...videos]
       .filter(video => video.publishedDate)
       .sort(
         (a, b) =>
@@ -61,7 +60,7 @@ const HomeSummary = () => {
           new Date(a.publishedDate).getTime()
       )
       .slice(0, 2);
-  }, []);
+  }, [videos]);
 
   const latestActivityDate = useMemo(() => {
     const dates = [
@@ -167,16 +166,16 @@ const HomeSummary = () => {
       <div className="summary-section">
         <div className="summary-header">
           <h2>{getText(copy.latestWriting, language)}</h2>
-          <a className="summary-link" href="/writing">
+          <Link className="summary-link" to="/writing">
             {getText(copy.exploreWriting, language)}
-          </a>
+          </Link>
         </div>
         <div className="summary-grid">
           {latestArticles.map(article => (
-            <a
+            <Link
               key={article.id}
               className="summary-card"
-              href={`/articles/${article.id}`}
+              to={`/articles/${article.id}`}
             >
               <div className="summary-card-meta">
                 <span>{formatDate(article.publishedDate, language)}</span>
@@ -184,7 +183,7 @@ const HomeSummary = () => {
               </div>
               <h3>{getText(article.title, language)}</h3>
               <p>{getText(article.excerpt, language)}</p>
-            </a>
+            </Link>
           ))}
         </div>
       </div>
@@ -192,17 +191,17 @@ const HomeSummary = () => {
       <div className="summary-section">
         <div className="summary-header">
           <h2>{getText(copy.featuredWorks, language)}</h2>
-          <a className="summary-link" href="/game-dev">
+          <Link className="summary-link" to="/game-dev">
             {getText(copy.exploreWorks, language)}
-          </a>
+          </Link>
         </div>
         <div className="featured-grid">
           {featuredWorks.map(work => (
-            <a key={work.id} className="featured-card" href={work.link}>
+            <Link key={work.id} className="featured-card" to={work.link}>
               <p className="featured-meta">{getText(work.meta, language)}</p>
               <h3>{getText(work.title, language)}</h3>
               <p>{getText(work.description, language)}</p>
-            </a>
+            </Link>
           ))}
         </div>
       </div>
@@ -210,14 +209,17 @@ const HomeSummary = () => {
       <div className="summary-section">
         <div className="summary-header">
           <h2>{getText(copy.latestVisuals, language)}</h2>
-          <a className="summary-link" href="/photos">
+          <Link className="summary-link" to="/photos">
             {getText(copy.exploreVisuals, language)}
-          </a>
+          </Link>
         </div>
         <div className="visual-grid">
           {latestPhotos.map(photo => (
             <div className="visual-card" key={photo.id}>
-              <img src={photo.thumbnail} alt={getText(photo.title, language)} />
+              <img
+                src={photo.thumbnail || photo.url}
+                alt={getText(photo.title, language)}
+              />
               <div className="visual-meta">
                 <span>{getText(photo.title, language)}</span>
                 <span>{formatDate(photo.captureDate, language)}</span>
