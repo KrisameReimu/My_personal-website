@@ -1,31 +1,46 @@
-import React, {useState, useContext} from "react";
+import React, {useState, useContext, useEffect, useMemo} from "react";
 import "./GameDevShowcase.scss";
 import {Fade} from "react-reveal";
-import {projects, calculateProgress} from "../../data/gamedev";
 import LanguageContext from "../../contexts/LanguageContext";
 import {formatDate, getText} from "../../utils/i18n";
+import {getGameProjects} from "../../services/contentAPI";
 
-// Backwards compatibility: maintain gameDevSection export shape for legacy imports
 const gameDevSection = {
-  display: true,
-  title: "Game Development",
-  subtitle: "CREATING IMMERSIVE WORLDS AND MEMORABLE EXPERIENCES",
-  games: projects.map(project => ({
-    title: project.title.en,
-    description: project.description.en,
-    image: project.coverImage,
-    status: project.status,
-    technologies: project.technologies,
-    highlights: project.highlights.map(h => h.en),
-    demoVideo: project.demoVideo,
-    downloadLink: project.downloadLink
-  }))
+  display: true
 };
 
 const GameDevShowcase = () => {
   const {language} = useContext(LanguageContext);
   const [selectedProject, setSelectedProject] = useState(null);
   const [hoveredMilestone, setHoveredMilestone] = useState(null);
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      const allProjects = await getGameProjects();
+      if (mounted) setProjects(allProjects || []);
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const projectProgress = useMemo(() => {
+    const progress = {};
+    projects.forEach(project => {
+      const milestones = project.milestones || [];
+      if (milestones.length === 0) {
+        progress[project.id] = 0;
+        return;
+      }
+      const completed = milestones.filter(
+        milestone => milestone.status === "completed"
+      ).length;
+      progress[project.id] = Math.round((completed / milestones.length) * 100);
+    });
+    return progress;
+  }, [projects]);
 
   if (!gameDevSection.display) return null;
 
@@ -38,6 +53,8 @@ const GameDevShowcase = () => {
     watchDemo: {zh: "观看演示", en: "Watch Demo"},
     download: {zh: "下载", en: "Download"},
     comingSoon: {zh: "即将推出", en: "Coming Soon"},
+    technologies: {zh: "技术栈", en: "Technologies"},
+    highlights: {zh: "项目亮点", en: "Highlights"},
     milestones: {zh: "开发里程碑", en: "Development Milestones"},
     process: {zh: "开发流程", en: "Development Process"},
     processSteps: [
@@ -72,7 +89,6 @@ const GameDevShowcase = () => {
     ]
   };
 
-  // Get milestone icon based on status
   const getMilestoneIcon = status => {
     switch (status) {
       case "completed":
@@ -90,7 +106,6 @@ const GameDevShowcase = () => {
     <Fade bottom duration={1000} distance="20px">
       <div className="main" id="game-showcase">
         <div className="game-dev-container">
-          {/* Header */}
           <div>
             <h1 className="game-dev-heading">
               {getText(copy.title, language)}
@@ -100,12 +115,11 @@ const GameDevShowcase = () => {
             </p>
           </div>
 
-          {/* Games Grid */}
           <div className="games-grid">
-            {projects.map((project, i) => {
-              const progress = calculateProgress(project);
+            {projects.map(project => {
+              const progress = projectProgress[project.id] || 0;
               return (
-                <Fade key={project.id} bottom duration={2000} distance="40px">
+                <Fade key={project.id} bottom duration={1200} distance="24px">
                   <div
                     className="game-card"
                     onClick={() =>
@@ -127,7 +141,7 @@ const GameDevShowcase = () => {
                       >
                         {project.status}
                       </div>
-                      {project.status === "In Development" && (
+                      {project.status === "in-development" && (
                         <div className="progress-overlay">
                           <div className="progress-bar">
                             <div
@@ -151,10 +165,13 @@ const GameDevShowcase = () => {
                       </p>
 
                       <div className="game-tech-stack">
-                        <strong>Technologies:</strong>
+                        <strong>{getText(copy.technologies, language)}:</strong>
                         <div className="tech-tags">
-                          {project.technologies.map((tech, index) => (
-                            <span key={index} className="tech-tag">
+                          {(project.technologies || []).map(tech => (
+                            <span
+                              key={`${project.id}-${tech}`}
+                              className="tech-tag"
+                            >
                               {tech}
                             </span>
                           ))}
@@ -163,11 +180,11 @@ const GameDevShowcase = () => {
 
                       {project.highlights && project.highlights.length > 0 && (
                         <div className="game-highlights">
-                          <strong>Highlights:</strong>
+                          <strong>{getText(copy.highlights, language)}:</strong>
                           <ul>
                             {project.highlights.map((highlight, index) => (
-                              <li key={index}>
-                                {getText(highlight, language) || highlight.zh}
+                              <li key={`${project.id}-h-${index}`}>
+                                {getText(highlight, language)}
                               </li>
                             ))}
                           </ul>
@@ -205,7 +222,6 @@ const GameDevShowcase = () => {
                         )}
                       </div>
 
-                      {/* Expandable Milestone Timeline */}
                       {selectedProject === project.id && project.milestones && (
                         <Fade>
                           <div className="milestones-section">
@@ -216,7 +232,7 @@ const GameDevShowcase = () => {
                             <div className="milestones-timeline">
                               {project.milestones.map((milestone, idx) => (
                                 <div
-                                  key={idx}
+                                  key={`${project.id}-m-${idx}`}
                                   className={`milestone-item ${milestone.status}`}
                                   onMouseEnter={() => setHoveredMilestone(idx)}
                                   onMouseLeave={() => setHoveredMilestone(null)}
@@ -260,49 +276,33 @@ const GameDevShowcase = () => {
             })}
           </div>
 
-          {/* Development Process Section - Generic Timeline */}
           <div className="dev-process-section">
             <Fade bottom duration={1500} distance="30px">
               <h2 className="process-heading">
                 {getText(copy.process, language)}
               </h2>
               <div className="process-timeline">
-                <div className="timeline-item">
-                  <div className="timeline-icon">
-                    <i className="fas fa-lightbulb"></i>
+                {copy.processSteps.map((step, index) => (
+                  <div className="timeline-item" key={index}>
+                    <div className="timeline-icon">
+                      <i
+                        className={
+                          index === 0
+                            ? "fas fa-lightbulb"
+                            : index === 1
+                            ? "fas fa-code"
+                            : index === 2
+                            ? "fas fa-paint-brush"
+                            : "fas fa-bug"
+                        }
+                      ></i>
+                    </div>
+                    <div className="timeline-content">
+                      <h4>{getText(step.title, language)}</h4>
+                      <p>{getText(step.desc, language)}</p>
+                    </div>
                   </div>
-                  <div className="timeline-content">
-                    <h4>{getText(copy.processSteps[0].title, language)}</h4>
-                    <p>{getText(copy.processSteps[0].desc, language)}</p>
-                  </div>
-                </div>
-                <div className="timeline-item">
-                  <div className="timeline-icon">
-                    <i className="fas fa-code"></i>
-                  </div>
-                  <div className="timeline-content">
-                    <h4>{getText(copy.processSteps[1].title, language)}</h4>
-                    <p>{getText(copy.processSteps[1].desc, language)}</p>
-                  </div>
-                </div>
-                <div className="timeline-item">
-                  <div className="timeline-icon">
-                    <i className="fas fa-paint-brush"></i>
-                  </div>
-                  <div className="timeline-content">
-                    <h4>{getText(copy.processSteps[2].title, language)}</h4>
-                    <p>{getText(copy.processSteps[2].desc, language)}</p>
-                  </div>
-                </div>
-                <div className="timeline-item">
-                  <div className="timeline-icon">
-                    <i className="fas fa-bug"></i>
-                  </div>
-                  <div className="timeline-content">
-                    <h4>{getText(copy.processSteps[3].title, language)}</h4>
-                    <p>{getText(copy.processSteps[3].desc, language)}</p>
-                  </div>
-                </div>
+                ))}
               </div>
             </Fade>
           </div>
