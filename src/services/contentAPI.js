@@ -21,11 +21,24 @@ const CMS_CONFIG = {
 
 const PUBLIC_CONTENT = {
   articlesIndexUrl: "/content/index.json",
-  articlesBaseUrl: "/content/articles"
+  articlesBaseUrl: "/content/articles",
+  photosIndexUrl: "/content/photos.json",
+  videosIndexUrl: "/content/videos.json",
+  projectsIndexUrl: "/content/projects.json"
 };
 
 let publicArticlesIndexCache = null;
 let publicArticlesIndexPromise = null;
+const publicIndexCache = {
+  photos: null,
+  videos: null,
+  projects: null
+};
+const publicIndexPromise = {
+  photos: null,
+  videos: null,
+  projects: null
+};
 
 const fetchWithTimeout = async (url, options = {}) => {
   const controller = new AbortController();
@@ -65,6 +78,37 @@ const getPublicArticlesIndex = async () => {
 
   return publicArticlesIndexPromise;
 };
+
+const getPublicIndex = async (key, url) => {
+  if (publicIndexCache[key]) return publicIndexCache[key];
+  if (publicIndexPromise[key]) return publicIndexPromise[key];
+
+  publicIndexPromise[key] = (async () => {
+    try {
+      const response = await fetchWithTimeout(url, {timeoutMs: 3000});
+      if (!response.ok) return null;
+      const data = await response.json();
+      if (!Array.isArray(data)) return null;
+      publicIndexCache[key] = data;
+      return publicIndexCache[key];
+    } catch {
+      return null;
+    } finally {
+      publicIndexPromise[key] = null;
+    }
+  })();
+
+  return publicIndexPromise[key];
+};
+
+const getPublicPhotosIndex = () =>
+  getPublicIndex("photos", PUBLIC_CONTENT.photosIndexUrl);
+
+const getPublicVideosIndex = () =>
+  getPublicIndex("videos", PUBLIC_CONTENT.videosIndexUrl);
+
+const getPublicProjectsIndex = () =>
+  getPublicIndex("projects", PUBLIC_CONTENT.projectsIndexUrl);
 
 const getPublicArticleMarkdown = async (id, language) => {
   const suffix = language === "en" ? "en" : "zh";
@@ -296,6 +340,25 @@ export const getPhotos = async (options = {}) => {
     console.warn("Falling back to local photos data");
   }
 
+  const publicPhotos = await getPublicPhotosIndex();
+  if (publicPhotos) {
+    let photos = [...publicPhotos].sort((a, b) => {
+      const da = new Date(a?.captureDate || 0).getTime();
+      const db = new Date(b?.captureDate || 0).getTime();
+      if (Number.isNaN(da) && Number.isNaN(db)) return 0;
+      if (Number.isNaN(da)) return 1;
+      if (Number.isNaN(db)) return -1;
+      return db - da;
+    });
+    if (options.category) {
+      photos = photos.filter(p => p.category === options.category);
+    }
+    if (options.limit) {
+      photos = photos.slice(0, options.limit);
+    }
+    return photos;
+  }
+
   const localData = await getLocalData(ContentTypes.PHOTO);
   if (!localData) return [];
 
@@ -333,6 +396,27 @@ export const getVideos = async (options = {}) => {
     console.warn("Falling back to local videos data");
   }
 
+  const publicVideos = await getPublicVideosIndex();
+  if (publicVideos) {
+    let videos = [...publicVideos].sort((a, b) => {
+      const da = new Date(a?.publishedDate || 0).getTime();
+      const db = new Date(b?.publishedDate || 0).getTime();
+      if (Number.isNaN(da) && Number.isNaN(db)) return 0;
+      if (Number.isNaN(da)) return 1;
+      if (Number.isNaN(db)) return -1;
+      return db - da;
+    });
+    if (options.category) {
+      videos = videos.filter(v => v.category === options.category);
+    }
+    if (options.awardLevel) {
+      videos = videos.filter(v =>
+        v.awards?.some(award => award.level === options.awardLevel)
+      );
+    }
+    return videos;
+  }
+
   const localData = await getLocalData(ContentTypes.VIDEO);
   if (!localData) return [];
 
@@ -363,6 +447,11 @@ export const getGameProjects = async (options = {}) => {
     }
   } catch (error) {
     console.warn("Falling back to local game projects data");
+  }
+
+  const publicProjects = await getPublicProjectsIndex();
+  if (publicProjects) {
+    return publicProjects;
   }
 
   const localData = await getLocalData(ContentTypes.GAME);
