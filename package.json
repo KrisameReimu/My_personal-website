@@ -1,5 +1,5 @@
 {
-  "homepage": "https://developerfolio.js.org/",
+  "homepage": "https://www.chenchen-echo.com/",
   "name": "developerfolio",
   "version": "0.1.0",
   "private": true,
@@ -32,6 +32,10 @@
     "eject": "react-scripts eject",
     "format": "prettier --write \"./**/*.{js,css,json,scss}\"",
     "check-format": "prettier -c \"./**/*.{js,css,json,scss}\"",
+    "new:article": "node scripts/new-article.js",
+    "new:photo": "node scripts/new-photo.js",
+    "new:video": "node scripts/new-video.js",
+    "new:project": "node scripts/new-project.js",
     "prepare": "husky"
   },
   "eslintConfig": {
