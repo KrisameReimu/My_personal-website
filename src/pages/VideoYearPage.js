@@ -1,37 +1,42 @@
-import React, {useContext, useMemo} from "react";
+import React, {useContext, useMemo, useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import "./VideoYearPage.scss";
-import {videoContent} from "../data/contentIndex";
 import LanguageContext from "../contexts/LanguageContext";
 import {formatDate, getText} from "../utils/i18n";
+import {getVideos} from "../services/contentAPI";
 
 export default function VideoYearPage() {
   const {year} = useParams();
   const {language} = useContext(LanguageContext);
+  const [videos, setVideos] = useState([]);
 
-  const filtered = useMemo(() => {
-    return videoContent.videos.filter(video =>
-      video.publishedDate?.startsWith(year)
-    );
-  }, [year]);
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      const allVideos = await getVideos();
+      if (mounted) setVideos(allVideos || []);
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const filtered = useMemo(
+    () => videos.filter(video => video.publishedDate?.startsWith(year)),
+    [videos, year]
+  );
 
   const copy = {
-    title: {
-      zh: `${year} 影像精选`,
-      en: `${year} Video Highlights`
-    },
+    title: {zh: `${year} 影像精选`, en: `${year} Video Highlights`},
     subtitle: {
       zh: "这一年的影像作品与视觉实验。",
-      en: "A selection of visual works and experiments from the year."
+      en: "Visual works and experiments from the year."
     },
     empty: {
       zh: "该年度影像正在整理中，敬请期待。",
       en: "This year's video archive is being curated."
     },
-    back: {
-      zh: "返回影像主页",
-      en: "Back to Videos"
-    }
+    back: {zh: "返回影像主页", en: "Back to Videos"}
   };
 
   return (
