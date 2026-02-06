@@ -1,21 +1,22 @@
-import React, {useState, useEffect, useCallback, useContext} from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useContext,
+  useMemo
+} from "react";
 import "./Photography.scss";
 import {Fade} from "react-reveal";
-import {photoContent} from "../../data/contentIndex";
+import {getPhotos} from "../../services/contentAPI";
 import LanguageContext from "../../contexts/LanguageContext";
 import {formatDate, getText} from "../../utils/i18n";
+import {
+  fallbackPhotoCategory,
+  photoCategoryMeta
+} from "../../config/contentTaxonomy";
 
-// Backwards compatibility: maintain photographySection export shape for legacy imports
 const photographySection = {
-  display: true,
-  title: "Photography",
-  subtitle: "CAPTURING MOMENTS, TELLING STORIES THROUGH LIGHT AND SHADOW",
-  categories: photoContent.categories.map(cat => ({
-    name: cat.name.en,
-    description: cat.description.en,
-    coverImage: cat.coverImage,
-    photos: photoContent.photosByCategory[cat.id].map(photo => photo.url)
-  }))
+  display: true
 };
 
 const Photography = () => {
@@ -25,13 +26,55 @@ const Photography = () => {
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [currentPhotos, setCurrentPhotos] = useState([]);
   const [loadedImages, setLoadedImages] = useState({});
+  const [photos, setPhotos] = useState([]);
   const loadedImagesRef = React.useRef({});
   const inFlightRef = React.useRef(new Set());
 
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      const allPhotos = await getPhotos();
+      if (mounted) setPhotos(allPhotos || []);
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const categories = useMemo(() => {
+    const categoryIds = Array.from(
+      new Set(photos.map(photo => photo.category).filter(Boolean))
+    );
+    return categoryIds.map(categoryId => {
+      const meta = photoCategoryMeta[categoryId] || fallbackPhotoCategory;
+      const categoryPhotos = photos.filter(
+        photo => photo.category === categoryId
+      );
+      return {
+        id: categoryId,
+        name: meta.label,
+        description: meta.description,
+        icon: meta.icon,
+        color: meta.color,
+        photoCount: categoryPhotos.length,
+        coverImage: categoryPhotos[0]?.thumbnail || categoryPhotos[0]?.url || ""
+      };
+    });
+  }, [photos]);
+
+  const photosByCategory = useMemo(() => {
+    const grouped = {};
+    photos.forEach(photo => {
+      if (!photo.category) return;
+      if (!grouped[photo.category]) grouped[photo.category] = [];
+      grouped[photo.category].push(photo);
+    });
+    return grouped;
+  }, [photos]);
+
   const loadImage = useCallback(src => {
-    if (!src) return;
-    if (loadedImagesRef.current[src]) return;
-    if (inFlightRef.current.has(src)) return;
+    if (!src || loadedImagesRef.current[src] || inFlightRef.current.has(src))
+      return;
     inFlightRef.current.add(src);
     const img = new Image();
     img.src = src;
@@ -45,23 +88,19 @@ const Photography = () => {
     };
   }, []);
 
-  // Note: move keyboard listener AFTER dependent callbacks are defined to avoid TDZ ReferenceErrors
-
-  // Preload images when category is selected
   useEffect(() => {
-    if (selectedCategory) {
-      const photos = photoContent.photosByCategory[selectedCategory.id];
-      photos.forEach(photo => {
-        loadImage(photo.thumbnail);
-        loadImage(photo.url); // Preload full-size for lightbox
-      });
-    }
-  }, [selectedCategory, loadImage]);
+    if (!selectedCategory) return;
+    const selected = photosByCategory[selectedCategory.id] || [];
+    selected.forEach(photo => {
+      loadImage(photo.thumbnail || photo.url);
+      loadImage(photo.url);
+    });
+  }, [selectedCategory, photosByCategory, loadImage]);
 
-  const openLightbox = useCallback((photos, index) => {
+  const openLightbox = useCallback((nextPhotos, index) => {
     setLightboxOpen(true);
     setLightboxIndex(index);
-    setCurrentPhotos(photos);
+    setCurrentPhotos(nextPhotos);
   }, []);
 
   const closeLightbox = useCallback(() => {
@@ -78,17 +117,12 @@ const Photography = () => {
     );
   }, [currentPhotos]);
 
-  // Keyboard navigation (defined after callbacks to prevent 'Cannot access before initialization')
   const handleKeydown = useCallback(
     e => {
       if (!lightboxOpen) return;
-      if (e.key === "Escape") {
-        closeLightbox();
-      } else if (e.key === "ArrowRight") {
-        nextPhoto();
-      } else if (e.key === "ArrowLeft") {
-        prevPhoto();
-      }
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowRight") nextPhoto();
+      if (e.key === "ArrowLeft") prevPhoto();
     },
     [lightboxOpen, closeLightbox, nextPhoto, prevPhoto]
   );
@@ -108,17 +142,14 @@ const Photography = () => {
     },
     back: {zh: "返回分类", en: "Back to Categories"},
     photoCount: {zh: "张", en: "Photos"},
-    empty: {
-      zh: "该分类暂时还没有作品。",
-      en: "Photos coming soon..."
-    }
+    empty: {zh: "该分类暂时还没有作品。", en: "Photos coming soon..."}
   };
 
   const selectedCategoryData = selectedCategory
-    ? photoContent.categories.find(c => c.id === selectedCategory.id)
+    ? categories.find(c => c.id === selectedCategory.id)
     : null;
   const selectedPhotos = selectedCategory
-    ? photoContent.photosByCategory[selectedCategory.id]
+    ? photosByCategory[selectedCategory.id] || []
     : [];
 
   return (
@@ -136,52 +167,46 @@ const Photography = () => {
 
           {!selectedCategory ? (
             <div className="photo-categories-grid">
-              {photoContent.categories.map((category, i) => {
-                return (
-                  <Fade
-                    key={category.id}
-                    bottom
-                    duration={2000}
-                    distance="40px"
+              {categories.map(category => (
+                <Fade key={category.id} bottom duration={1200} distance="24px">
+                  <div
+                    className="category-card"
+                    onClick={() => setSelectedCategory(category)}
                   >
-                    <div
-                      className="category-card"
-                      onClick={() => setSelectedCategory(category)}
-                    >
-                      <div className="category-image-container">
-                        <img
-                          src={category.coverImage}
-                          alt={getText(category.name, language)}
-                          className="category-cover"
-                          loading="lazy"
-                        />
-                        <div className="category-overlay">
-                          <span className="category-icon">
-                            <i className={category.icon}></i>
-                          </span>
-                          <h3 className="category-name">
-                            {getText(category.name, language)}
-                          </h3>
-                          <p className="category-description">
-                            {getText(category.description, language)}
-                          </p>
-                          <span className="photo-count">
-                            <i className="fas fa-images"></i>{" "}
-                            {category.photoCount}{" "}
-                            {getText(copy.photoCount, language)}
-                          </span>
-                        </div>
+                    <div className="category-image-container">
+                      <img
+                        src={category.coverImage}
+                        alt={getText(category.name, language)}
+                        className="category-cover"
+                        loading="lazy"
+                      />
+                      <div className="category-overlay">
+                        <span className="category-icon">
+                          <i className={category.icon}></i>
+                        </span>
+                        <h3 className="category-name">
+                          {getText(category.name, language)}
+                        </h3>
+                        <p className="category-description">
+                          {getText(category.description, language)}
+                        </p>
+                        <span className="photo-count">
+                          <i className="fas fa-images"></i>{" "}
+                          {category.photoCount}{" "}
+                          {getText(copy.photoCount, language)}
+                        </span>
                       </div>
                     </div>
-                  </Fade>
-                );
-              })}
+                  </div>
+                </Fade>
+              ))}
             </div>
           ) : (
             <div className="photo-gallery">
               <button
                 className="back-button"
                 onClick={() => setSelectedCategory(null)}
+                type="button"
               >
                 <i className="fas fa-arrow-left"></i>{" "}
                 {getText(copy.back, language)}
@@ -200,7 +225,11 @@ const Photography = () => {
                     onClick={() => openLightbox(selectedPhotos, index)}
                   >
                     <img
-                      src={loadedImages[photo.thumbnail] || photo.thumbnail}
+                      src={
+                        loadedImages[photo.thumbnail] ||
+                        photo.thumbnail ||
+                        photo.url
+                      }
                       alt={getText(photo.title, language)}
                       loading="lazy"
                     />
@@ -225,7 +254,6 @@ const Photography = () => {
             </div>
           )}
 
-          {/* Enhanced Lightbox with EXIF data */}
           {lightboxOpen && currentPhotos.length > 0 && (
             <div className="lightbox" onClick={closeLightbox}>
               <button className="lightbox-close" aria-label="Close lightbox">
@@ -241,7 +269,6 @@ const Photography = () => {
               >
                 <i className="fas fa-chevron-left"></i>
               </button>
-
               <div
                 className="lightbox-content"
                 onClick={e => e.stopPropagation()}
@@ -274,7 +301,6 @@ const Photography = () => {
                   )}
                 </div>
               </div>
-
               <button
                 className="lightbox-next"
                 onClick={e => {
