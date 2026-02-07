@@ -36,6 +36,7 @@
     "new:photo": "node scripts/new-photo.js",
     "new:video": "node scripts/new-video.js",
     "new:project": "node scripts/new-project.js",
+    "content:validate": "node scripts/validate-content.js",
     "prepare": "husky"
   },
   "eslintConfig": {

@@ -8,6 +8,8 @@ Live site: https://www.chenchen-echo.com/
 
 - Article index: `public/content/index.json`
 - Article body: `public/content/articles/<id>.zh.md` and optional `<id>.en.md`
+- Validate all content files:
+  - `npm run content:validate`
 - Create new article scaffold:
   - `npm run new:article -- --id your-article-id --title-zh "中文标题" --date 2026-02-06 --category reflection --tags "标签1,标签2" --excerpt-zh "摘要"`
 - Optional English file:
@@ -24,6 +26,8 @@ Live site: https://www.chenchen-echo.com/
   - `npm run new:video -- --id video-id --title-zh "标题" --date 2026-02-06 --category documentary --thumbnail "https://img.chenchen-echo.com/cover.jpg" --platform youtube --video-id "YOUTUBE_ID"`
 - Create new project:
   - `npm run new:project -- --id project-id --title-zh "项目标题" --status in-development --cover "https://img.chenchen-echo.com/project-cover.jpg" --tech "Unity,C#,Node.js"`
+- Before push/deploy:
+  - `npm run content:validate && npm run build`
 
 ## Recommended Hosting
 

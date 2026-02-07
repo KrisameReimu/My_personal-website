@@ -1,0 +1,256 @@
+#!/usr/bin/env node
+const fs = require("fs");
+const path = require("path");
+
+const root = process.cwd();
+const contentDir = path.join(root, "public", "content");
+const files = {
+  articles: path.join(contentDir, "index.json"),
+  photos: path.join(contentDir, "photos.json"),
+  videos: path.join(contentDir, "videos.json"),
+  projects: path.join(contentDir, "projects.json")
+};
+const articlesDir = path.join(contentDir, "articles");
+
+const articleCategories = new Set(["reflection", "essay", "tech", "creative"]);
+const photoCategories = new Set(["urban", "portrait", "nature"]);
+const videoCategories = new Set(["promotional", "short-film", "documentary"]);
+const projectStatuses = new Set(["planning", "in-development", "released"]);
+
+const errors = [];
+const warnings = [];
+
+const addError = message => errors.push(message);
+const addWarning = message => warnings.push(message);
+
+const readJsonArray = filePath => {
+  if (!fs.existsSync(filePath)) {
+    addError(`Missing file: ${filePath}`);
+    return [];
+  }
+
+  try {
+    const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
+    if (!Array.isArray(data)) {
+      addError(`Expected array JSON: ${filePath}`);
+      return [];
+    }
+    return data;
+  } catch (error) {
+    addError(`Invalid JSON in ${filePath}: ${error.message}`);
+    return [];
+  }
+};
+
+const isValidDate = value => {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value))
+    return false;
+  const date = new Date(`${value}T00:00:00Z`);
+  if (Number.isNaN(date.getTime())) return false;
+  return date.toISOString().slice(0, 10) === value;
+};
+
+const hasText = value => typeof value === "string" && value.trim().length > 0;
+
+const validateI18nObject = (obj, pathLabel, requiredZh = true) => {
+  if (!obj || typeof obj !== "object") {
+    addError(`${pathLabel} must be an object with zh/en`);
+    return;
+  }
+  if (requiredZh && !hasText(obj.zh)) {
+    addError(`${pathLabel}.zh is required`);
+  }
+  if ("en" in obj && typeof obj.en !== "string") {
+    addError(`${pathLabel}.en must be a string`);
+  }
+};
+
+const validateUniqueIds = (items, listName) => {
+  const seen = new Set();
+  items.forEach((item, idx) => {
+    const label = `${listName}[${idx}]`;
+    if (!item || typeof item !== "object") {
+      addError(`${label} must be an object`);
+      return;
+    }
+    if (!hasText(item.id)) {
+      addError(`${label}.id is required`);
+      return;
+    }
+    if (seen.has(item.id)) {
+      addError(`${listName} has duplicate id: ${item.id}`);
+    }
+    seen.add(item.id);
+  });
+  return seen;
+};
+
+const validateArticles = articles => {
+  validateUniqueIds(articles, "articles");
+
+  articles.forEach((article, idx) => {
+    const label = `articles[${idx}](${article.id || "missing-id"})`;
+    validateI18nObject(article.title, `${label}.title`);
+    validateI18nObject(article.excerpt, `${label}.excerpt`, false);
+
+    if (!isValidDate(article.publishedDate)) {
+      addError(`${label}.publishedDate must be YYYY-MM-DD`);
+    }
+    if (!articleCategories.has(article.category)) {
+      addWarning(`${label}.category is not in known categories`);
+    }
+    if (!Array.isArray(article.tags)) {
+      addError(`${label}.tags must be an array`);
+    }
+    if (typeof article.readingTime !== "number" || article.readingTime <= 0) {
+      addWarning(`${label}.readingTime should be a positive number`);
+    }
+    if (typeof article.featured !== "boolean") {
+      addWarning(`${label}.featured should be boolean`);
+    }
+
+    const zhPath = path.join(articlesDir, `${article.id}.zh.md`);
+    if (!fs.existsSync(zhPath)) {
+      addError(`Missing article markdown: ${zhPath}`);
+    }
+
+    const enPath = path.join(articlesDir, `${article.id}.en.md`);
+    if (!fs.existsSync(enPath)) {
+      addWarning(`English markdown not found (optional): ${enPath}`);
+    }
+  });
+};
+
+const validatePhotos = photos => {
+  validateUniqueIds(photos, "photos");
+
+  photos.forEach((photo, idx) => {
+    const label = `photos[${idx}](${photo.id || "missing-id"})`;
+    validateI18nObject(photo.title, `${label}.title`);
+    validateI18nObject(photo.description, `${label}.description`, false);
+
+    if (!hasText(photo.url)) addError(`${label}.url is required`);
+    if (!hasText(photo.thumbnail)) addWarning(`${label}.thumbnail is empty`);
+    if (!isValidDate(photo.captureDate)) {
+      addError(`${label}.captureDate must be YYYY-MM-DD`);
+    }
+    if (!photoCategories.has(photo.category)) {
+      addWarning(`${label}.category is not in known categories`);
+    }
+    if (!Array.isArray(photo.tags)) {
+      addError(`${label}.tags must be an array`);
+    }
+  });
+};
+
+const validateVideos = videos => {
+  validateUniqueIds(videos, "videos");
+
+  videos.forEach((video, idx) => {
+    const label = `videos[${idx}](${video.id || "missing-id"})`;
+    validateI18nObject(video.title, `${label}.title`);
+    validateI18nObject(video.description, `${label}.description`, false);
+
+    if (!hasText(video.thumbnailUrl)) {
+      addError(`${label}.thumbnailUrl is required`);
+    }
+    if (!isValidDate(video.publishedDate)) {
+      addError(`${label}.publishedDate must be YYYY-MM-DD`);
+    }
+    if (!videoCategories.has(video.category)) {
+      addWarning(`${label}.category is not in known categories`);
+    }
+    if (!Array.isArray(video.tags)) {
+      addError(`${label}.tags must be an array`);
+    }
+    if (typeof video.duration !== "number" || video.duration < 0) {
+      addError(`${label}.duration must be >= 0`);
+    }
+    if (video.platform === "youtube" && !hasText(video.videoId)) {
+      addWarning(`${label}.videoId is empty for youtube platform`);
+    }
+  });
+};
+
+const validateProjects = projects => {
+  validateUniqueIds(projects, "projects");
+
+  projects.forEach((project, idx) => {
+    const label = `projects[${idx}](${project.id || "missing-id"})`;
+    validateI18nObject(project.title, `${label}.title`);
+    validateI18nObject(project.description, `${label}.description`, false);
+
+    if (!hasText(project.coverImage)) {
+      addError(`${label}.coverImage is required`);
+    }
+    if (!projectStatuses.has(project.status)) {
+      addWarning(`${label}.status is not in known statuses`);
+    }
+    if (!isValidDate(project.startDate)) {
+      addError(`${label}.startDate must be YYYY-MM-DD`);
+    }
+    if (project.releaseDate !== null && !isValidDate(project.releaseDate)) {
+      addError(`${label}.releaseDate must be null or YYYY-MM-DD`);
+    }
+    if (!Array.isArray(project.technologies)) {
+      addError(`${label}.technologies must be an array`);
+    }
+    if (!Array.isArray(project.highlights)) {
+      addError(`${label}.highlights must be an array`);
+    }
+    if (!Array.isArray(project.milestones)) {
+      addError(`${label}.milestones must be an array`);
+    }
+  });
+};
+
+const run = () => {
+  const articles = readJsonArray(files.articles);
+  const photos = readJsonArray(files.photos);
+  const videos = readJsonArray(files.videos);
+  const projects = readJsonArray(files.projects);
+
+  validateArticles(articles);
+  validatePhotos(photos);
+  validateVideos(videos);
+  validateProjects(projects);
+
+  const globalIds = new Map();
+  [
+    ["articles", articles],
+    ["photos", photos],
+    ["videos", videos],
+    ["projects", projects]
+  ].forEach(([type, list]) => {
+    list.forEach(item => {
+      if (!item || !hasText(item.id)) return;
+      if (globalIds.has(item.id)) {
+        addError(
+          `Global duplicate id: ${item.id} appears in ${globalIds.get(
+            item.id
+          )} and ${type}`
+        );
+      } else {
+        globalIds.set(item.id, type);
+      }
+    });
+  });
+
+  if (warnings.length > 0) {
+    console.log("Content warnings:");
+    warnings.forEach(item => console.log(`- ${item}`));
+  }
+
+  if (errors.length > 0) {
+    console.error("\nContent validation failed:");
+    errors.forEach(item => console.error(`- ${item}`));
+    process.exit(1);
+  }
+
+  console.log("Content validation passed.");
+  if (warnings.length > 0) {
+    console.log(`Validation completed with ${warnings.length} warning(s).`);
+  }
+};
+
+run();
