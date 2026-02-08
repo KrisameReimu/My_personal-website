@@ -1,29 +1,106 @@
 @import "../_globalColor";
 
 .about-hero {
-  background: linear-gradient(
-    135deg,
-    rgba(85, 25, 139, 0.05) 0%,
-    rgba(140, 67, 206, 0.05) 100%
-  ) !important;
+  background: radial-gradient(
+      120% 120% at 0% 0%,
+      rgba(12, 74, 110, 0.16) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      100% 100% at 100% 0%,
+      rgba(161, 98, 7, 0.13) 0%,
+      transparent 55%
+    ),
+    linear-gradient(
+      140deg,
+      rgba(2, 6, 23, 0.02) 0%,
+      rgba(15, 23, 42, 0.08) 100%
+    ) !important;
+}
+
+.about-story,
+.about-block,
+.about-resume-card {
+  max-width: 980px;
+  margin: 24px auto;
+  padding: 24px 28px;
+  border-radius: 18px;
+  border: 1px solid $lightBorder1;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(6px);
+}
+
+.about-story p,
+.about-block p {
+  margin: 0;
+  line-height: 1.8;
+  color: $subTitle;
+}
+
+.about-block h2 {
+  margin: 0 0 16px;
+  font-size: 1.3rem;
+  color: $textColor;
+}
+
+.about-chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.about-chapter-card {
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid $lightBorder1;
+  background: rgba(248, 250, 252, 0.86);
+}
+
+.about-chapter-card h3 {
+  margin: 0 0 10px;
+  font-size: 1.02rem;
+  color: $textColor;
+}
+
+.about-chapter-card p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.about-list {
+  margin: 0;
+  padding-left: 18px;
+  color: $subTitle;
+  line-height: 1.8;
+}
+
+.about-nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.about-nav-links a {
+  text-decoration: none;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid $lightBorder1;
+  color: $textColor;
+  background: rgba(248, 250, 252, 0.9);
+  transition: all 0.2s ease;
+}
+
+.about-nav-links a:hover {
+  transform: translateY(-1px);
+  border-color: rgba(37, 99, 235, 0.45);
+  color: #1d4ed8;
 }
 
 .about-resume-card {
-  max-width: 1000px;
-  margin: 40px auto 20px;
-  padding: 24px 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  border-radius: 16px;
-  border: 1px solid $lightBorder1;
-  background: $lightBackground2;
-}
-
-.about-resume-card h2 {
-  margin: 0 0 8px;
-  color: $textColor;
 }
 
 .about-resume-card p {
@@ -42,21 +119,58 @@
 }
 
 .dark-mode .about-resume-card {
-  background: $darkBackground;
+  background: rgba(11, 20, 38, 0.84);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .about-story,
+.dark-mode .about-block {
+  background: rgba(11, 20, 38, 0.84);
   border-color: rgba(255, 255, 255, 0.08);
 }
 
-.dark-mode .about-resume-card h2 {
+.dark-mode .about-block h2 {
   color: $textColorDark;
 }
 
-.dark-mode .about-resume-card p {
+.dark-mode .about-resume-card p,
+.dark-mode .about-story p,
+.dark-mode .about-block p,
+.dark-mode .about-list {
   color: rgba(255, 255, 255, 0.7);
 }
 
+.dark-mode .about-chapter-card {
+  background: rgba(30, 41, 59, 0.5);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .about-chapter-card h3 {
+  color: $textColorDark;
+}
+
+.dark-mode .about-nav-links a {
+  color: $textColorDark;
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(30, 41, 59, 0.5);
+}
+
+.dark-mode .about-nav-links a:hover {
+  border-color: rgba(96, 165, 250, 0.6);
+  color: #93c5fd;
+}
+
 @media (max-width: 768px) {
+  .about-story,
+  .about-block,
   .about-resume-card {
+    margin: 16px 12px;
+    padding: 18px;
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .about-chapter-grid {
+    grid-template-columns: 1fr;
   }
 }

@@ -43,5 +43,24 @@
     "publishedDate": "2025-07-12",
     "duration": 420,
     "tags": ["纪录片", "城市"]
+  },
+  {
+    "id": "messi-paris-kids-chant",
+    "title": {
+      "zh": "巴黎6000多名孩子高呼梅西对抗嘘声【用纯真打破丑陋】-致永远的Lionel Messi",
+      "en": "6000 Paris Kids Chant Messi Against Booing"
+    },
+    "description": {
+      "zh": "",
+      "en": ""
+    },
+    "platform": "youtube",
+    "videoId": "xoTGzme_HRo",
+    "thumbnailUrl": "https://i.ytimg.com/vi/xoTGzme_HRo/maxresdefault.jpg",
+    "category": "promotional",
+    "awards": [],
+    "publishedDate": "2026-02-07",
+    "duration": 0,
+    "tags": ["Messi", "Paris", "Football"]
   }
 ]

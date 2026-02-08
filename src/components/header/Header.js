@@ -28,8 +28,7 @@ function Header() {
     photography: language === "zh" ? "摄影" : "Photography",
     writing: language === "zh" ? "写作" : "Writing",
     about: language === "zh" ? "关于我" : "About",
-    contact: language === "zh" ? "联系" : "Contact",
-    resume: language === "zh" ? "简历" : "Resume"
+    contact: language === "zh" ? "联系" : "Contact"
   };
 
   return (
@@ -75,13 +74,6 @@ function Header() {
           <li>
             <Link to="/about">{navLabels.about}</Link>
           </li>
-          {greeting.resumeLink && (
-            <li>
-              <a href={greeting.resumeLink} target="_blank" rel="noreferrer">
-                {navLabels.resume}
-              </a>
-            </li>
-          )}
           <li>
             <Link to="/contact">{navLabels.contact}</Link>
           </li>
