@@ -34,3 +34,8 @@ Live site: https://www.chenchen-echo.com/
 - Images: Cloudflare R2 custom domain (current direction)
 - Videos: YouTube (store only metadata and video IDs in `public/content/videos.json`)
 - Keep original source files in cloud drive, keep website as curated index/showcase
+
+## Community Backend (D1)
+
+- Setup guide: `docs/CLOUDFLARE_D1_COMMUNITY_SETUP.md`
+- Worker template: `cloudflare/community-api/`
