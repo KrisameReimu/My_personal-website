@@ -1,0 +1,38 @@
+[
+  {
+    "id": "m1-core-pages",
+    "area": "foundation",
+    "title": {
+      "zh": "M1：Now/Lab/Roadmap 页面上线",
+      "en": "M1: Launch Now/Lab/Roadmap pages"
+    },
+    "status": "in-progress",
+    "priority": 1,
+    "targetMonth": "2026-02",
+    "progress": 70
+  },
+  {
+    "id": "m3-ask-v1",
+    "area": "ai",
+    "title": {
+      "zh": "M3：Ask Echo v1（检索+引用）",
+      "en": "M3: Ask Echo v1 (retrieval + citation)"
+    },
+    "status": "planned",
+    "priority": 1,
+    "targetMonth": "2026-04",
+    "progress": 0
+  },
+  {
+    "id": "m4-data-loop",
+    "area": "data",
+    "title": {
+      "zh": "M4：订阅 + 埋点 + Dashboard",
+      "en": "M4: Subscription + Event Tracking + Dashboard"
+    },
+    "status": "planned",
+    "priority": 2,
+    "targetMonth": "2026-05",
+    "progress": 0
+  }
+]

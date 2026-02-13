@@ -1,0 +1,92 @@
+[
+  {
+    "id": "exp-ai-001",
+    "pillar": "ai-engineering",
+    "status": "building",
+    "title": {
+      "zh": "Ask Echo 引用式问答",
+      "en": "Ask Echo citation-based QA"
+    },
+    "hypothesis": {
+      "zh": "带来源的回答更容易建立信任",
+      "en": "Answers with sources build trust faster"
+    },
+    "method": {
+      "zh": "为站内内容建立可检索索引并返回引用",
+      "en": "Create a searchable index and return citations"
+    },
+    "result": {
+      "zh": "已发布可用版本",
+      "en": "A usable version has been released"
+    },
+    "failureNotes": {
+      "zh": "长尾关键词召回仍需改进",
+      "en": "Long-tail recall still needs work"
+    },
+    "decision": {
+      "zh": "先提升命中率，再升级更复杂检索",
+      "en": "Improve hit rate before moving to advanced retrieval"
+    },
+    "publishedAt": "2026-02-12"
+  },
+  {
+    "id": "exp-invest-001",
+    "pillar": "investment-systems",
+    "status": "idea",
+    "title": {
+      "zh": "投资决策日志模板",
+      "en": "Investment decision log template"
+    },
+    "hypothesis": {
+      "zh": "公开决策过程能提升可信度",
+      "en": "Publishing decision process improves credibility"
+    },
+    "method": {
+      "zh": "记录假设、约束、执行、复盘",
+      "en": "Track hypothesis, constraints, execution, and review"
+    },
+    "result": {
+      "zh": "模板阶段",
+      "en": "Template stage"
+    },
+    "failureNotes": {
+      "zh": "尚未积累足够样本",
+      "en": "Not enough sample entries yet"
+    },
+    "decision": {
+      "zh": "先完成 4 周试运行",
+      "en": "Run a 4-week pilot first"
+    },
+    "publishedAt": "2026-02-10"
+  },
+  {
+    "id": "exp-creative-001",
+    "pillar": "creative-tech",
+    "status": "validated",
+    "title": {
+      "zh": "视频 + 写作双轨发布",
+      "en": "Dual-track publishing: video + writing"
+    },
+    "hypothesis": {
+      "zh": "多媒体组合比单一媒介更易转化",
+      "en": "A multimedia mix converts better than a single format"
+    },
+    "method": {
+      "zh": "同主题短视频和长文联动发布",
+      "en": "Ship short video and long-form writeup on the same topic"
+    },
+    "result": {
+      "zh": "互动显著提升",
+      "en": "Engagement improved clearly"
+    },
+    "failureNotes": {
+      "zh": "制作成本偏高",
+      "en": "Production cost is high"
+    },
+    "decision": {
+      "zh": "保留并标准化流程",
+      "en": "Keep and standardize the workflow"
+    },
+    "publishedAt": "2026-02-08"
+  }
+]

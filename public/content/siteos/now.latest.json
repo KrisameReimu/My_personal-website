@@ -1,0 +1,23 @@
+{
+  "weekOf": "2026-02-09",
+  "focus": {
+    "zh": "把个人网站升级为 AI 时代长期资产",
+    "en": "Upgrade the site into a long-term AI-era asset"
+  },
+  "doing": {
+    "zh": "持续发布实验日志，完善互动、订阅与 Ask Echo",
+    "en": "Publish experiment logs and improve community, subscriptions, and Ask Echo"
+  },
+  "notDoing": {
+    "zh": "不做泛教程与热点堆叠",
+    "en": "No generic tutorials or trend-chasing"
+  },
+  "blockers": {
+    "zh": "内容更新与系统迭代并行，时间管理压力较高",
+    "en": "Running publishing and product iteration in parallel creates time pressure"
+  },
+  "nextActions": {
+    "zh": "优化 Ask Echo 引用质量，并公开每周路线图进展",
+    "en": "Improve Ask Echo citation quality and publish weekly roadmap updates"
+  }
+}

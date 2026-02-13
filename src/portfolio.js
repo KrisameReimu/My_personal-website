@@ -461,6 +461,15 @@ const contactInfo = {
   email_address: "krisamegreimu@flounderfantasy.com"
 };
 
+const supportInfo = {
+  display: true,
+  wechatQrImage: "/wechat_qrcode_echo.jpg",
+  paypal: "",
+  fps: "",
+  alipay: "",
+  wechatPay: ""
+};
+
 // Twitter Section
 
 const twitterDetails = {
@@ -491,5 +500,6 @@ export {
   contactInfo,
   twitterDetails,
   isHireable,
-  resumeSection
+  resumeSection,
+  supportInfo
 };

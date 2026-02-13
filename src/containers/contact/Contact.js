@@ -8,6 +8,7 @@ import DisplayLottie from "../../components/displayLottie/DisplayLottie";
 import StyleContext from "../../contexts/StyleContext";
 import LanguageContext from "../../contexts/LanguageContext";
 import {getText} from "../../utils/i18n";
+import DonatePanel from "../../components/donatePanel/DonatePanel";
 
 export default function Contact() {
   const {isDark} = useContext(StyleContext);
@@ -66,6 +67,7 @@ export default function Contact() {
                 </p>
                 <img src="/wechat_qrcode_echo.jpg" alt="WeChat QR Code" />
               </div>
+              <DonatePanel />
             </div>
           </div>
           <div className="contact-image-div">

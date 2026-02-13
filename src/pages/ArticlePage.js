@@ -6,6 +6,7 @@ import {marked} from "marked";
 import "./ArticlePage.scss";
 import LanguageContext from "../contexts/LanguageContext";
 import {formatDate} from "../utils/i18n";
+import EngagementPanel from "../components/engagementPanel/EngagementPanel";
 
 // Article detail page with bilingual toggle and markdown rendering.
 // CMS future-proof: tries fields content_zh/content_en; falls back to excerpt.
@@ -173,6 +174,15 @@ const ArticlePage = () => {
           ))}
         </div>
       )}
+      <EngagementPanel
+        resourceKey={`article:${article.slug || article.id || slug}`}
+        item={{
+          key: `article:${article.slug || article.id || slug}`,
+          title: displayTitle,
+          url: `/articles/${article.slug || article.id || slug}`,
+          coverImage: article.coverImage
+        }}
+      />
       <nav className="article-nav" aria-label="Article navigation">
         {prevArticle && (
           <Link

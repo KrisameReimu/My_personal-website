@@ -1,0 +1,24 @@
+.donate-panel {
+  margin-top: 2rem;
+  padding: 1.2rem;
+  border: 1px solid #ececec;
+  border-radius: 12px;
+  background: #fafbff;
+}
+
+.donate-content {
+  margin-top: 0.9rem;
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.donate-qr img {
+  width: 180px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.donate-methods p {
+  margin: 0.35rem 0;
+}
