@@ -25,13 +25,15 @@
   max-width: 100%;
   padding: 15px 20px;
   margin: 0px auto;
+  position: relative;
+  z-index: 1200;
 }
 
 .header ul {
   margin: 0;
   padding: 0;
   list-style: none;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .grey-color {
@@ -40,9 +42,11 @@
 
 .header li a {
   display: block;
-  padding: 15px 20px;
+  padding: 12px 16px;
   color: $textColor;
   text-decoration: none;
+  letter-spacing: 0.02em;
+  font-weight: 500;
 }
 
 .header li a:hover,
@@ -73,6 +77,7 @@
 .header .menu {
   clear: both;
   max-height: 0;
+  overflow: hidden;
   transition: max-height 0.2s ease-out;
 }
 
@@ -137,7 +142,7 @@
 }
 
 .header .menu-btn:checked ~ .menu {
-  max-height: 486px;
+  max-height: 760px;
 }
 
 .header .menu-btn:checked ~ .menu-icon .navicon {
@@ -169,7 +174,13 @@
     justify-content: space-between;
   }
   .header .menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 4px;
     max-height: none;
+    overflow: visible;
   }
   .header .menu-icon {
     display: none;
@@ -178,5 +189,9 @@
 @media (max-width: 960px) and (min-width: 768px) {
   .header {
     font-size: 12px;
+  }
+
+  .header li a {
+    padding: 10px 12px;
   }
 }

@@ -6,6 +6,8 @@ import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
 import LanguageSwitch from "../LanguageSwitch/LanguageSwitch";
 import StyleContext from "../../contexts/StyleContext";
 import LanguageContext from "../../contexts/LanguageContext";
+import AuthControls from "../authControls/AuthControls";
+import AuthContext from "../../contexts/AuthContext";
 import {
   greeting,
   gameDevSection,
@@ -17,16 +19,20 @@ import {writingShowcaseSection} from "../../containers/writingShowcase/WritingSh
 function Header() {
   const {isDark} = useContext(StyleContext);
   const {language} = useContext(LanguageContext);
+  const {isLoggedIn, isOwner} = useContext(AuthContext);
   const viewGameDev = gameDevSection.display;
   const viewVideoPortfolio = videoPortfolioSection.display;
   const viewPhotography = photographySection.display;
   const viewWriting = writingShowcaseSection.display;
   const navLabels = {
     home: language === "zh" ? "首页" : "Home",
+    dashboard: language === "zh" ? "看板" : "Dashboard",
     gameDev: language === "zh" ? "游戏开发" : "Game Dev",
     videos: language === "zh" ? "视频作品" : "Videos",
     photography: language === "zh" ? "摄影" : "Photography",
     writing: language === "zh" ? "写作" : "Writing",
+    community: language === "zh" ? "互动区" : "Community",
+    favorites: language === "zh" ? "收藏" : "Favorites",
     about: language === "zh" ? "关于我" : "About",
     contact: language === "zh" ? "联系" : "Contact"
   };
@@ -71,6 +77,21 @@ function Header() {
               <Link to="/writing">{navLabels.writing}</Link>
             </li>
           )}
+          {isOwner && (
+            <li>
+              <Link to="/dashboard">{navLabels.dashboard}</Link>
+            </li>
+          )}
+          {isLoggedIn && (
+            <li>
+              <Link to="/community">{navLabels.community}</Link>
+            </li>
+          )}
+          {isLoggedIn && (
+            <li>
+              <Link to="/favorites">{navLabels.favorites}</Link>
+            </li>
+          )}
           <li>
             <Link to="/about">{navLabels.about}</Link>
           </li>
@@ -82,6 +103,9 @@ function Header() {
           </li>
           <li>
             <ToggleSwitch />
+          </li>
+          <li>
+            <AuthControls />
           </li>
         </ul>
       </header>
