@@ -1,0 +1,12 @@
+name = "echo-community-api"
+main = "src/index.js"
+compatibility_date = "2026-02-12"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "echo-main-db"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+[vars]
+ADMIN_EMAILS = "you@example.com"
+GOOGLE_CLIENT_ID = "REPLACE_WITH_GOOGLE_WEB_CLIENT_ID"
